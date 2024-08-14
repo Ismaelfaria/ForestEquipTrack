@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
 
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="DataContext\" />
@@ -15,14 +15,12 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="8.0.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
-		<PrivateAssets>all</PrivateAssets>
+			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 
- 
 	<ItemGroup> 
-		<ProjectReference Include="..\BusOnTime.Application\BusOnTime.Application.csproj" />
 		<Folder Include="Entities\" />
 		<Folder Include="DataContext\" />
 		<Folder Include="Repositories\" />
@@ -31,5 +29,4 @@
   <ItemGroup>
     <ProjectReference Include="..\BusOnTime.Application\BusOnTime.Application.csproj" />
 </ItemGroup>
-
 </Project>
