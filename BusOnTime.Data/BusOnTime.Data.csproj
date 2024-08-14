@@ -15,11 +15,17 @@
 		</PackageReference>
 	</ItemGroup>
 
+<<<<<<< HEAD
 	<ItemGroup>
 		<ProjectReference Include="..\BusOnTime.Application\BusOnTime.Application.csproj" />
 		<Folder Include="Entities\" />
 		<Folder Include="DataContext\" />
 		<Folder Include="Repositories\" />
 	</ItemGroup>
+=======
+  <ItemGroup>
+    <ProjectReference Include="..\BusOnTime.Application\BusOnTime.Application.csproj" />
+</ItemGroup>
+>>>>>>> 83fcf1eccbc60d77587e1d885f63d6c9a1973315
 
 </Project>
