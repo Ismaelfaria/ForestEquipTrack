@@ -1,3 +1,4 @@
+
 ﻿using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Generic;
 using System;
