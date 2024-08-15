@@ -1,13 +1,13 @@
+﻿using BusOnTime.Application.Interfaces.Generic;
 using BusOnTime.Data.Entities;
-using BusOnTime.Data.Interfaces.Generic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusOnTime.Data.Interfaces.Interface
+namespace BusOnTime.Application.Interfaces
 {
-    internal interface IEquipment : IRepositoryBase<Equipment>
+    internal interface IEquipmentS : IServiceBase<Equipment>
     {}
 }

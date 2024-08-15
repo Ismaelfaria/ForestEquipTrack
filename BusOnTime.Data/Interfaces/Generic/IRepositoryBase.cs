@@ -1,7 +1,7 @@
 ﻿
 namespace BusOnTime.Data.Interfaces.Generic
 {
-    public interface IRepository<TEntity> where TEntity : class
+    public interface IRepositoryBase<TEntity> where TEntity : class
     {
         TEntity GetById(Guid id);
         IEnumerable<TEntity> FindAll();

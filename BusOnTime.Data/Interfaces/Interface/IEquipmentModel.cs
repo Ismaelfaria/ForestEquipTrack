@@ -9,6 +9,6 @@ using System.Threading.Tasks;
 
 namespace BusOnTime.Data.Interfaces.Interface
 {
-    internal interface IEquipmentModel : IRepository<EquipmentModel>
+    internal interface IEquipmentModel : IRepositoryBase<EquipmentModel>
     {}
 }

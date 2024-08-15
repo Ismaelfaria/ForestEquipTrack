@@ -3,7 +3,7 @@ using BusOnTime.Data.Interfaces.Generic;
 
 namespace BusOnTime.Data.Repositories.Generic
 {
-    public abstract class RepositoryBase<TEntity> : IRepository<TEntity> where TEntity : class
+    public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class
     {
         protected readonly Context _context;
 

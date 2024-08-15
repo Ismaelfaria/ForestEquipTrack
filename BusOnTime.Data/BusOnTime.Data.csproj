@@ -23,8 +23,4 @@
 		<Folder Include="Entities\" />
 		<Folder Include="DataContext\" />
 	</ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\BusOnTime.Application\BusOnTime.Application.csproj" />
-</ItemGroup>
 </Project>
