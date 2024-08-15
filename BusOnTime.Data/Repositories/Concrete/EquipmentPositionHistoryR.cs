@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace BusOnTime.Data.Repositories.Concrete
 {
-    internal class EquipmentModelR : RepositoryBase<EquipmentModel>
+    internal class EquipmentPositionHistoryR : RepositoryBase<EquipmentPositionHistory>
     {
-        public EquipmentModelR(Context context) : base(context)
+        public EquipmentPositionHistoryR(Context context) : base(context)
         {}
     }
 }
