@@ -1,5 +1,7 @@
 ﻿using BusOnTime.Application.Interfaces;
 using BusOnTime.Data.Entities;
+using BusOnTime.Data.Interfaces.Interface;
+using BusOnTime.Data.Repositories.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,31 +10,80 @@ using System.Threading.Tasks;
 
 namespace BusOnTime.Application.Services
 {
-    internal class EquipmentPositionHistoryS : IEquipmentPositionHistoryS
+    public class EquipmentPositionHistoryS : IEquipmentPositionHistoryS
     {
-        public EquipmentPositionHistory Create(EquipmentPositionHistory entity)
+        private readonly IEquipmentPositionHistoryR equipmentPositionHistoryR;
+        public EquipmentPositionHistoryS(IEquipmentPositionHistoryR _equipmentPositionHistoryR)
         {
-            throw new NotImplementedException();
+            equipmentPositionHistoryR = _equipmentPositionHistoryR;
+        }
+        public async Task<EquipmentPositionHistory> CreateAsync(EquipmentPositionHistory entity)
+        {
+            try
+            {
+                if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+                return await equipmentPositionHistoryR.CreateAsync(entity);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("BusOnTime/Application/Services/EquipmentPositionHistoryS/CreateAsync", ex);
+            }
         }
 
-        public void Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (id == Guid.Empty) throw new ArgumentException("Invalid ID.", nameof(id));
+
+                await equipmentPositionHistoryR.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("BusOnTime/Application/Services/EquipmentPositionHistoryS/DeleteAsync", ex);
+            }
+
         }
 
-        public IEnumerable<EquipmentPositionHistory> FindAll()
+        public async Task<IEnumerable<EquipmentPositionHistory>> FindAllAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await equipmentPositionHistoryR.FindAllAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("BusOnTime/Application/Services/EquipmentPositionHistoryS/FindAllAsync", ex);
+            }
         }
 
-        public EquipmentPositionHistory GetById(Guid id)
+        public async Task<EquipmentPositionHistory> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (id == Guid.Empty) throw new ArgumentException("Invalid ID.", nameof(id));
+
+                return await equipmentPositionHistoryR.GetByIdAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("BusOnTime/Application/Services/EquipmentPositionHistoryS/FindByIdAsync", ex);
+            }
         }
 
-        public void Update(EquipmentPositionHistory entity)
+        public async Task UpdateAsync(EquipmentPositionHistory entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+                await equipmentPositionHistoryR.UpdateAsync(entity);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("BusOnTime/Application/Services/EquipmentPositionHistoryS/UpdateAsync", ex);
+            }
         }
     }
 }

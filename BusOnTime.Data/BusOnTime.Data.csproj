@@ -7,7 +7,6 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
   <ItemGroup>
-    <Folder Include="Entities\" />
     <Folder Include="DataContext\" />
   </ItemGroup>
 	<ItemGroup>
@@ -19,8 +18,7 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup> 
-		<Folder Include="Entities\" />
+	<ItemGroup>
 		<Folder Include="DataContext\" />
 	</ItemGroup>
 </Project>

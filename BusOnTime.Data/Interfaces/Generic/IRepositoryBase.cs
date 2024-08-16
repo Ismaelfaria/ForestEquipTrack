@@ -3,10 +3,10 @@ namespace BusOnTime.Data.Interfaces.Generic
 {
     public interface IRepositoryBase<TEntity> where TEntity : class
     {
-        TEntity GetById(Guid id);
-        IEnumerable<TEntity> FindAll();
-        TEntity Create(TEntity entity);
-        void Update(TEntity entity);
-        void Delete(Guid id);
+        Task<TEntity> GetByIdAsync(Guid id);
+        Task<IEnumerable<TEntity>> FindAllAsync();
+        Task<TEntity> CreateAsync(TEntity entity);
+        Task UpdateAsync(TEntity entity);
+        Task DeleteAsync(Guid id);
     }
 }

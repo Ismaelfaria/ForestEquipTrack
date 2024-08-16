@@ -8,10 +8,10 @@ namespace BusOnTime.Application.Interfaces.Generic
 {
     public interface IServiceBase<TEntity> where TEntity : class
     {
-        TEntity GetById(Guid id);
-        IEnumerable<TEntity> FindAll();
-        TEntity Create(TEntity entity);
-        void Update(TEntity entity);
-        void Delete(Guid id);
+        Task<TEntity> GetByIdAsync(Guid id);
+        Task<IEnumerable<TEntity>> FindAllAsync();
+        Task<TEntity> CreateAsync(TEntity entity);
+        Task UpdateAsync(TEntity entity);
+        Task DeleteAsync(Guid id);
     }
 }

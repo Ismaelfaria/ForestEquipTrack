@@ -1,3 +1,4 @@
+
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Generic;
 using System;
@@ -8,6 +9,6 @@ using System.Threading.Tasks;
 
 namespace BusOnTime.Data.Interfaces.Interface
 {
-    internal interface IEquipmentPositionHistory : IRepositoryBase<EquipmentPositionHistory>
-    {}
+    public interface IEquipmentModelR : IRepositoryBase<EquipmentModel>
+    { }
 }
