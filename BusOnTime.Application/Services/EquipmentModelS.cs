@@ -1,5 +1,6 @@
 ﻿using BusOnTime.Application.Interfaces;
 using BusOnTime.Data.Entities;
+using BusOnTime.Data.Interfaces.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,29 +11,78 @@ namespace BusOnTime.Application.Services
 {
     internal class EquipmentModelS : IEquipmentModelS
     {
-        public EquipmentModel Create(EquipmentModel entity)
+        private readonly IEquipmentModelR equipmentModelR;
+        public EquipmentModelS(IEquipmentModelR _equipmentModelR)
         {
-            throw new NotImplementedException();
+            equipmentModelR = _equipmentModelR;
+        }
+        public async Task<EquipmentModel> CreateAsync(EquipmentModel entity)
+        {
+            try
+            {
+                if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+                return await equipmentModelR.CreateAsync(entity);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("BusOnTime/Application/Services/EquipmentModelS/CreateAsync", ex);
+            }
         }
 
-        public void Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (id == Guid.Empty) throw new ArgumentException("Invalid ID.", nameof(id));
+
+                await equipmentModelR.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("BusOnTime/Application/Services/EquipmentModelS/DeleteAsync", ex);
+            }
+
         }
 
-        public IEnumerable<EquipmentModel> FindAll()
+        public async Task<IEnumerable<EquipmentModel>> FindAllAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await equipmentModelR.FindAllAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("BusOnTime/Application/Services/EquipmentModelS/FindAllAsync", ex);
+            }
         }
 
-        public EquipmentModel GetById(Guid id)
+        public async Task<EquipmentModel> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (id == Guid.Empty) throw new ArgumentException("Invalid ID.", nameof(id));
+
+                return await equipmentModelR.GetByIdAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("BusOnTime/Application/Services/EquipmentModelS/FindByIdAsync", ex);
+            }
         }
 
-        public void Update(EquipmentModel entity)
+        public async Task UpdateAsync(EquipmentModel entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+                equipmentModelR.UpdateAsync(entity);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("BusOnTime/Application/Services/EquipmentModelS/UpdateAsync", ex);
+            }
         }
     }
 }

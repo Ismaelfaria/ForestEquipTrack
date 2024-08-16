@@ -10,27 +10,27 @@ namespace BusOnTime.Application.Services
 {
     internal class EquipmentModelStateHourlyEarningS : IEquipmentModelStateHourlyEarningS
     {
-        public EquipmentModelStateHourlyEarnings Create(EquipmentModelStateHourlyEarnings entity)
+        public Task<EquipmentModelStateHourlyEarnings> CreateAsync(EquipmentModelStateHourlyEarnings entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(Guid id)
+        public Task DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<EquipmentModelStateHourlyEarnings> FindAll()
+        public Task<IEnumerable<EquipmentModelStateHourlyEarnings>> FindAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public EquipmentModelStateHourlyEarnings GetById(Guid id)
+        public Task<EquipmentModelStateHourlyEarnings> GetByIdAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(EquipmentModelStateHourlyEarnings entity)
+        public Task UpdateAsync(EquipmentModelStateHourlyEarnings entity)
         {
             throw new NotImplementedException();
         }

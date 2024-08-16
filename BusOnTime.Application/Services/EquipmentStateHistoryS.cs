@@ -10,27 +10,27 @@ namespace BusOnTime.Application.Services
 {
     internal class EquipmentStateHistoryS : IEquipmentStateHistoryS
     {
-        public EquipmentStateHistory Create(EquipmentStateHistory entity)
+        public Task<EquipmentStateHistory> CreateAsync(EquipmentStateHistory entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(Guid id)
+        public Task DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<EquipmentStateHistory> FindAll()
+        public Task<IEnumerable<EquipmentStateHistory>> FindAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public EquipmentStateHistory GetById(Guid id)
+        public Task<EquipmentStateHistory> GetByIdAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(EquipmentStateHistory entity)
+        public Task UpdateAsync(EquipmentStateHistory entity)
         {
             throw new NotImplementedException();
         }

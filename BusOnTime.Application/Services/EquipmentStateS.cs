@@ -10,27 +10,27 @@ namespace BusOnTime.Application.Services
 {
     internal class EquipmentStateS : IEquipmentStateS
     {
-        public EquipmentState Create(EquipmentState entity)
+        public Task<EquipmentState> CreateAsync(EquipmentState entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(Guid id)
+        public Task DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<EquipmentState> FindAll()
+        public Task<IEnumerable<EquipmentState>> FindAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public EquipmentState GetById(Guid id)
+        public Task<EquipmentState> GetByIdAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(EquipmentState entity)
+        public Task UpdateAsync(EquipmentState entity)
         {
             throw new NotImplementedException();
         }
