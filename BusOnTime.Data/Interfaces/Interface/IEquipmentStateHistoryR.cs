@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace BusOnTime.Data.Interfaces.Interface
 {
-    internal interface IEquipmentStateHistory : IRepository<EquipmentStateHistory>
+    public interface IEquipmentStateHistoryR : IRepositoryBase<EquipmentStateHistory>
     {}
 }

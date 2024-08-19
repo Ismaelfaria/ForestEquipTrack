@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusOnTime.Data.Repositories.Concrete
+namespace BusOnTime.Data.Entities.Generic
 {
-    internal class EquipmentPositionHistory
+    public class BaseEntity
     {
+        public bool IsDeleted { get; set; }
     }
 }

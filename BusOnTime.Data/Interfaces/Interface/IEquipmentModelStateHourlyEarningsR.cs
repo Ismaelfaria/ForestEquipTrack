@@ -1,4 +1,4 @@
-﻿using BusOnTime.Data.Entities;
+using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Generic;
 using System;
 using System.Collections.Generic;
@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace BusOnTime.Data.Interfaces.Interface
 {
-    internal interface IEquipmentState : IRepository<EquipmentState>
+    public interface IEquipmentModelStateHourlyEarningsR : IRepositoryBase<EquipmentModelStateHourlyEarnings>
     {}
 }

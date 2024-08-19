@@ -1,6 +1,7 @@
 ﻿using BusOnTime.Data.DataContext;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Repositories.Generic;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,44 @@ using System.Threading.Tasks;
 
 namespace BusOnTime.Data.Repositories.Concrete
 {
-    internal class EquipmentPositionHistoryR : RepositoryBase<EquipmentPositionHistory>
+    public class EquipmentPositionHistoryR : RepositoryBase<EquipmentPositionHistory>
     {
         public EquipmentPositionHistoryR(Context context) : base(context)
-        {}
+        { }
+        
+        public override async Task<EquipmentPositionHistory> GetByIdAsync(Guid id)
+        {
+            try
+            {
+                if (id == Guid.Empty)
+                {
+                    throw new ArgumentException("O ID não pode ser vazio.", nameof(id));
+                }
+
+                var entity = await _context.EquipmentPositionHistory.SingleOrDefaultAsync(a => a.EquipmentPositionId == id);
+
+                if (entity == null)
+                {
+                    throw new KeyNotFoundException("Entidade não encontrada.");
+                }
+
+                return entity;
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"Erro de argumento: {ex.Message}");
+                throw;
+            }
+            catch (KeyNotFoundException ex)
+            {
+                Console.WriteLine($"Entidade não encontrada: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro inesperado: {ex.Message}");
+                throw;
+            }
+        }
     }
 }
