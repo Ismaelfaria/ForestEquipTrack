@@ -87,19 +87,6 @@ namespace BusOnTime.Data.Repositories.Generic
             }
         }
 
-        public async virtual Task<IEnumerable<TEntity>> GetAllAsync()
-        {
-            try
-            {
-                return await _context.Set<TEntity>().ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro ao buscar todas as entidades: {ex.Message}");
-                throw;
-            }
-        }
-
         public async virtual Task DeleteAsync(Guid id)
         {
             try

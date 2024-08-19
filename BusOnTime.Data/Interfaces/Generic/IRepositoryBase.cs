@@ -8,5 +8,6 @@ namespace BusOnTime.Data.Interfaces.Generic
         Task<TEntity> CreateAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(Guid id);
+        
     }
 }
