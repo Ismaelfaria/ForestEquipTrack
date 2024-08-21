@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Tests", "BusOnT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Tests", "BusOnTime.Data.Tests\Data.Tests.csproj", "{9DB3CB80-056B-4C9B-8E3C-C8F418DF32A7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BusOnTime.Tests", "BusOnTime.Tests", "{8A1B56F1-6897-47AE-B05B-E9C809300C7D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BusOnTimeTests", "BusOnTimeTests", "{8A1B56F1-6897-47AE-B05B-E9C809300C7D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Tests", "BusOnTime.Web.Tests\Web.Tests.csproj", "{139DD985-664C-49E3-9DB3-8B9EAD0DAB73}"
 EndProject
