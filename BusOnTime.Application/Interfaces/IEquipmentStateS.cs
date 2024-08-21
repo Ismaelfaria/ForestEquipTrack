@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace BusOnTime.Application.Interfaces
 {
-    internal interface IEquipmentStateS : IServiceBase<EquipmentState>
+    public interface IEquipmentStateS : IServiceBase<EquipmentState>
     {}
 }

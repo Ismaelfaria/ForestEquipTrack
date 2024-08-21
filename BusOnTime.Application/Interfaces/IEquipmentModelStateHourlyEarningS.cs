@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BusOnTime.Application.Interfaces
 {
-    internal interface IEquipmentModelStateHourlyEarningS : IServiceBase<EquipmentModelStateHourlyEarnings>
+    public interface IEquipmentModelStateHourlyEarningS : IServiceBase<EquipmentModelStateHourlyEarnings>
     {
     }
 }
