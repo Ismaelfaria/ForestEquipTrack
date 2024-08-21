@@ -34,9 +34,13 @@ namespace BusOnTime.Application.Services
         {
             try
             {
-                if (id == Guid.Empty) throw new ArgumentException("Invalid ID.", nameof(id));
+                if (id == Guid.Empty) throw new ArgumentException("Invalid ID.");
 
                 await equipmentModelR.DeleteAsync(id);
+            }
+            catch (ArgumentException ex)
+            {
+                throw;
             }
             catch (Exception ex)
             {
@@ -61,9 +65,13 @@ namespace BusOnTime.Application.Services
         {
             try
             {
-                if (id == Guid.Empty) throw new ArgumentException("Invalid ID.", nameof(id));
+                if (id == Guid.Empty) throw new ArgumentException("Invalid ID.");
 
                 return await equipmentModelR.GetByIdAsync(id);
+            }
+            catch (ArgumentException ex)
+            {
+                throw;
             }
             catch (Exception ex)
             {
@@ -79,7 +87,10 @@ namespace BusOnTime.Application.Services
 
                 await equipmentModelR.UpdateAsync(entity);
             }
-            catch (Exception ex)
+            catch (ArgumentNullException ex)
+            {
+                throw;
+            }catch (Exception ex)
             {
                 throw new Exception("BusOnTime/Application/Services/EquipmentModelS/UpdateAsync", ex);
             }

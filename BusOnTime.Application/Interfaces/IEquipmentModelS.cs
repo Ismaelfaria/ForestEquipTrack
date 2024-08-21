@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace BusOnTime.Application.Interfaces
 {
-    internal interface IEquipmentModelS : IServiceBase<EquipmentModel>
+    public interface IEquipmentModelS : IServiceBase<EquipmentModel>
     {}
 }

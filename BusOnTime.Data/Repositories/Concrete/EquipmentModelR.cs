@@ -1,6 +1,7 @@
 ﻿using BusOnTime.Data.DataContext;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Generic;
+using BusOnTime.Data.Interfaces.Interface;
 using BusOnTime.Data.Repositories.Generic;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,7 +13,7 @@ using System.Xml.Linq;
 
 namespace BusOnTime.Data.Repositories.Concrete
 {
-    public class EquipmentModelR : RepositoryBase<EquipmentModel>
+    public class EquipmentModelR : RepositoryBase<EquipmentModel>, IEquipmentModelR
     {
         public EquipmentModelR(Context context) : base(context)
         {}

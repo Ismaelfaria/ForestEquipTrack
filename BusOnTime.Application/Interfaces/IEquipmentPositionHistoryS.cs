@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace BusOnTime.Application.Interfaces
 {
-    internal interface IEquipmentPositionHistoryS : IServiceBase<EquipmentPositionHistory>
+    public interface IEquipmentPositionHistoryS : IServiceBase<EquipmentPositionHistory>
     {}
 }
