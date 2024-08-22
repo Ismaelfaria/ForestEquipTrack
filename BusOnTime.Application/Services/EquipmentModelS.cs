@@ -38,7 +38,7 @@ namespace BusOnTime.Application.Services
 
                 await equipmentModelR.DeleteAsync(id);
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 throw;
             }
@@ -69,7 +69,7 @@ namespace BusOnTime.Application.Services
 
                 return await equipmentModelR.GetByIdAsync(id);
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 throw;
             }
@@ -87,7 +87,7 @@ namespace BusOnTime.Application.Services
 
                 await equipmentModelR.UpdateAsync(entity);
             }
-            catch (ArgumentNullException ex)
+            catch (ArgumentNullException)
             {
                 throw;
             }catch (Exception ex)
