@@ -9,22 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusOnTime.Application", "Bu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusOnTime.Data", "BusOnTime.Data\BusOnTime.Data.csproj", "{83F58364-579E-4CDC-8034-DEA089DBA41C}"
 EndProject
-
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Tests", "BusOnTime.Application.Tests\Application.Tests.csproj", "{9AFBDB71-BD04-45D3-B3B6-6F1389A6F58E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Tests", "BusOnTime.Data.Tests\Data.Tests.csproj", "{9DB3CB80-056B-4C9B-8E3C-C8F418DF32A7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BusOnTime.Tests", "BusOnTime.Tests", "{8A1B56F1-6897-47AE-B05B-E9C809300C7D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BusOnTimeTests", "BusOnTimeTests", "{8A1B56F1-6897-47AE-B05B-E9C809300C7D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Tests", "BusOnTime.Web.Tests\Web.Tests.csproj", "{139DD985-664C-49E3-9DB3-8B9EAD0DAB73}"
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusOnTime.Application.Tests", "BusOnTime.Application.Tests\BusOnTime.Application.Tests.csproj", "{9AFBDB71-BD04-45D3-B3B6-6F1389A6F58E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusOnTime.Data.Tests", "BusOnTime.Data.Tests\BusOnTime.Data.Tests.csproj", "{9DB3CB80-056B-4C9B-8E3C-C8F418DF32A7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BusOnTime.Tests", "BusOnTime.Tests", "{8A1B56F1-6897-47AE-B05B-E9C809300C7D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusOnTime.Web.Tests", "BusOnTime.Web.Tests\BusOnTime.Web.Tests.csproj", "{139DD985-664C-49E3-9DB3-8B9EAD0DAB73}"
-
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
