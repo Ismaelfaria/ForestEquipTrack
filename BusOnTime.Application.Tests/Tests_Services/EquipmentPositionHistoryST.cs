@@ -1,6 +1,9 @@
-﻿using BusOnTime.Application.Services;
+﻿using AutoMapper;
+using BusOnTime.Application.Mapping.DTOs.InputModel;
+using BusOnTime.Application.Services;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
+using FluentValidation;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -13,9 +16,11 @@ namespace Application.Tests.Tests_Services
     public class EquipmentPositionHistoryST
     {
         [Fact]
-        public async void CreateAsync_ValidEquipmentPositionHistory_ReturnsCreatedEquipmentPositionHistory()
+        public async Task CreateAsync_ValidEquipmentPositionHistory_ReturnsCreatedEquipmentPositionHistory()
         {
             var equipmentPositionHistoryRepository = new Mock<IEquipmentPositionHistoryR>();
+            var mockMapper = new Mock<IMapper>();
+            var validator = new Mock<IValidator<EquipmentPositionHistoryIM>>();
 
             var equipmentPositionHistory = new EquipmentPositionHistory
             {
@@ -27,13 +32,30 @@ namespace Application.Tests.Tests_Services
                 Equipment = new Equipment()
             };
 
+            var equipmentPositionHistoryIM = new EquipmentPositionHistoryIM
+            {
+                EquipmentId = Guid.NewGuid(),
+                Date = DateTime.Now,
+                Lat = 1,
+                Lon = 2,
+            };
+
+            validator.Setup(v => v.Validate(It.IsAny<EquipmentPositionHistoryIM>()))
+                     .Returns(new FluentValidation.Results.ValidationResult());
+
+            mockMapper.Setup(m => m.Map<EquipmentPositionHistory>(It.IsAny<EquipmentPositionHistoryIM>()))
+                      .Returns(equipmentPositionHistory);
+
             equipmentPositionHistoryRepository.Setup(repo => repo.CreateAsync(equipmentPositionHistory))
-            .ReturnsAsync(equipmentPositionHistory);
+                .ReturnsAsync(equipmentPositionHistory);
 
+            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(
+                equipmentPositionHistoryRepository.Object,
+                mockMapper.Object,
+                validator.Object
+            );
 
-            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(equipmentPositionHistoryRepository.Object);
-
-            var result = await equipmentPositionHistoryService.CreateAsync(equipmentPositionHistory);
+            var result = await equipmentPositionHistoryService.CreateAsync(equipmentPositionHistoryIM);
 
             Assert.NotNull(result);
             Assert.IsType<EquipmentPositionHistory>(result);
@@ -51,12 +73,18 @@ namespace Application.Tests.Tests_Services
         public async Task DeleteAsync_ValidId_CallsDeleteAsyncInRepository()
         {
             var mockEquipmentPositionHistoryRepository = new Mock<IEquipmentPositionHistoryR>();
+            var mockMapper = new Mock<IMapper>();
+            var validator = new Mock<IValidator<EquipmentPositionHistoryIM>>();
             var validId = Guid.NewGuid();
 
             mockEquipmentPositionHistoryRepository.Setup(repo => repo.DeleteAsync(validId))
                 .Returns(Task.CompletedTask);
 
-            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(mockEquipmentPositionHistoryRepository.Object);
+            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(
+                mockEquipmentPositionHistoryRepository.Object,
+                mockMapper.Object,
+                validator.Object
+            );
 
             await equipmentPositionHistoryService.DeleteAsync(validId);
 
@@ -67,52 +95,64 @@ namespace Application.Tests.Tests_Services
         public async Task DeleteAsync_InvalidId_ThrowsArgumentException()
         {
             var mockEquipmentPositionHistoryRepository = new Mock<IEquipmentPositionHistoryR>();
+            var mockMapper = new Mock<IMapper>();
+            var validator = new Mock<IValidator<EquipmentPositionHistoryIM>>();
             var invalidId = Guid.Empty;
 
-            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(mockEquipmentPositionHistoryRepository.Object);
+            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(
+                mockEquipmentPositionHistoryRepository.Object,
+                mockMapper.Object,
+                validator.Object
+            );
 
             var exception = await Assert.ThrowsAsync<ArgumentException>(() => equipmentPositionHistoryService.DeleteAsync(invalidId));
             Assert.Equal("Invalid ID.", exception.Message);
         }
 
         [Fact]
-        public async Task FindAllAsync_ReturnsListOfEquipmentPositionHistorys()
+        public async Task FindAllAsync_ReturnsListOfEquipmentPositionHistories()
         {
             var mockEquipmentPositionHistoryRepository = new Mock<IEquipmentPositionHistoryR>();
-            var equipmentPositionHistorys = new List<EquipmentPositionHistory>
+            var mockMapper = new Mock<IMapper>();
+            var validator = new Mock<IValidator<EquipmentPositionHistoryIM>>();
+            var equipmentPositionHistories = new List<EquipmentPositionHistory>
             {
-            new EquipmentPositionHistory
-            {
-                EquipmentPositionId = Guid.NewGuid(),
-                EquipmentId = Guid.NewGuid(),
-                Date = DateTime.Now,
-                Lat = 1,
-                Lon = 2,
-                Equipment = new Equipment()
-            },
-            new EquipmentPositionHistory
-            {
-                EquipmentPositionId = Guid.NewGuid(),
-                EquipmentId = Guid.NewGuid(),
-                Date = DateTime.Now,
-                Lat = 3,
-                Lon = 4,
-                Equipment = new Equipment()
-            }
-        };
+                new EquipmentPositionHistory
+                {
+                    EquipmentPositionId = Guid.NewGuid(),
+                    EquipmentId = Guid.NewGuid(),
+                    Date = DateTime.Now,
+                    Lat = 1,
+                    Lon = 2,
+                    Equipment = new Equipment()
+                },
+                new EquipmentPositionHistory
+                {
+                    EquipmentPositionId = Guid.NewGuid(),
+                    EquipmentId = Guid.NewGuid(),
+                    Date = DateTime.Now,
+                    Lat = 3,
+                    Lon = 4,
+                    Equipment = new Equipment()
+                }
+            };
 
             mockEquipmentPositionHistoryRepository.Setup(repo => repo.FindAllAsync())
-            .ReturnsAsync(equipmentPositionHistorys);
+                .ReturnsAsync(equipmentPositionHistories);
 
-            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(mockEquipmentPositionHistoryRepository.Object);
+            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(
+                mockEquipmentPositionHistoryRepository.Object,
+                mockMapper.Object,
+                validator.Object
+            );
 
             var result = await equipmentPositionHistoryService.FindAllAsync();
 
             Assert.NotNull(result);
             Assert.IsType<List<EquipmentPositionHistory>>(result);
-            Assert.Equal(equipmentPositionHistorys.Count, result.Count());
-            Assert.Contains(result, em => em.Lat == 1);
-            Assert.Contains(result, em => em.Lat == 3);
+            Assert.Equal(equipmentPositionHistories.Count, result.Count());
+            Assert.Contains(result, ep => ep.Lat == 1);
+            Assert.Contains(result, ep => ep.Lat == 3);
 
             mockEquipmentPositionHistoryRepository.Verify(repo => repo.FindAllAsync(), Times.Once);
         }
@@ -121,6 +161,8 @@ namespace Application.Tests.Tests_Services
         public async Task GetByIdAsync_ValidId_ReturnsEquipmentPositionHistory()
         {
             var mockEquipmentPositionHistoryRepository = new Mock<IEquipmentPositionHistoryR>();
+            var mockMapper = new Mock<IMapper>();
+            var validator = new Mock<IValidator<EquipmentPositionHistoryIM>>();
             var validId = Guid.NewGuid();
             var equipmentPositionHistory = new EquipmentPositionHistory
             {
@@ -135,7 +177,11 @@ namespace Application.Tests.Tests_Services
             mockEquipmentPositionHistoryRepository.Setup(repo => repo.GetByIdAsync(validId))
                 .ReturnsAsync(equipmentPositionHistory);
 
-            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(mockEquipmentPositionHistoryRepository.Object);
+            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(
+                mockEquipmentPositionHistoryRepository.Object,
+                mockMapper.Object,
+                validator.Object
+            );
 
             var result = await equipmentPositionHistoryService.GetByIdAsync(validId);
 
@@ -155,9 +201,15 @@ namespace Application.Tests.Tests_Services
         public async Task GetByIdAsync_InvalidId_ThrowsArgumentException()
         {
             var mockEquipmentPositionHistoryRepository = new Mock<IEquipmentPositionHistoryR>();
+            var mockMapper = new Mock<IMapper>();
+            var validator = new Mock<IValidator<EquipmentPositionHistoryIM>>();
             var invalidId = Guid.Empty;
 
-            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(mockEquipmentPositionHistoryRepository.Object);
+            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(
+                mockEquipmentPositionHistoryRepository.Object,
+                mockMapper.Object,
+                validator.Object
+            );
 
             var exception = await Assert.ThrowsAsync<ArgumentException>(() => equipmentPositionHistoryService.GetByIdAsync(invalidId));
             Assert.Equal("Invalid ID.", exception.Message);
@@ -167,6 +219,8 @@ namespace Application.Tests.Tests_Services
         public async Task UpdateAsync_ValidEquipmentPositionHistory_CallsUpdateAsyncInRepository()
         {
             var mockEquipmentPositionHistoryRepository = new Mock<IEquipmentPositionHistoryR>();
+            var mockMapper = new Mock<IMapper>();
+            var validator = new Mock<IValidator<EquipmentPositionHistoryIM>>();
             var equipmentPositionHistory = new EquipmentPositionHistory
             {
                 EquipmentPositionId = Guid.NewGuid(),
@@ -180,7 +234,11 @@ namespace Application.Tests.Tests_Services
             mockEquipmentPositionHistoryRepository.Setup(repo => repo.UpdateAsync(equipmentPositionHistory))
                 .Returns(Task.CompletedTask);
 
-            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(mockEquipmentPositionHistoryRepository.Object);
+            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(
+                mockEquipmentPositionHistoryRepository.Object,
+                mockMapper.Object,
+                validator.Object
+            );
 
             await equipmentPositionHistoryService.UpdateAsync(equipmentPositionHistory);
 
@@ -191,9 +249,15 @@ namespace Application.Tests.Tests_Services
         public async Task UpdateAsync_NullEquipmentPositionHistory_ThrowsArgumentNullException()
         {
             var mockEquipmentPositionHistoryRepository = new Mock<IEquipmentPositionHistoryR>();
+            var mockMapper = new Mock<IMapper>();
+            var validator = new Mock<IValidator<EquipmentPositionHistoryIM>>();
             EquipmentPositionHistory? nullEquipmentPositionHistory = null;
 
-            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(mockEquipmentPositionHistoryRepository.Object);
+            var equipmentPositionHistoryService = new EquipmentPositionHistoryS(
+                mockEquipmentPositionHistoryRepository.Object,
+                mockMapper.Object,
+                validator.Object
+            );
 
             var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => equipmentPositionHistoryService.UpdateAsync(nullEquipmentPositionHistory));
             Assert.Equal("entity", exception.ParamName);

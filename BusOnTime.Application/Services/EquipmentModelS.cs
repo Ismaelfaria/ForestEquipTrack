@@ -1,6 +1,9 @@
-﻿using BusOnTime.Application.Interfaces;
+﻿using AutoMapper;
+using BusOnTime.Application.Interfaces;
+using BusOnTime.Application.Mapping.DTOs.InputModel;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,17 +15,30 @@ namespace BusOnTime.Application.Services
     public class EquipmentModelS : IEquipmentModelS
     {
         private readonly IEquipmentModelR equipmentModelR;
-        public EquipmentModelS(IEquipmentModelR _equipmentModelR)
+        private readonly IMapper mapper;
+        private readonly IValidator<EquipmentModelIM> validator;
+        public EquipmentModelS(IEquipmentModelR _equipmentModelR, IMapper _mapper, IValidator<EquipmentModelIM> _validator)
         {
             equipmentModelR = _equipmentModelR;
+            mapper = _mapper;
+            validator = _validator;
         }
-        public async Task<EquipmentModel> CreateAsync(EquipmentModel entity)
+        public async Task<EquipmentModel> CreateAsync(EquipmentModelIM entity)
         {
             try
             {
-                if (entity == null) throw new ArgumentNullException(nameof(entity));
+                var validResult = validator.Validate(entity);
 
-                return await equipmentModelR.CreateAsync(entity);
+                if (!validResult.IsValid)
+                {
+                    throw new ValidationException("Erro na validação ao criar 'EquipmentModel'");
+                }
+
+                var createMapObject = mapper.Map<EquipmentModel>(entity);
+
+                if (createMapObject == null) throw new ArgumentNullException(nameof(createMapObject));
+
+                return await equipmentModelR.CreateAsync(createMapObject);
             }
             catch (Exception ex)
             {
