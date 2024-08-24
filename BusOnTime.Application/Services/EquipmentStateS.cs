@@ -1,7 +1,10 @@
-﻿using BusOnTime.Application.Interfaces;
+﻿using AutoMapper;
+using BusOnTime.Application.Interfaces;
+using BusOnTime.Application.Mapping.DTOs.InputModel;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
 using BusOnTime.Data.Repositories.Concrete;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,17 +16,33 @@ namespace BusOnTime.Application.Services
     public class EquipmentStateS : IEquipmentStateS
     {
         private readonly IEquipmentStateR equipmentStateR;
-        public EquipmentStateS(IEquipmentStateR _equipmentStateR)
+        private readonly IMapper mapper;
+        private readonly IValidator<EquipmentStateIM> validator;
+        public EquipmentStateS(
+            IEquipmentStateR _equipmentStateR,
+            IMapper _mapper,
+            IValidator<EquipmentStateIM> _validator)
         {
             equipmentStateR = _equipmentStateR;
+            mapper = _mapper;
+            validator = _validator;
         }
-        public async Task<EquipmentState> CreateAsync(EquipmentState entity)
+        public async Task<EquipmentState> CreateAsync(EquipmentStateIM entity)
         {
             try
             {
-                if (entity == null) throw new ArgumentNullException(nameof(entity));
+                var validResult = validator.Validate(entity);
 
-                return await equipmentStateR.CreateAsync(entity);
+                if (!validResult.IsValid)
+                {
+                    throw new ValidationException("Erro na validação ao criar 'EquipmentModel'");
+                }
+
+                var createMapObject = mapper.Map<EquipmentState>(entity);
+
+                if (createMapObject == null) throw new ArgumentNullException(nameof(createMapObject));
+
+                return await equipmentStateR.CreateAsync(createMapObject);
             }
             catch (Exception ex)
             {
@@ -80,13 +99,24 @@ namespace BusOnTime.Application.Services
             }
         }
 
-        public async Task UpdateAsync(EquipmentState entity)
+        public async Task UpdateAsync(Guid id, EquipmentStateIM entity)
         {
             try
             {
-                if (entity == null) throw new ArgumentNullException(nameof(entity));
+                var validResult = validator.Validate(entity);
 
-                await equipmentStateR.UpdateAsync(entity);
+                if (!validResult.IsValid)
+                {
+                    throw new ValidationException("Erro na validação ao criar 'EquipmentState'");
+                }
+
+                var createMapObject = mapper.Map<EquipmentState>(entity);
+
+                createMapObject.StateId = id;
+
+                if (createMapObject == null) throw new ArgumentNullException(nameof(createMapObject));
+
+                await equipmentStateR.UpdateAsync(createMapObject);
             }
             catch (ArgumentNullException)
             {

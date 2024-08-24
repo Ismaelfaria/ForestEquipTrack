@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusOnTime.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,6 @@ namespace BusOnTime.Application.Interfaces.Generic
     {
         Task<TEntity> GetByIdAsync(Guid id);
         Task<IEnumerable<TEntity>> FindAllAsync();
-        Task<TEntity> CreateAsync(TEntity entity);
-        Task UpdateAsync(TEntity entity);
         Task DeleteAsync(Guid id);
     }
 }

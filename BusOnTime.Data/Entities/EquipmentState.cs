@@ -9,10 +9,7 @@ namespace BusOnTime.Data.Entities
 {
     public class EquipmentState : BaseEntity
     {
-        public EquipmentState()
-        {
-            IsDeleted = false;
-        }
+        
         public Guid StateId { get; set; }
         public string? Name { get; set; }
         public string? Color { get; set; }

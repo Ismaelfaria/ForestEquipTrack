@@ -1,4 +1,5 @@
 ﻿using BusOnTime.Application.Interfaces.Generic;
+using BusOnTime.Application.Mapping.DTOs.InputModel;
 using BusOnTime.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,5 +11,7 @@ namespace BusOnTime.Application.Interfaces
 {
     public interface IEquipmentModelStateHourlyEarningS : IServiceBase<EquipmentModelStateHourlyEarnings>
     {
+        Task<EquipmentModelStateHourlyEarnings> CreateAsync(EquipmentModelStateHourlyEarningsIM entity);
+        Task UpdateAsync(Guid id, EquipmentModelStateHourlyEarningsIM entity);
     }
 }
