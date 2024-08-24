@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusOnTime.Application.DTOs.InputModel
+namespace BusOnTime.Application.Mapping.DTOs.ViewModel
 {
-    public class EquipmentModelStateHourlyEarningsIM
+    public class EquipmentModelStateHourlyEarningsVM
     {
+        public Guid EquipmentModelStateHourlyEarningsId { get; set; }
         public Guid EquipmentModelId { get; set; }
         public Guid EquipmentStateId { get; set; }
         public decimal Value { get; set; }

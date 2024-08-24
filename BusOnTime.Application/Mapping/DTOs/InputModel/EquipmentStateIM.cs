@@ -5,13 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusOnTime.Application.DTOs.InputModel
+namespace BusOnTime.Application.Mapping.DTOs.InputModel
 {
     public class EquipmentStateIM
     {
         public string? Name { get; set; }
         public string? Color { get; set; }
-        public ICollection<EquipmentModelStateHourlyEarnings>? EquipmentModelStateHourlyEarnings { get; set; }
-        public ICollection<EquipmentStateHistory>? EquipmentStateHistories { get; set; }
     }
 }

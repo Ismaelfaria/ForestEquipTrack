@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusOnTime.Application.DTOs.InputModel
+namespace BusOnTime.Application.Mapping.DTOs.ViewModel
 {
-    public class EquipmentIM
+    public class EquipmentStateVM
     {
-        public Guid EquipmentModelId { get; set; }
+        public Guid StateId { get; set; }
         public string? Name { get; set; }
-        public EquipmentModel? EquipmentModel { get; set; }
+        public string? Color { get; set; }
+        public ICollection<EquipmentModelStateHourlyEarnings>? EquipmentModelStateHourlyEarnings { get; set; }
         public ICollection<EquipmentStateHistory>? EquipmentStateHistories { get; set; }
-        public ICollection<EquipmentPositionHistory>? EquipmentPositionHistories { get; set; }
     }
 }
