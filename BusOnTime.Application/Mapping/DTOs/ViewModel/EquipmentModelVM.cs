@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusOnTime.Application.DTOs.ViewModel
+namespace BusOnTime.Application.Mapping.DTOs.ViewModel
 {
     public class EquipmentModelVM
     {

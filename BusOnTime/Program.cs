@@ -1,7 +1,11 @@
 using BusOnTime.Application.Interfaces;
+using BusOnTime.Application.Mapping.DTOs.InputModel;
+using BusOnTime.Application.Mapping.Profiles;
 using BusOnTime.Application.Services;
+using BusOnTime.Application.Validators;
 using BusOnTime.Data.Interfaces.Interface;
 using BusOnTime.Data.Repositories.Concrete;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +15,19 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(typeof(ProfileMapping));
+
+//FluentValidation
+
+builder.Services.AddTransient<IValidator<EquipmentIM>, EquipmentInputValidator>();
+builder.Services.AddTransient<IValidator<EquipmentModelIM>, EquipmentModelInputValidator>();
+builder.Services.AddTransient<IValidator<EquipmentModelStateHourlyEarningsIM>, EquipmentModelStateHourlyEarningsInputValidator>();
+builder.Services.AddTransient<IValidator<EquipmentPositionHistoryIM>, EquipmentPositionHistoryInputValidator>();
+builder.Services.AddTransient<IValidator<EquipmentStateHistoryIM>, EquipmentStateHistoryInputValidator>();
+builder.Services.AddTransient<IValidator<EquipmentStateIM>, EquipmentStateInputValidator>();
+
+///////////////////////
 
 //Repository 
 
