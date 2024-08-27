@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using BusOnTime.Application.Interfaces;
 using BusOnTime.Application.Mapping.DTOs.InputModel;
+using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
 using BusOnTime.Data.Repositories.Concrete;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +29,7 @@ namespace BusOnTime.Application.Services
             mapper = _mapper;
             validator = _validator;
         }
-        public async Task<EquipmentState> CreateAsync(EquipmentStateIM entity)
+        public async Task<EquipmentStateVM> CreateAsync(EquipmentStateIM entity)
         {
             try
             {
@@ -42,7 +44,11 @@ namespace BusOnTime.Application.Services
 
                 if (createMapObject == null) throw new ArgumentNullException(nameof(createMapObject));
 
-                return await equipmentStateR.CreateAsync(createMapObject);
+                var view = await equipmentStateR.CreateAsync(createMapObject);
+
+                var viewModel = mapper.Map<EquipmentStateVM>(view);
+
+                return viewModel;
             }
             catch (Exception ex)
             {
@@ -69,11 +75,15 @@ namespace BusOnTime.Application.Services
 
         }
 
-        public async Task<IEnumerable<EquipmentState>> FindAllAsync()
+        public async Task<IEnumerable<EquipmentStateVM>> FindAllAsync()
         {
             try
             {
-                return await equipmentStateR.FindAllAsync();
+                var view = await equipmentStateR.FindAllAsync();
+
+                var viewModel = mapper.Map<IEnumerable<EquipmentStateVM>>(view);
+
+                return viewModel;
             }
             catch (Exception ex)
             {
@@ -81,13 +91,17 @@ namespace BusOnTime.Application.Services
             }
         }
 
-        public async Task<EquipmentState> GetByIdAsync(Guid id)
+        public async Task<EquipmentStateVM> GetByIdAsync(Guid id)
         {
             try
             {
                 if (id == Guid.Empty) throw new ArgumentException("Invalid ID.");
 
-                return await equipmentStateR.GetByIdAsync(id);
+                var view = await equipmentStateR.GetByIdAsync(id);
+
+                var viewModel = mapper.Map<EquipmentStateVM>(view);
+
+                return viewModel;
             }
             catch (ArgumentException)
             {

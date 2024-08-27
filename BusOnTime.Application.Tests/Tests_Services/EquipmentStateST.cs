@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusOnTime.Application.Mapping.DTOs.InputModel;
+using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using BusOnTime.Application.Services;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
@@ -18,6 +19,7 @@ namespace Application.Tests.Tests_Services
         [Fact]
         public async Task CreateAsync_ValidEquipmentStateIM_ReturnsCreatedEquipmentState()
         {
+            // Arrange
             var equipmentStateRepository = new Mock<IEquipmentStateR>();
             var mapper = new Mock<IMapper>();
             var validator = new Mock<IValidator<EquipmentStateIM>>();
@@ -37,11 +39,23 @@ namespace Application.Tests.Tests_Services
                 Name = "Excavator"
             };
 
+            var equipmentStateVM = new EquipmentStateVM
+            {
+                StateId = equipmentState.StateId,
+                Color = equipmentState.Color,
+                Name = equipmentState.Name,
+                EquipmentModelStateHourlyEarnings = equipmentState.EquipmentModelStateHourlyEarnings,
+                EquipmentStateHistories = equipmentState.EquipmentStateHistories
+            };
+
             validator.Setup(v => v.Validate(equipmentStateIM))
                      .Returns(new FluentValidation.Results.ValidationResult());
 
             mapper.Setup(m => m.Map<EquipmentState>(equipmentStateIM))
                   .Returns(equipmentState);
+
+            mapper.Setup(m => m.Map<EquipmentStateVM>(equipmentState))
+                  .Returns(equipmentStateVM);
 
             equipmentStateRepository.Setup(repo => repo.CreateAsync(equipmentState))
                                     .ReturnsAsync(equipmentState);
@@ -52,15 +66,17 @@ namespace Application.Tests.Tests_Services
                 validator.Object
             );
 
+            // Act
             var result = await equipmentStateService.CreateAsync(equipmentStateIM);
 
+            // Assert
             Assert.NotNull(result);
-            Assert.IsType<EquipmentState>(result);
-            Assert.Equal(equipmentState.StateId, result.StateId);
-            Assert.Equal(equipmentState.Color, result.Color);
-            Assert.Equal(equipmentState.Name, result.Name);
-            Assert.Equal(equipmentState.EquipmentModelStateHourlyEarnings, result.EquipmentModelStateHourlyEarnings);
-            Assert.Equal(equipmentState.EquipmentStateHistories, result.EquipmentStateHistories);
+            Assert.IsType<EquipmentStateVM>(result);
+            Assert.Equal(equipmentStateVM.StateId, result.StateId);
+            Assert.Equal(equipmentStateVM.Color, result.Color);
+            Assert.Equal(equipmentStateVM.Name, result.Name);
+            Assert.Equal(equipmentStateVM.EquipmentModelStateHourlyEarnings, result.EquipmentModelStateHourlyEarnings);
+            Assert.Equal(equipmentStateVM.EquipmentStateHistories, result.EquipmentStateHistories);
 
             equipmentStateRepository.Verify(repo => repo.CreateAsync(equipmentState), Times.Once);
         }
@@ -68,6 +84,7 @@ namespace Application.Tests.Tests_Services
         [Fact]
         public async Task DeleteAsync_ValidId_CallsDeleteAsyncInRepository()
         {
+            // Arrange
             var mockEquipmentStateRepository = new Mock<IEquipmentStateR>();
             var mapper = new Mock<IMapper>();
             var validator = new Mock<IValidator<EquipmentStateIM>>();
@@ -82,14 +99,17 @@ namespace Application.Tests.Tests_Services
                 validator.Object
             );
 
+            // Act
             await equipmentStateService.DeleteAsync(validId);
 
+            // Assert
             mockEquipmentStateRepository.Verify(repo => repo.DeleteAsync(validId), Times.Once);
         }
 
         [Fact]
         public async Task DeleteAsync_InvalidId_ThrowsArgumentException()
         {
+            // Arrange
             var mockEquipmentStateRepository = new Mock<IEquipmentStateR>();
             var mapper = new Mock<IMapper>();
             var validator = new Mock<IValidator<EquipmentStateIM>>();
@@ -101,13 +121,15 @@ namespace Application.Tests.Tests_Services
                 validator.Object
             );
 
+            // Act & Assert
             var exception = await Assert.ThrowsAsync<ArgumentException>(() => equipmentStateService.DeleteAsync(invalidId));
-            Assert.Equal("Invalid ID.", exception.Message);
+            Assert.Equal("Invalid ID: Guid.Empty", exception.Message);
         }
 
         [Fact]
         public async Task FindAllAsync_ReturnsListOfEquipmentStates()
         {
+            // Arrange
             var mockEquipmentStateRepository = new Mock<IEquipmentStateR>();
             var mapper = new Mock<IMapper>();
             var validator = new Mock<IValidator<EquipmentStateIM>>();
@@ -132,8 +154,20 @@ namespace Application.Tests.Tests_Services
                 }
             };
 
+            var equipmentStateVMs = equipmentStates.Select(es => new EquipmentStateVM
+            {
+                StateId = es.StateId,
+                Color = es.Color,
+                Name = es.Name,
+                EquipmentModelStateHourlyEarnings = es.EquipmentModelStateHourlyEarnings,
+                EquipmentStateHistories = es.EquipmentStateHistories
+            }).ToList();
+
             mockEquipmentStateRepository.Setup(repo => repo.FindAllAsync())
                                         .ReturnsAsync(equipmentStates);
+
+            mapper.Setup(m => m.Map<IEnumerable<EquipmentStateVM>>(equipmentStates))
+                  .Returns(equipmentStateVMs);
 
             var equipmentStateService = new EquipmentStateS(
                 mockEquipmentStateRepository.Object,
@@ -141,13 +175,15 @@ namespace Application.Tests.Tests_Services
                 validator.Object
             );
 
+            // Act
             var result = await equipmentStateService.FindAllAsync();
 
+            // Assert
             Assert.NotNull(result);
-            Assert.IsType<List<EquipmentState>>(result);
-            Assert.Equal(equipmentStates.Count, result.Count());
-            Assert.Contains(result, es => es.Name == "Excavator");
-            Assert.Contains(result, es => es.Name == "Bulldozer");
+            Assert.IsType<List<EquipmentStateVM>>(result);
+            Assert.Equal(equipmentStateVMs.Count, result.Count());
+            Assert.Contains(result, esvm => esvm.Name == "Excavator");
+            Assert.Contains(result, esvm => esvm.Name == "Bulldozer");
 
             mockEquipmentStateRepository.Verify(repo => repo.FindAllAsync(), Times.Once);
         }
@@ -155,21 +191,34 @@ namespace Application.Tests.Tests_Services
         [Fact]
         public async Task GetByIdAsync_ValidId_ReturnsEquipmentState()
         {
+            // Arrange
             var mockEquipmentStateRepository = new Mock<IEquipmentStateR>();
             var mapper = new Mock<IMapper>();
             var validator = new Mock<IValidator<EquipmentStateIM>>();
             var validId = Guid.NewGuid();
             var equipmentState = new EquipmentState
             {
-                StateId = Guid.NewGuid(),
+                StateId = validId,
                 Color = "ColorTest",
                 Name = "Excavator",
                 EquipmentModelStateHourlyEarnings = new List<EquipmentModelStateHourlyEarnings>(),
                 EquipmentStateHistories = new List<EquipmentStateHistory>()
             };
 
+            var equipmentStateVM = new EquipmentStateVM
+            {
+                StateId = equipmentState.StateId,
+                Color = equipmentState.Color,
+                Name = equipmentState.Name,
+                EquipmentModelStateHourlyEarnings = equipmentState.EquipmentModelStateHourlyEarnings,
+                EquipmentStateHistories = equipmentState.EquipmentStateHistories
+            };
+
             mockEquipmentStateRepository.Setup(repo => repo.GetByIdAsync(validId))
                                         .ReturnsAsync(equipmentState);
+
+            mapper.Setup(m => m.Map<EquipmentStateVM>(equipmentState))
+                  .Returns(equipmentStateVM);
 
             var equipmentStateService = new EquipmentStateS(
                 mockEquipmentStateRepository.Object,
@@ -177,15 +226,17 @@ namespace Application.Tests.Tests_Services
                 validator.Object
             );
 
+            // Act
             var result = await equipmentStateService.GetByIdAsync(validId);
 
+            // Assert
             Assert.NotNull(result);
-            Assert.IsType<EquipmentState>(result);
-            Assert.Equal(equipmentState.StateId, result.StateId);
-            Assert.Equal(equipmentState.Color, result.Color);
-            Assert.Equal(equipmentState.Name, result.Name);
-            Assert.Equal(equipmentState.EquipmentModelStateHourlyEarnings, result.EquipmentModelStateHourlyEarnings);
-            Assert.Equal(equipmentState.EquipmentStateHistories, result.EquipmentStateHistories);
+            Assert.IsType<EquipmentStateVM>(result);
+            Assert.Equal(equipmentStateVM.StateId, result.StateId);
+            Assert.Equal(equipmentStateVM.Color, result.Color);
+            Assert.Equal(equipmentStateVM.Name, result.Name);
+            Assert.Equal(equipmentStateVM.EquipmentModelStateHourlyEarnings, result.EquipmentModelStateHourlyEarnings);
+            Assert.Equal(equipmentStateVM.EquipmentStateHistories, result.EquipmentStateHistories);
 
             mockEquipmentStateRepository.Verify(repo => repo.GetByIdAsync(validId), Times.Once);
         }
@@ -193,6 +244,7 @@ namespace Application.Tests.Tests_Services
         [Fact]
         public async Task GetByIdAsync_InvalidId_ThrowsArgumentException()
         {
+            // Arrange
             var mockEquipmentStateRepository = new Mock<IEquipmentStateR>();
             var mapper = new Mock<IMapper>();
             var validator = new Mock<IValidator<EquipmentStateIM>>();
@@ -204,13 +256,15 @@ namespace Application.Tests.Tests_Services
                 validator.Object
             );
 
+            // Act & Assert
             var exception = await Assert.ThrowsAsync<ArgumentException>(() => equipmentStateService.GetByIdAsync(invalidId));
-            Assert.Equal("Invalid ID.", exception.Message);
+            Assert.Equal("Invalid ID: Guid.Empty", exception.Message);
         }
 
         [Fact]
         public async Task UpdateAsync_ValidEquipmentState_CallsUpdateAsyncInRepository()
         {
+            // Arrange
             var mockEquipmentStateRepository = new Mock<IEquipmentStateR>();
             var mapper = new Mock<IMapper>();
             var validator = new Mock<IValidator<EquipmentStateIM>>();
@@ -223,6 +277,18 @@ namespace Application.Tests.Tests_Services
                 EquipmentStateHistories = new List<EquipmentStateHistory>()
             };
 
+            var equipmentStateIM = new EquipmentStateIM
+            {
+                Color = "ColorTest",
+                Name = "Excavator"
+            };
+
+            validator.Setup(v => v.Validate(equipmentStateIM))
+                     .Returns(new FluentValidation.Results.ValidationResult());
+
+            mapper.Setup(m => m.Map<EquipmentState>(equipmentStateIM))
+                  .Returns(equipmentState);
+
             mockEquipmentStateRepository.Setup(repo => repo.UpdateAsync(equipmentState))
                                         .Returns(Task.CompletedTask);
 
@@ -232,18 +298,21 @@ namespace Application.Tests.Tests_Services
                 validator.Object
             );
 
-            await equipmentStateService.UpdateAsync(equipmentState);
+            // Act
+            await equipmentStateService.UpdateAsync(equipmentState.StateId,equipmentStateIM);
 
+            // Assert
             mockEquipmentStateRepository.Verify(repo => repo.UpdateAsync(equipmentState), Times.Once);
         }
 
         [Fact]
         public async Task UpdateAsync_NullEquipmentState_ThrowsArgumentNullException()
         {
+            // Arrange
             var mockEquipmentStateRepository = new Mock<IEquipmentStateR>();
             var mapper = new Mock<IMapper>();
             var validator = new Mock<IValidator<EquipmentStateIM>>();
-            EquipmentState? nullEquipmentState = null;
+            EquipmentStateIM nullEquipmentStateIM = null;
 
             var equipmentStateService = new EquipmentStateS(
                 mockEquipmentStateRepository.Object,
@@ -251,8 +320,10 @@ namespace Application.Tests.Tests_Services
                 validator.Object
             );
 
-            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => equipmentStateService.UpdateAsync(nullEquipmentState));
-            Assert.Equal("entity", exception.ParamName);
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => equipmentStateService.UpdateAsync(Guid.Empty,nullEquipmentStateIM));
+            Assert.Equal("Value cannot be null. (Parameter 'equipmentStateIM')", exception.Message);
         }
+
     }
 }

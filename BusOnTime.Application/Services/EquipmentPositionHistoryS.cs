@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using BusOnTime.Application.Interfaces;
 using BusOnTime.Application.Mapping.DTOs.InputModel;
+using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
 using BusOnTime.Data.Repositories.Concrete;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +30,7 @@ namespace BusOnTime.Application.Services
             mapper = _mapper;
             validator = _validator;
         }
-        public async Task<EquipmentPositionHistory> CreateAsync(EquipmentPositionHistoryIM entity)
+        public async Task<EquipmentPositionHistoryVM> CreateAsync(EquipmentPositionHistoryIM entity)
         {
             try
             {
@@ -43,7 +45,11 @@ namespace BusOnTime.Application.Services
 
                 if (createMapObject == null) throw new ArgumentNullException(nameof(createMapObject));
 
-                return await equipmentPositionHistoryR.CreateAsync(createMapObject);
+                var view = await equipmentPositionHistoryR.CreateAsync(createMapObject);
+
+                var viewModel = mapper.Map<EquipmentPositionHistoryVM>(view);
+
+                return viewModel;
             }
             catch (Exception ex)
             {
@@ -70,11 +76,15 @@ namespace BusOnTime.Application.Services
 
         }
 
-        public async Task<IEnumerable<EquipmentPositionHistory>> FindAllAsync()
+        public async Task<IEnumerable<EquipmentPositionHistoryVM>> FindAllAsync()
         {
             try
             {
-                return await equipmentPositionHistoryR.FindAllAsync();
+                var view = await equipmentPositionHistoryR.FindAllAsync();
+
+                var viewModel = mapper.Map<IEnumerable<EquipmentPositionHistoryVM>>(view);
+
+                return viewModel;
             }
             catch (Exception ex)
             {
@@ -82,13 +92,17 @@ namespace BusOnTime.Application.Services
             }
         }
 
-        public async Task<EquipmentPositionHistory> GetByIdAsync(Guid id)
+        public async Task<EquipmentPositionHistoryVM> GetByIdAsync(Guid id)
         {
             try
             {
                 if (id == Guid.Empty) throw new ArgumentException("Invalid ID.");
 
-                return await equipmentPositionHistoryR.GetByIdAsync(id);
+                var view = await equipmentPositionHistoryR.GetByIdAsync(id);
+
+                var viewModel = mapper.Map<EquipmentPositionHistoryVM>(view);
+
+                return viewModel;
             }
             catch (ArgumentException)
             {
