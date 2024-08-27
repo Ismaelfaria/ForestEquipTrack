@@ -12,5 +12,6 @@ namespace BusOnTime.Application.Interfaces
     public interface IEquipmentStateS : IServiceBase<EquipmentState>
     {
         Task<EquipmentState> CreateAsync(EquipmentStateIM entity);
+        Task UpdateAsync(Guid id, EquipmentStateIM entity);
     }
 }

@@ -12,5 +12,6 @@ namespace BusOnTime.Application.Interfaces
     public interface IEquipmentPositionHistoryS : IServiceBase<EquipmentPositionHistory>
     {
         Task<EquipmentPositionHistory> CreateAsync(EquipmentPositionHistoryIM entity);
+        Task UpdateAsync(Guid id, EquipmentPositionHistoryIM entity);
     }
 }

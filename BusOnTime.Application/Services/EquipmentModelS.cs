@@ -95,13 +95,24 @@ namespace BusOnTime.Application.Services
             }
         }
 
-        public async Task UpdateAsync(EquipmentModel entity)
+        public async Task UpdateAsync(Guid id, EquipmentModelIM entity)
         {
             try
             {
-                if (entity == null) throw new ArgumentNullException(nameof(entity));
+                var validResult = validator.Validate(entity);
 
-                await equipmentModelR.UpdateAsync(entity);
+                if (!validResult.IsValid)
+                {
+                    throw new ValidationException("Erro na validação ao criar 'EquipmentModel'");
+                }
+
+                var createMapObject = mapper.Map<EquipmentModel>(entity);
+
+                createMapObject.EquipmentId = id;
+
+                if (createMapObject == null) throw new ArgumentNullException(nameof(createMapObject));
+
+                await equipmentModelR.UpdateAsync(createMapObject);
             }
             catch (ArgumentNullException)
             {

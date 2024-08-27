@@ -34,7 +34,7 @@ namespace BusOnTime.Application.Services
 
                 if (!validResult.IsValid)
                 {
-                    throw new ValidationException("Erro na validação ao criar 'EquipmentModel'");
+                    throw new ValidationException("Erro na validação ao criar 'Equipment'");
                 }
 
                 var createMapObject = mapper.Map<Equipment>(entity);
@@ -97,13 +97,24 @@ namespace BusOnTime.Application.Services
             }
         }
 
-        public async Task UpdateAsync(Equipment entity)
+        public async Task UpdateAsync(Guid id, EquipmentIM entity)
         {
             try
             {
-                if (entity == null) throw new ArgumentNullException(nameof(entity));
+                var validResult = validator.Validate(entity);
 
-                await equipmentR.UpdateAsync(entity);
+                if (!validResult.IsValid)
+                {
+                    throw new ValidationException("Erro na validação ao criar 'Equipment'");
+                }
+
+                var createMapObject = mapper.Map<Equipment>(entity);
+
+                createMapObject.EquipmentId = id;
+
+                if (entity == null) throw new ArgumentNullException(nameof(createMapObject));
+
+                await equipmentR.UpdateAsync(createMapObject);
             }
             catch (ArgumentNullException)
             {
