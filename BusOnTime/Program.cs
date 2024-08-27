@@ -3,11 +3,17 @@ using BusOnTime.Application.Mapping.DTOs.InputModel;
 using BusOnTime.Application.Mapping.Profiles;
 using BusOnTime.Application.Services;
 using BusOnTime.Application.Validators;
+using BusOnTime.Data.DataContext;
 using BusOnTime.Data.Interfaces.Interface;
 using BusOnTime.Data.Repositories.Concrete;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var ConnectionString = builder.Configuration.GetConnectionString("BusOnTimeConnection");
+
+builder.Services.AddDbContext<Context>(o => o.UseSqlServer(ConnectionString));
 
 // Add services to the container.
 
