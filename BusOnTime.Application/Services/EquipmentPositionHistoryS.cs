@@ -118,6 +118,9 @@ namespace BusOnTime.Application.Services
         {
             try
             {
+
+                if (entity == null) throw new ArgumentNullException(nameof(entity));
+
                 var validResult = validator.Validate(entity);
 
                 if (!validResult.IsValid)
@@ -128,9 +131,6 @@ namespace BusOnTime.Application.Services
                 var createMapObject = mapper.Map<EquipmentPositionHistory>(entity);
 
                 createMapObject.EquipmentPositionId = id;
-
-
-                if (createMapObject == null) throw new ArgumentNullException(nameof(createMapObject));
 
                 await equipmentPositionHistoryR.UpdateAsync(createMapObject);
             }

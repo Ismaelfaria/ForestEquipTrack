@@ -115,6 +115,8 @@ namespace BusOnTime.Application.Services
         {
             try
             {
+                if (entity == null) throw new ArgumentNullException(nameof(entity));
+
                 var validResult = validator.Validate(entity);
 
                 if (!validResult.IsValid)
@@ -125,8 +127,6 @@ namespace BusOnTime.Application.Services
                 var createMapObject = mapper.Map<Equipment>(entity);
 
                 createMapObject.EquipmentId = id;
-
-                if (entity == null) throw new ArgumentNullException(nameof(createMapObject));
 
                 await equipmentR.UpdateAsync(createMapObject);
             }

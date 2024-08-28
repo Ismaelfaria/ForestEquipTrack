@@ -117,14 +117,11 @@ namespace BusOnTime.Application.Services
         {
             try
             {
+                if (entity == null) throw new ArgumentNullException(nameof(entity));
+
                 var validResult = validator.Validate(entity);
 
-                if (!validResult.IsValid)
-                {
-                    throw new ValidationException("Erro na validação ao criar 'EquipmentModelStateHourlyEarnings'");
-                }
-
-                if (entity == null) throw new ArgumentNullException(nameof(entity));
+                if (!validResult.IsValid) throw new ValidationException("Erro na validação ao criar 'EquipmentModelStateHourlyEarnings'");
 
                 var createMapObject = mapper.Map<EquipmentModelStateHourlyEarnings>(entity);
 

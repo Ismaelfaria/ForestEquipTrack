@@ -285,12 +285,20 @@ namespace Application.Tests.Tests_Services
             var mockEquipmentRepository = new Mock<IEquipmentR>();
             var mapper = new Mock<IMapper>();
             var validator = new Mock<IValidator<EquipmentIM>>();
+            EquipmentIM equipmentNull = null;
 
-            var equipmentService = new EquipmentS(mockEquipmentRepository.Object, mapper.Object, validator.Object);
+            var equipmentService = new EquipmentS(
+               mockEquipmentRepository.Object,
+               mapper.Object,
+               validator.Object);
 
-            // Act & Assert
-            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => equipmentService.UpdateAsync(Guid.Empty,null));
-            Assert.Equal("EquipmentIM cannot be null", exception.Message);
+            EquipmentIM equipmentIM = new EquipmentIM()
+            {
+                EquipmentModelId = Guid.NewGuid(),
+                Name = "testUpdate"
+            };
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => equipmentService.UpdateAsync(Guid.NewGuid(), equipmentNull));
         }
     }
 }

@@ -4,6 +4,7 @@ using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using BusOnTime.Application.Services;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
+using BusOnTime.Data.Repositories.Concrete;
 using FluentValidation;
 using FluentValidation.Results;
 using Moq;
@@ -183,67 +184,54 @@ namespace Application.Tests.Tests_Services
             var mockEquipmentModelStateHourlyEarningsRepository = new Mock<IEquipmentModelStateHourlyEarningsR>();
             var validatorMock = new Mock<IValidator<EquipmentModelStateHourlyEarningsIM>>();
             var mapperMock = new Mock<IMapper>();
-            var id = Guid.NewGuid();
 
-            var equipmentModelStateHourlyEarningsIM = new EquipmentModelStateHourlyEarningsIM
+            var equipmentModelStateHourlyEarnings = new EquipmentModelStateHourlyEarnings
             {
+                EquipmentModelStateHourlyEarningsId = Guid.NewGuid(),
                 EquipmentModelId = Guid.NewGuid(),
                 EquipmentStateId = Guid.NewGuid(),
                 Value = 15
             };
 
-            var equipmentModelStateHourlyEarnings = new EquipmentModelStateHourlyEarnings
-            {
-                EquipmentModelStateHourlyEarningsId = id,
-                EquipmentModelId = equipmentModelStateHourlyEarningsIM.EquipmentModelId,
-                EquipmentStateId = equipmentModelStateHourlyEarningsIM.EquipmentStateId,
-                Value = equipmentModelStateHourlyEarningsIM.Value
-            };
-
             var equipmentModelStateHourlyEarningsVM = new EquipmentModelStateHourlyEarningsVM
             {
-                EquipmentModelStateHourlyEarningsId = id,
-                EquipmentModelId = equipmentModelStateHourlyEarningsIM.EquipmentModelId,
-                EquipmentStateId = equipmentModelStateHourlyEarningsIM.EquipmentStateId,
-                Value = equipmentModelStateHourlyEarningsIM.Value
+                EquipmentModelStateHourlyEarningsId = equipmentModelStateHourlyEarnings.EquipmentModelStateHourlyEarningsId,
+                EquipmentModelId = equipmentModelStateHourlyEarnings.EquipmentModelId,
+                EquipmentStateId = equipmentModelStateHourlyEarnings.EquipmentStateId,
+                Value = equipmentModelStateHourlyEarnings.Value
+            };
+            var equipmentModelStateHourlyEarningsIM = new EquipmentModelStateHourlyEarningsIM
+            {
+                EquipmentModelId = equipmentModelStateHourlyEarnings.EquipmentModelId,
+                EquipmentStateId = equipmentModelStateHourlyEarnings.EquipmentStateId,
+                Value = equipmentModelStateHourlyEarnings.Value
             };
 
             validatorMock.Setup(v => v.Validate(equipmentModelStateHourlyEarningsIM))
                 .Returns(new ValidationResult());
 
-            mockEquipmentModelStateHourlyEarningsRepository.Setup(repo => repo.GetByIdAsync(equipmentModelStateHourlyEarnings.EquipmentModelStateHourlyEarningsId))
-                .ReturnsAsync(equipmentModelStateHourlyEarnings);
+            mapperMock.Setup(m => m.Map<EquipmentModelStateHourlyEarnings>(equipmentModelStateHourlyEarningsIM))
+                .Returns(equipmentModelStateHourlyEarnings);
 
             mockEquipmentModelStateHourlyEarningsRepository.Setup(repo => repo.UpdateAsync(equipmentModelStateHourlyEarnings))
                 .Returns(Task.CompletedTask);
 
-            mapperMock.Setup(m => m.Map<EquipmentModelStateHourlyEarnings>(equipmentModelStateHourlyEarningsIM))
-                .Returns(equipmentModelStateHourlyEarnings);
+            var equipmentModelStateHourlyEarningService = new EquipmentModelStateHourlyEarningS(mockEquipmentModelStateHourlyEarningsRepository.Object, mapperMock.Object, validatorMock.Object);
 
-            mapperMock.Setup(m => m.Map<EquipmentModelStateHourlyEarningsVM>(equipmentModelStateHourlyEarnings))
-                .Returns(equipmentModelStateHourlyEarningsVM);
+            await equipmentModelStateHourlyEarningService.UpdateAsync(equipmentModelStateHourlyEarnings.EquipmentModelStateHourlyEarningsId, equipmentModelStateHourlyEarningsIM);
 
-            var equipmentModelStateHourlyEarningService = new EquipmentModelStateHourlyEarningS(
-                mockEquipmentModelStateHourlyEarningsRepository.Object,
-                mapperMock.Object,
-                validatorMock.Object);
-
-            await equipmentModelStateHourlyEarningService.UpdateAsync(id, equipmentModelStateHourlyEarningsIM);      
-
-            mockEquipmentModelStateHourlyEarningsRepository.Verify(repo => repo.GetByIdAsync(id), Times.Once);
             mockEquipmentModelStateHourlyEarningsRepository.Verify(repo => repo.UpdateAsync(equipmentModelStateHourlyEarnings), Times.Once);
             validatorMock.Verify(v => v.Validate(equipmentModelStateHourlyEarningsIM), Times.Once);
             mapperMock.Verify(m => m.Map<EquipmentModelStateHourlyEarnings>(equipmentModelStateHourlyEarningsIM), Times.Once);
-            mapperMock.Verify(m => m.Map<EquipmentModelStateHourlyEarningsVM>(equipmentModelStateHourlyEarnings), Times.Once);
         }
 
         [Fact]
-        public async Task UpdateAsync_InvalidId_ThrowsArgumentException()
+        public async Task UpdateAsync_InvalidId_ThrowsArgumentNullException()
         {
             var mockEquipmentModelStateHourlyEarningsRepository = new Mock<IEquipmentModelStateHourlyEarningsR>();
             var validatorMock = new Mock<IValidator<EquipmentModelStateHourlyEarningsIM>>();
             var mapperMock = new Mock<IMapper>();
-            var invalidId = Guid.Empty;
+            EquipmentModelStateHourlyEarningsIM entityNull = null;
 
             var equipmentModelStateHourlyEarningService = new EquipmentModelStateHourlyEarningS(
                 mockEquipmentModelStateHourlyEarningsRepository.Object,
@@ -257,7 +245,7 @@ namespace Application.Tests.Tests_Services
                 Value = 10
             };
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => equipmentModelStateHourlyEarningService.UpdateAsync(invalidId, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => equipmentModelStateHourlyEarningService.UpdateAsync(Guid.NewGuid(), entityNull));
         }
     }
 }
