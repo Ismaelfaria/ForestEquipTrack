@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusOnTime.Application.Mapping.DTOs.InputModel;
+using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using BusOnTime.Application.Services;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
@@ -16,17 +17,30 @@ namespace Application.Tests.Tests_Services
 {
     public class EquipmentModelST
     {
-        [Fact]
-        public async void CreateAsync_ValidEquipmentModel_ReturnsCreatedEquipmentModel()
+
+        private readonly Mock<IMapper> _mapperMock;
+        private readonly Mock<IValidator<EquipmentModelIM>> _validatorMock;
+        private readonly Mock<IEquipmentModelR> _equipmentModelRMock;
+        private readonly EquipmentModelS _service;
+
+        public EquipmentModelST()
         {
-            var equipmentModelRepository = new Mock<IEquipmentModelR>();
-            var mapper = new Mock<IMapper>();
-            var validator = new Mock<IValidator<EquipmentModelIM>>();
+            _mapperMock = new Mock<IMapper>();
+            _validatorMock = new Mock<IValidator<EquipmentModelIM>>();
+            _equipmentModelRMock = new Mock<IEquipmentModelR>();
+
+            _service = new EquipmentModelS(_equipmentModelRMock.Object, _mapperMock.Object, _validatorMock.Object);
+        }
+
+
+        [Fact]
+        public async void CreateAsync_ValidEquipmentModel_ReturnsCreatedEquipmentModelVM()
+        {
 
             var equipmentModelIM = new EquipmentModelIM
             {
                 EquipmentId = Guid.NewGuid(),
-                Name = "Excavator",
+                Name = "Excavator"
             };
 
             var equipmentModelEntity = new EquipmentModel
@@ -38,115 +52,135 @@ namespace Application.Tests.Tests_Services
                 EquipmentModelStateHourlyEarnings = new List<EquipmentModelStateHourlyEarnings>()
             };
 
-            validator.Setup(v => v.Validate(equipmentModelIM))
+            var equipmentModelVM = new EquipmentModelVM
+            {
+                ModelId = equipmentModelEntity.ModelId,
+                EquipmentId = equipmentModelEntity.EquipmentId,
+                Name = equipmentModelEntity.Name
+            };
+
+
+            _validatorMock.Setup(v => v.Validate(equipmentModelIM))
                 .Returns(new ValidationResult());
 
-            mapper.Setup(m => m.Map<EquipmentModel>(equipmentModelIM))
+            _mapperMock.Setup(m => m.Map<EquipmentModel>(equipmentModelIM))
                 .Returns(equipmentModelEntity);
 
-            equipmentModelRepository.Setup(repo => repo.CreateAsync(equipmentModelEntity))
+            _mapperMock.Setup(m => m.Map<EquipmentModelVM>(equipmentModelEntity))
+                .Returns(equipmentModelVM);
+
+            _equipmentModelRMock.Setup(repo => repo.CreateAsync(equipmentModelEntity))
                 .ReturnsAsync(equipmentModelEntity);
 
-            var equipmentModelService = new EquipmentModelS(equipmentModelRepository.Object, mapper.Object, validator.Object);
-
-            var result = await equipmentModelService.CreateAsync(equipmentModelIM);
+            var result = await _service.CreateAsync(equipmentModelIM);
 
             Assert.NotNull(result);
-            Assert.IsType<EquipmentModel>(result);
-            Assert.Equal(equipmentModelEntity.ModelId, result.ModelId);
-            Assert.Equal(equipmentModelEntity.EquipmentId, result.EquipmentId);
-            Assert.Equal(equipmentModelEntity.Name, result.Name);
+            Assert.IsType<EquipmentModelVM>(result);
+            Assert.Equal(equipmentModelVM.ModelId, result.ModelId);
+            Assert.Equal(equipmentModelVM.EquipmentId, result.EquipmentId);
+            Assert.Equal(equipmentModelVM.Name, result.Name);
 
-            equipmentModelRepository.Verify(repo => repo.CreateAsync(equipmentModelEntity), Times.Once);
-            mapper.Verify(m => m.Map<EquipmentModel>(equipmentModelIM), Times.Once);
-            validator.Verify(v => v.Validate(equipmentModelIM), Times.Once);
+            _equipmentModelRMock.Verify(repo => repo.CreateAsync(equipmentModelEntity), Times.Once);
+            _mapperMock.Verify(m => m.Map<EquipmentModel>(equipmentModelIM), Times.Once);
+            _mapperMock.Verify(m => m.Map<EquipmentModelVM>(equipmentModelEntity), Times.Once);
+            _validatorMock.Verify(v => v.Validate(equipmentModelIM), Times.Once);
+        }
+        
+        [Fact]
+        public async Task CreateAsync_ExceptionEquipmentModelNull_ThrowsArgumentNullException()
+        {
+
+            EquipmentModelIM? equipmentModelIM = null;
+
+            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => _service.CreateAsync(equipmentModelIM));
+            Assert.Equal("Value cannot be null. (Parameter 'Entity Invalid.')", exception.Message);
         }
 
         [Fact]
         public async Task DeleteAsync_ValidId_CallsDeleteAsyncInRepository()
         {
-            var mockEquipmentModelRepository = new Mock<IEquipmentModelR>();
-            var mockMapper = new Mock<IMapper>();
-            var mockValidator = new Mock<IValidator<EquipmentModelIM>>();
-
             var validId = Guid.NewGuid();
 
-            mockEquipmentModelRepository.Setup(repo => repo.DeleteAsync(validId))
+            _equipmentModelRMock.Setup(repo => repo.DeleteAsync(validId))
                 .Returns(Task.CompletedTask);
 
-            var equipmentModelService = new EquipmentModelS(mockEquipmentModelRepository.Object, mockMapper.Object, mockValidator.Object);
+            await _service.DeleteAsync(validId);
 
-            await equipmentModelService.DeleteAsync(validId);
-
-            mockEquipmentModelRepository.Verify(repo => repo.DeleteAsync(validId), Times.Once);
+            _equipmentModelRMock.Verify(repo => repo.DeleteAsync(validId), Times.Once);
         }
 
         [Fact]
         public async Task DeleteAsync_InvalidId_ThrowsArgumentException()
         {
-            var mockEquipmentModelRepository = new Mock<IEquipmentModelR>();
-            var mockMapper = new Mock<IMapper>();
-            var mockValidator = new Mock<IValidator<EquipmentModelIM>>();
-
+            
             var invalidId = Guid.Empty;
 
-            var equipmentModelService = new EquipmentModelS(mockEquipmentModelRepository.Object, mockMapper.Object, mockValidator.Object);
-
-            var exception = await Assert.ThrowsAsync<ArgumentException>(() => equipmentModelService.DeleteAsync(invalidId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(() => _service.DeleteAsync(invalidId));
             Assert.Equal("Invalid ID.", exception.Message);
         }
 
         [Fact]
-        public async Task FindAllAsync_ReturnsListOfEquipmentModels()
+        public async Task FindAllAsync_ReturnsListOfEquipmentModelVMs()
         {
-            var mockEquipmentModelRepository = new Mock<IEquipmentModelR>();
-            var mockMapper = new Mock<IMapper>();
-            var mockValidator = new Mock<IValidator<EquipmentModelIM>>();
-
             var equipmentModels = new List<EquipmentModel>
-    {
-        new EquipmentModel
-        {
-            ModelId = Guid.NewGuid(),
-            EquipmentId = Guid.NewGuid(),
-            Name = "Excavator",
-            Equipment = new List<Equipment>(),
-            EquipmentModelStateHourlyEarnings = new List<EquipmentModelStateHourlyEarnings>()
-        },
-        new EquipmentModel
-        {
-            ModelId = Guid.NewGuid(),
-            EquipmentId = Guid.NewGuid(),
-            Name = "Bulldozer",
-            Equipment = new List<Equipment>(),
-            EquipmentModelStateHourlyEarnings = new List<EquipmentModelStateHourlyEarnings>()
-        }
-    };
+            {
+                new EquipmentModel
+                {
+                    ModelId = Guid.NewGuid(),
+                    EquipmentId = Guid.NewGuid(),
+                    Name = "Excavator",
+                    Equipment = new List<Equipment>(),
+                    EquipmentModelStateHourlyEarnings = new List<EquipmentModelStateHourlyEarnings>()
+                },
+                new EquipmentModel
+                {
+                    ModelId = Guid.NewGuid(),
+                    EquipmentId = Guid.NewGuid(),
+                    Name = "Bulldozer",
+                    Equipment = new List<Equipment>(),
+                    EquipmentModelStateHourlyEarnings = new List<EquipmentModelStateHourlyEarnings>()
+                }
+            };
 
-            mockEquipmentModelRepository.Setup(repo => repo.FindAllAsync())
+            var equipmentModelVMs = new List<EquipmentModelVM>
+            {
+                new EquipmentModelVM
+                {
+                    ModelId = equipmentModels[0].ModelId,
+                    EquipmentId = equipmentModels[0].EquipmentId,
+                    Name = equipmentModels[0].Name
+                },
+                new EquipmentModelVM
+                {
+                    ModelId = equipmentModels[1].ModelId,
+                    EquipmentId = equipmentModels[1].EquipmentId,
+                    Name = equipmentModels[1].Name
+                }
+            };
+
+            _equipmentModelRMock.Setup(repo => repo.FindAllAsync())
                 .ReturnsAsync(equipmentModels);
 
-            var equipmentModelService = new EquipmentModelS(mockEquipmentModelRepository.Object, mockMapper.Object, mockValidator.Object);
+            _mapperMock.Setup(m => m.Map<IEnumerable<EquipmentModelVM>>(equipmentModels))
+                .Returns(equipmentModelVMs);
 
-            var result = await equipmentModelService.FindAllAsync();
+            var result = await _service.FindAllAsync();
 
             Assert.NotNull(result);
-            Assert.IsType<List<EquipmentModel>>(result);
-            Assert.Equal(equipmentModels.Count, result.Count());
+            Assert.IsType<List<EquipmentModelVM>>(result);
+            Assert.Equal(equipmentModelVMs.Count, result.Count());
             Assert.Contains(result, em => em.Name == "Excavator");
             Assert.Contains(result, em => em.Name == "Bulldozer");
 
-            mockEquipmentModelRepository.Verify(repo => repo.FindAllAsync(), Times.Once);
+            _equipmentModelRMock.Verify(repo => repo.FindAllAsync(), Times.Once);
+            _mapperMock.Verify(m => m.Map<IEnumerable<EquipmentModelVM>>(equipmentModels), Times.Once);
         }
 
         [Fact]
-        public async Task GetByIdAsync_ValidId_ReturnsEquipmentModel()
+        public async Task GetByIdAsync_ValidId_ReturnsEquipmentModelVM()
         {
-            var mockEquipmentModelRepository = new Mock<IEquipmentModelR>();
-            var mockMapper = new Mock<IMapper>();
-            var mockValidator = new Mock<IValidator<EquipmentModelIM>>();
-
             var validId = Guid.NewGuid();
+
             var equipmentModel = new EquipmentModel
             {
                 ModelId = validId,
@@ -156,46 +190,43 @@ namespace Application.Tests.Tests_Services
                 EquipmentModelStateHourlyEarnings = new List<EquipmentModelStateHourlyEarnings>()
             };
 
-            mockEquipmentModelRepository.Setup(repo => repo.GetByIdAsync(validId))
+            var equipmentModelVM = new EquipmentModelVM
+            {
+                ModelId = equipmentModel.ModelId,
+                EquipmentId = equipmentModel.EquipmentId,
+                Name = equipmentModel.Name
+            };
+
+            _equipmentModelRMock.Setup(repo => repo.GetByIdAsync(validId))
                 .ReturnsAsync(equipmentModel);
 
-            var equipmentModelService = new EquipmentModelS(mockEquipmentModelRepository.Object, mockMapper.Object, mockValidator.Object);
+            _mapperMock.Setup(m => m.Map<EquipmentModelVM>(equipmentModel))
+                .Returns(equipmentModelVM);
 
-            var result = await equipmentModelService.GetByIdAsync(validId);
+            var result = await _service.GetByIdAsync(validId);
 
             Assert.NotNull(result);
-            Assert.IsType<EquipmentModel>(result);
-            Assert.Equal(equipmentModel.ModelId, result.ModelId);
-            Assert.Equal(equipmentModel.EquipmentId, result.EquipmentId);
-            Assert.Equal(equipmentModel.Name, result.Name);
-            Assert.Equal(equipmentModel.Equipment, result.Equipment);
-            Assert.Equal(equipmentModel.EquipmentModelStateHourlyEarnings, result.EquipmentModelStateHourlyEarnings);
+            Assert.IsType<EquipmentModelVM>(result);
+            Assert.Equal(equipmentModelVM.ModelId, result.ModelId);
+            Assert.Equal(equipmentModelVM.EquipmentId, result.EquipmentId);
+            Assert.Equal(equipmentModelVM.Name, result.Name);
 
-            mockEquipmentModelRepository.Verify(repo => repo.GetByIdAsync(validId), Times.Once);
+            _equipmentModelRMock.Verify(repo => repo.GetByIdAsync(validId), Times.Once);
+            _mapperMock.Verify(m => m.Map<EquipmentModelVM>(equipmentModel), Times.Once);
         }
 
         [Fact]
         public async Task GetByIdAsync_InvalidId_ThrowsArgumentException()
         {
-            var mockEquipmentModelRepository = new Mock<IEquipmentModelR>();
-            var mockMapper = new Mock<IMapper>();
-            var mockValidator = new Mock<IValidator<EquipmentModelIM>>();
-
             var invalidId = Guid.Empty;
 
-            var equipmentModelService = new EquipmentModelS(mockEquipmentModelRepository.Object, mockMapper.Object, mockValidator.Object);
-
-            var exception = await Assert.ThrowsAsync<ArgumentException>(() => equipmentModelService.GetByIdAsync(invalidId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(() => _service.GetByIdAsync(invalidId));
             Assert.Equal("Invalid ID.", exception.Message);
         }
 
         [Fact]
         public async Task UpdateAsync_ValidEquipmentModel_CallsUpdateAsyncInRepository()
         {
-            var mockEquipmentModelRepository = new Mock<IEquipmentModelR>();
-            var mockMapper = new Mock<IMapper>();
-            var mockValidator = new Mock<IValidator<EquipmentModelIM>>();
-
             var equipmentModel = new EquipmentModel
             {
                 ModelId = Guid.NewGuid(),
@@ -205,29 +236,57 @@ namespace Application.Tests.Tests_Services
                 EquipmentModelStateHourlyEarnings = new List<EquipmentModelStateHourlyEarnings>()
             };
 
-            mockEquipmentModelRepository.Setup(repo => repo.UpdateAsync(equipmentModel))
+            var equipmentModelIM = new EquipmentModelIM
+            {
+                EquipmentId = equipmentModel.EquipmentId,
+                Name = equipmentModel.Name
+            };
+
+            _validatorMock.Setup(v => v.Validate(equipmentModelIM))
+                .Returns(new ValidationResult());
+
+            _mapperMock.Setup(m => m.Map<EquipmentModel>(equipmentModelIM))
+                .Returns(equipmentModel);
+
+            _equipmentModelRMock.Setup(repo => repo.UpdateAsync(equipmentModel))
                 .Returns(Task.CompletedTask);
 
-            var equipmentModelService = new EquipmentModelS(mockEquipmentModelRepository.Object, mockMapper.Object, mockValidator.Object);
+            await _service.UpdateAsync(equipmentModel.ModelId, equipmentModelIM);
 
-            await equipmentModelService.UpdateAsync(equipmentModel);
-
-            mockEquipmentModelRepository.Verify(repo => repo.UpdateAsync(equipmentModel), Times.Once);
+            _equipmentModelRMock.Verify(repo => repo.UpdateAsync(equipmentModel), Times.Once);
+            _validatorMock.Verify(v => v.Validate(equipmentModelIM), Times.Once);
+            _mapperMock.Verify(m => m.Map<EquipmentModel>(equipmentModelIM), Times.Once);
         }
 
         [Fact]
-        public async Task UpdateAsync_NullEquipmentModel_ThrowsArgumentNullException()
+        public async Task UpdateAsync_InvalidEntity_ThrowsValidationExceptionAndArgumentNullException()
         {
-            var mockEquipmentModelRepository = new Mock<IEquipmentModelR>();
-            var mockMapper = new Mock<IMapper>();
-            var mockValidator = new Mock<IValidator<EquipmentModelIM>>();
+            var invalidEquipmentModelIM = new EquipmentModelIM
+            {
+                EquipmentId = Guid.Empty,
+                Name = null
+            };
 
-            EquipmentModel? nullEquipmentModel = null;
+            var validationFailures = new List<ValidationFailure>
+            {
+                new ValidationFailure("EquipmentId", "EquipmentId cannot be empty."),
+                new ValidationFailure("Name", "Name is required.")
+            };
 
-            var equipmentModelService = new EquipmentModelS(mockEquipmentModelRepository.Object, mockMapper.Object, mockValidator.Object);
+            _validatorMock.Setup(v => v.Validate(invalidEquipmentModelIM))
+                         .Returns(new ValidationResult(validationFailures));
 
-            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => equipmentModelService.UpdateAsync(nullEquipmentModel));
-            Assert.Equal("entity", exception.ParamName);
+            var exception = await Assert.ThrowsAsync<ValidationException>(() => _service.UpdateAsync(Guid.NewGuid(), invalidEquipmentModelIM));
+            Assert.Contains("Validation failed", exception.Message);
+            
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _service.UpdateAsync(Guid.NewGuid(), null));
+
+            foreach (var failure in validationFailures)
+            {
+                Assert.Contains(failure.ErrorMessage, exception.Message);
+            }
+
+            _validatorMock.Verify(v => v.Validate(invalidEquipmentModelIM), Times.Once);
         }
     }
 }

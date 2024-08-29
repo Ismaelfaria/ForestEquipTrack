@@ -14,6 +14,5 @@ namespace BusOnTime.Application.Mapping.DTOs.ViewModel
         public DateTime Date { get; set; }
         public int Lat { get; set; }
         public int Lon { get; set; }
-        public Equipment? Equipment { get; set; }
     }
 }

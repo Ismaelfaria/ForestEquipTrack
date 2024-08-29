@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using BusOnTime.Application.Interfaces;
 using BusOnTime.Application.Mapping.DTOs.InputModel;
+using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +25,12 @@ namespace BusOnTime.Application.Services
             mapper = _mapper;
             validator = _validator;
         }
-        public async Task<EquipmentModel> CreateAsync(EquipmentModelIM entity)
+        public async Task<EquipmentModelVM> CreateAsync(EquipmentModelIM entity)
         {
             try
             {
+                if (entity == null) throw new ArgumentNullException("Entity Invalid.");
+
                 var validResult = validator.Validate(entity);
 
                 if (!validResult.IsValid)
@@ -36,9 +40,15 @@ namespace BusOnTime.Application.Services
 
                 var createMapObject = mapper.Map<EquipmentModel>(entity);
 
-                if (createMapObject == null) throw new ArgumentNullException(nameof(createMapObject));
+                var view = await equipmentModelR.CreateAsync(createMapObject);
 
-                return await equipmentModelR.CreateAsync(createMapObject);
+                var viewModel = mapper.Map<EquipmentModelVM>(view);
+
+                return viewModel;
+            }
+            catch (ArgumentNullException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
@@ -65,11 +75,15 @@ namespace BusOnTime.Application.Services
 
         }
 
-        public async Task<IEnumerable<EquipmentModel>> FindAllAsync()
+        public async Task<IEnumerable<EquipmentModelVM>> FindAllAsync()
         {
             try
             {
-                return await equipmentModelR.FindAllAsync();
+                var view = await equipmentModelR.FindAllAsync();
+
+                var viewModel = mapper.Map <IEnumerable<EquipmentModelVM>>(view);
+
+                return viewModel;
             }
             catch (Exception ex)
             {
@@ -77,13 +91,17 @@ namespace BusOnTime.Application.Services
             }
         }
 
-        public async Task<EquipmentModel> GetByIdAsync(Guid id)
+        public async Task<EquipmentModelVM> GetByIdAsync(Guid id)
         {
             try
             {
                 if (id == Guid.Empty) throw new ArgumentException("Invalid ID.");
 
-                return await equipmentModelR.GetByIdAsync(id);
+                var view = await equipmentModelR.GetByIdAsync(id);
+
+                var viewModel = mapper.Map<EquipmentModelVM>(view);
+
+                return viewModel;
             }
             catch (ArgumentException)
             {
@@ -99,25 +117,30 @@ namespace BusOnTime.Application.Services
         {
             try
             {
+                if (entity == null) throw new ArgumentNullException(nameof(entity));
+
                 var validResult = validator.Validate(entity);
 
                 if (!validResult.IsValid)
                 {
-                    throw new ValidationException("Erro na validação ao criar 'EquipmentModel'");
+                    var errorMessage = string.Join(", ", validResult.Errors.Select(e => e.ErrorMessage));
+                    throw new ValidationException($"Validation failed, {errorMessage}");
                 }
 
                 var createMapObject = mapper.Map<EquipmentModel>(entity);
 
                 createMapObject.EquipmentId = id;
 
-                if (createMapObject == null) throw new ArgumentNullException(nameof(createMapObject));
-
                 await equipmentModelR.UpdateAsync(createMapObject);
             }
             catch (ArgumentNullException)
             {
                 throw;
-            }catch (Exception ex)
+            }catch (ValidationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
             {
                 throw new Exception("BusOnTime/Application/Services/EquipmentModelS/UpdateAsync", ex);
             }

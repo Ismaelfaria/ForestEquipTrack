@@ -1,5 +1,6 @@
 ﻿using BusOnTime.Application.Interfaces.Generic;
 using BusOnTime.Application.Mapping.DTOs.InputModel;
+using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using BusOnTime.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,6 @@ using System.Threading.Tasks;
 
 namespace BusOnTime.Application.Interfaces
 {
-    public interface IEquipmentStateHistoryS : IServiceBase<EquipmentStateHistory>
-    {
-        Task<EquipmentStateHistory> CreateAsync(EquipmentStateHistoryIM entity);
-        Task UpdateAsync(Guid id, EquipmentStateHistoryIM entity);
-    }
+    public interface IEquipmentStateHistoryS : IServiceBase<EquipmentStateHistoryIM, EquipmentStateHistoryVM>
+    {}
 }

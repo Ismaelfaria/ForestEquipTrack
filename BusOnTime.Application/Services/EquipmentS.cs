@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using BusOnTime.Application.Interfaces;
 using BusOnTime.Application.Mapping.DTOs.InputModel;
+using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +28,7 @@ namespace BusOnTime.Application.Services
             mapper = _mapper;
             validator = _validator;
         }
-        public async Task<Equipment> CreateAsync(EquipmentIM entity)
+        public async Task<EquipmentVM> CreateAsync(EquipmentIM entity)
         {
             try
             {
@@ -41,7 +43,11 @@ namespace BusOnTime.Application.Services
 
                 if (createMapObject == null) throw new ArgumentNullException(nameof(createMapObject));
 
-                return await equipmentR.CreateAsync(createMapObject);
+                var view = await equipmentR.CreateAsync(createMapObject);
+
+                var viewModel = mapper.Map<EquipmentVM>(view);
+
+                return viewModel;
             }
             catch (Exception ex)
             {
@@ -68,11 +74,15 @@ namespace BusOnTime.Application.Services
 
         }
 
-        public async Task<IEnumerable<Equipment>> FindAllAsync()
+        public async Task<IEnumerable<EquipmentVM>> FindAllAsync()
         {
             try
             {
-                return await equipmentR.FindAllAsync();
+                var view = await equipmentR.FindAllAsync();
+
+                var viewModel = mapper.Map<IEnumerable<EquipmentVM>>(view);
+
+                return viewModel;
             }
             catch (Exception ex)
             {
@@ -80,13 +90,17 @@ namespace BusOnTime.Application.Services
             }
         }
 
-        public async Task<Equipment> GetByIdAsync(Guid id)
+        public async Task<EquipmentVM> GetByIdAsync(Guid id)
         {
             try
             {
                 if (id == Guid.Empty) throw new ArgumentException("Invalid ID.");
 
-                return await equipmentR.GetByIdAsync(id);
+                var view = await equipmentR.GetByIdAsync(id);
+
+                var viewModel = mapper.Map<EquipmentVM>(view);
+
+                return viewModel;
             }
             catch (ArgumentException)
             {
@@ -101,6 +115,8 @@ namespace BusOnTime.Application.Services
         {
             try
             {
+                if (entity == null) throw new ArgumentNullException(nameof(entity));
+
                 var validResult = validator.Validate(entity);
 
                 if (!validResult.IsValid)
@@ -111,8 +127,6 @@ namespace BusOnTime.Application.Services
                 var createMapObject = mapper.Map<Equipment>(entity);
 
                 createMapObject.EquipmentId = id;
-
-                if (entity == null) throw new ArgumentNullException(nameof(createMapObject));
 
                 await equipmentR.UpdateAsync(createMapObject);
             }

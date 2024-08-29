@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using BusOnTime.Application.Mapping.DTOs.InputModel;
+using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using BusOnTime.Application.Services;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
+using BusOnTime.Data.Repositories.Concrete;
 using FluentValidation;
 using FluentValidation.Results;
 using Moq;
@@ -16,246 +18,289 @@ namespace Application.Tests.Tests_Services
 {
     public class EquipmentModelStateHourlyEarningST
     {
-        [Fact]
-        public async Task CreateAsync_ValidEquipmentModelStateHourlyEarning_ReturnsCreatedEquipmentModelStateHourlyEarning()
+
+        private readonly Mock<IMapper> _mapperMock;
+        private readonly Mock<IValidator<EquipmentModelStateHourlyEarningsIM>> _validatorMock;
+        private readonly Mock<IEquipmentModelStateHourlyEarningsR> _equipmentModelStateHourlyEarningsRMock;
+        private readonly EquipmentModelStateHourlyEarningS _service;
+
+        public EquipmentModelStateHourlyEarningST()
         {
-            var equipmentModelStateHourlyEarningsRepository = new Mock<IEquipmentModelStateHourlyEarningsR>();
-            var validatorMock = new Mock<IValidator<EquipmentModelStateHourlyEarningsIM>>();
-            var mapperMock = new Mock<IMapper>();
+            _mapperMock = new Mock<IMapper>();
+            _validatorMock = new Mock<IValidator<EquipmentModelStateHourlyEarningsIM>>();
+            _equipmentModelStateHourlyEarningsRMock = new Mock<IEquipmentModelStateHourlyEarningsR>();
+
+            _service = new EquipmentModelStateHourlyEarningS(_equipmentModelStateHourlyEarningsRMock.Object, _mapperMock.Object, _validatorMock.Object);
+        }
+
+
+        [Fact]
+        public async void CreateAsync_ValidEquipmentModelStateHourlyEarning_ReturnsCreatedEquipmentModelStateHourlyEarningsVM()
+        {
 
             var equipmentModelStateHourlyEarningsIM = new EquipmentModelStateHourlyEarningsIM
             {
                 EquipmentModelId = Guid.NewGuid(),
                 EquipmentStateId = Guid.NewGuid(),
-                Value = 10
+                Value = 15
             };
 
-            var equipmentModelStateHourlyEarnings = new EquipmentModelStateHourlyEarnings
+            var equipmentModelStateHourlyEarningEntity = new EquipmentModelStateHourlyEarnings
             {
                 EquipmentModelStateHourlyEarningsId = Guid.NewGuid(),
-                EquipmentModelId = Guid.NewGuid(),
-                EquipmentStateId = Guid.NewGuid(),
-                Value = 10,
+                EquipmentModelId = equipmentModelStateHourlyEarningsIM.EquipmentModelId,
+                EquipmentStateId = equipmentModelStateHourlyEarningsIM.EquipmentStateId,
+                Value = equipmentModelStateHourlyEarningsIM.Value,
                 EquipmentModel = new EquipmentModel(),
                 EquipmentState = new EquipmentState()
             };
 
-            validatorMock.Setup(v => v.Validate(equipmentModelStateHourlyEarningsIM))
+            var equipmentModelStateHourlyEarningsVM = new EquipmentModelStateHourlyEarningsVM
+            {
+                EquipmentModelStateHourlyEarningsId = equipmentModelStateHourlyEarningEntity.EquipmentModelStateHourlyEarningsId,
+                EquipmentModelId = equipmentModelStateHourlyEarningEntity.EquipmentModelId,
+                EquipmentStateId = equipmentModelStateHourlyEarningEntity.EquipmentStateId,
+                Value = equipmentModelStateHourlyEarningEntity.Value
+            };
+
+
+            _validatorMock.Setup(v => v.Validate(equipmentModelStateHourlyEarningsIM))
                 .Returns(new ValidationResult());
 
-            mapperMock.Setup(m => m.Map<EquipmentModelStateHourlyEarnings>(equipmentModelStateHourlyEarningsIM))
-                .Returns(equipmentModelStateHourlyEarnings);
+            _mapperMock.Setup(m => m.Map<EquipmentModelStateHourlyEarnings>(equipmentModelStateHourlyEarningsIM))
+                .Returns(equipmentModelStateHourlyEarningEntity);
 
-            equipmentModelStateHourlyEarningsRepository.Setup(repo => repo.CreateAsync(equipmentModelStateHourlyEarnings))
-                .ReturnsAsync(equipmentModelStateHourlyEarnings);
+            _mapperMock.Setup(m => m.Map<EquipmentModelStateHourlyEarningsVM>(equipmentModelStateHourlyEarningEntity))
+                .Returns(equipmentModelStateHourlyEarningsVM);
 
-            var equipmentModelStateHourlyEarningService = new EquipmentModelStateHourlyEarningS(
-                equipmentModelStateHourlyEarningsRepository.Object,
-                mapperMock.Object,
-                validatorMock.Object);
+            _equipmentModelStateHourlyEarningsRMock.Setup(repo => repo.CreateAsync(equipmentModelStateHourlyEarningEntity))
+                .ReturnsAsync(equipmentModelStateHourlyEarningEntity);
 
-            var result = await equipmentModelStateHourlyEarningService.CreateAsync(equipmentModelStateHourlyEarningsIM);
+            var result = await _service.CreateAsync(equipmentModelStateHourlyEarningsIM);
 
             Assert.NotNull(result);
-            Assert.IsType<EquipmentModelStateHourlyEarnings>(result);
-            Assert.Equal(equipmentModelStateHourlyEarnings.EquipmentModelStateHourlyEarningsId, result.EquipmentModelStateHourlyEarningsId);
-            Assert.Equal(equipmentModelStateHourlyEarnings.EquipmentModelId, result.EquipmentModelId);
-            Assert.Equal(equipmentModelStateHourlyEarnings.EquipmentStateId, result.EquipmentStateId);
-            Assert.Equal(equipmentModelStateHourlyEarnings.Value, result.Value);
-            Assert.Equal(equipmentModelStateHourlyEarnings.EquipmentModel, result.EquipmentModel);
-            Assert.Equal(equipmentModelStateHourlyEarnings.EquipmentState, result.EquipmentState);
+            Assert.IsType<EquipmentModelStateHourlyEarningsVM>(result);
+            Assert.Equal(equipmentModelStateHourlyEarningsVM.EquipmentModelStateHourlyEarningsId, result.EquipmentModelStateHourlyEarningsId);
+            Assert.Equal(equipmentModelStateHourlyEarningsVM.EquipmentModelId, result.EquipmentModelId);
+            Assert.Equal(equipmentModelStateHourlyEarningsVM.EquipmentStateId, result.EquipmentStateId);
+            Assert.Equal(equipmentModelStateHourlyEarningsVM.Value, result.Value);
 
-            equipmentModelStateHourlyEarningsRepository.Verify(repo => repo.CreateAsync(equipmentModelStateHourlyEarnings), Times.Once);
-            validatorMock.Verify(v => v.Validate(equipmentModelStateHourlyEarningsIM), Times.Once);
-            mapperMock.Verify(m => m.Map<EquipmentModelStateHourlyEarnings>(equipmentModelStateHourlyEarningsIM), Times.Once);
+            _equipmentModelStateHourlyEarningsRMock.Verify(repo => repo.CreateAsync(equipmentModelStateHourlyEarningEntity), Times.Once);
+            _mapperMock.Verify(m => m.Map<EquipmentModelStateHourlyEarnings>(equipmentModelStateHourlyEarningsIM), Times.Once);
+            _mapperMock.Verify(m => m.Map<EquipmentModelStateHourlyEarningsVM>(equipmentModelStateHourlyEarningEntity), Times.Once);
+            _validatorMock.Verify(v => v.Validate(equipmentModelStateHourlyEarningsIM), Times.Once);
+        }
+
+        [Fact]
+        public async Task CreateAsync_ExceptionEquipmentModelStateHourlyEarningsNull_ThrowsArgumentNullException()
+        {
+
+            EquipmentModelStateHourlyEarningsIM? equipmentModelStateHourlyEarningsIM = null;
+
+            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => _service.CreateAsync(null));
+            Assert.Equal("Value cannot be null. (Parameter 'Entity Invalid.')", exception.Message);
         }
 
         [Fact]
         public async Task DeleteAsync_ValidId_CallsDeleteAsyncInRepository()
         {
-            var mockEquipmentModelStateHourlyEarningsRepository = new Mock<IEquipmentModelStateHourlyEarningsR>();
-            var validatorMock = new Mock<IValidator<EquipmentModelStateHourlyEarningsIM>>();
-            var mapperMock = new Mock<IMapper>();
             var validId = Guid.NewGuid();
 
-            mockEquipmentModelStateHourlyEarningsRepository.Setup(repo => repo.DeleteAsync(validId))
+            _equipmentModelStateHourlyEarningsRMock.Setup(repo => repo.DeleteAsync(validId))
                 .Returns(Task.CompletedTask);
 
-            var equipmentModelStateHourlyEarningService = new EquipmentModelStateHourlyEarningS(
-                mockEquipmentModelStateHourlyEarningsRepository.Object,
-                mapperMock.Object,
-                validatorMock.Object);
+            await _service.DeleteAsync(validId);
 
-            await equipmentModelStateHourlyEarningService.DeleteAsync(validId);
-
-            mockEquipmentModelStateHourlyEarningsRepository.Verify(repo => repo.DeleteAsync(validId), Times.Once);
+            _equipmentModelStateHourlyEarningsRMock.Verify(repo => repo.DeleteAsync(validId), Times.Once);
         }
 
         [Fact]
         public async Task DeleteAsync_InvalidId_ThrowsArgumentException()
         {
-            var mockEquipmentModelStateHourlyEarningsRepository = new Mock<IEquipmentModelStateHourlyEarningsR>();
-            var validatorMock = new Mock<IValidator<EquipmentModelStateHourlyEarningsIM>>();
-            var mapperMock = new Mock<IMapper>();
             var invalidId = Guid.Empty;
 
-            var equipmentModelStateHourlyEarningService = new EquipmentModelStateHourlyEarningS(
-                mockEquipmentModelStateHourlyEarningsRepository.Object,
-                mapperMock.Object,
-                validatorMock.Object);
-
-            var exception = await Assert.ThrowsAsync<ArgumentException>(() => equipmentModelStateHourlyEarningService.DeleteAsync(invalidId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(() => _service.DeleteAsync(invalidId));
             Assert.Equal("Invalid ID.", exception.Message);
         }
 
         [Fact]
-        public async Task FindAllAsync_ReturnsListOfEquipmentModelStateHourlyEarnings()
+        public async Task FindAllAsync_ReturnsListOfEquipmentModelStateHourlyEarningVMs()
         {
-            var mockEquipmentModelStateHourlyEarningsRepository = new Mock<IEquipmentModelStateHourlyEarningsR>();
-            var validatorMock = new Mock<IValidator<EquipmentModelStateHourlyEarningsIM>>();
-            var mapperMock = new Mock<IMapper>();
             var equipmentModelStateHourlyEarnings = new List<EquipmentModelStateHourlyEarnings>
-    {
-        new EquipmentModelStateHourlyEarnings
-        {
-            EquipmentModelStateHourlyEarningsId = Guid.NewGuid(),
-            EquipmentModelId = Guid.NewGuid(),
-            EquipmentStateId = Guid.NewGuid(),
-            Value = 10,
-            EquipmentModel = new EquipmentModel(),
-            EquipmentState = new EquipmentState()
-        },
-        new EquipmentModelStateHourlyEarnings
-        {
-            EquipmentModelStateHourlyEarningsId = Guid.NewGuid(),
-            EquipmentModelId = Guid.NewGuid(),
-            EquipmentStateId = Guid.NewGuid(),
-            Value = 11,
-            EquipmentModel = new EquipmentModel(),
-            EquipmentState = new EquipmentState()
-        }
-    };
+            {
+                new EquipmentModelStateHourlyEarnings
+                {
+                    EquipmentModelStateHourlyEarningsId = Guid.NewGuid(),
+                    EquipmentModelId = Guid.NewGuid(),
+                    EquipmentStateId = Guid.NewGuid(),
+                    Value = 15,
+                    EquipmentModel = new EquipmentModel(),
+                    EquipmentState = new EquipmentState()
+                },
+                new EquipmentModelStateHourlyEarnings
+                {
+                    EquipmentModelStateHourlyEarningsId = Guid.NewGuid(),
+                    EquipmentModelId = Guid.NewGuid(),
+                    EquipmentStateId = Guid.NewGuid(),
+                    Value = 16,
+                    EquipmentModel = new EquipmentModel(),
+                    EquipmentState = new EquipmentState()
+                }
+            };
 
-            mockEquipmentModelStateHourlyEarningsRepository.Setup(repo => repo.FindAllAsync())
+            var equipmentModelStateHourlyEarningsVMs = new List<EquipmentModelStateHourlyEarningsVM>
+            {
+                new EquipmentModelStateHourlyEarningsVM
+                {
+                    EquipmentModelStateHourlyEarningsId = equipmentModelStateHourlyEarnings[0].EquipmentModelStateHourlyEarningsId,
+                    EquipmentModelId = equipmentModelStateHourlyEarnings[0].EquipmentModelId,
+                    EquipmentStateId = equipmentModelStateHourlyEarnings[0].EquipmentStateId,
+                    Value = equipmentModelStateHourlyEarnings[0].Value
+                },
+                new EquipmentModelStateHourlyEarningsVM
+                {
+                    EquipmentModelStateHourlyEarningsId = equipmentModelStateHourlyEarnings[1].EquipmentModelStateHourlyEarningsId,
+                    EquipmentModelId = equipmentModelStateHourlyEarnings[1].EquipmentModelId,
+                    EquipmentStateId = equipmentModelStateHourlyEarnings[1].EquipmentStateId,
+                    Value = equipmentModelStateHourlyEarnings[1].Value
+                }
+            };
+
+            _equipmentModelStateHourlyEarningsRMock.Setup(repo => repo.FindAllAsync())
                 .ReturnsAsync(equipmentModelStateHourlyEarnings);
 
-            var equipmentModelStateHourlyEarningService = new EquipmentModelStateHourlyEarningS(
-                mockEquipmentModelStateHourlyEarningsRepository.Object,
-                mapperMock.Object,
-                validatorMock.Object);
+            _mapperMock.Setup(m => m.Map<IEnumerable<EquipmentModelStateHourlyEarningsVM>>(equipmentModelStateHourlyEarnings))
+                .Returns(equipmentModelStateHourlyEarningsVMs);
 
-            var result = await equipmentModelStateHourlyEarningService.FindAllAsync();
+            var result = await _service.FindAllAsync();
 
             Assert.NotNull(result);
-            Assert.IsType<List<EquipmentModelStateHourlyEarnings>>(result);
-            Assert.Equal(equipmentModelStateHourlyEarnings.Count, result.Count());
-            Assert.Contains(result, em => em.Value == 10);
-            Assert.Contains(result, em => em.Value == 11);
+            Assert.IsType<List<EquipmentModelStateHourlyEarningsVM>>(result);
+            Assert.Equal(equipmentModelStateHourlyEarningsVMs.Count, result.Count());
+            Assert.Contains(result, em => em.Value == 15);
+            Assert.Contains(result, em => em.Value == 16);
 
-            mockEquipmentModelStateHourlyEarningsRepository.Verify(repo => repo.FindAllAsync(), Times.Once);
+            _equipmentModelStateHourlyEarningsRMock.Verify(repo => repo.FindAllAsync(), Times.Once);
+            _mapperMock.Verify(m => m.Map<IEnumerable<EquipmentModelStateHourlyEarningsVM>>(equipmentModelStateHourlyEarnings), Times.Once);
         }
 
         [Fact]
-        public async Task GetByIdAsync_ValidId_ReturnsEquipmentModelStateHourlyEarnings()
+        public async Task GetByIdAsync_ValidId_ReturnsEquipmentModelStateHourlyEarningsVM()
         {
-            var mockEquipmentModelStateHourlyEarningsRepository = new Mock<IEquipmentModelStateHourlyEarningsR>();
-            var validatorMock = new Mock<IValidator<EquipmentModelStateHourlyEarningsIM>>();
-            var mapperMock = new Mock<IMapper>();
             var validId = Guid.NewGuid();
+
             var equipmentModelStateHourlyEarnings = new EquipmentModelStateHourlyEarnings
             {
                 EquipmentModelStateHourlyEarningsId = Guid.NewGuid(),
                 EquipmentModelId = Guid.NewGuid(),
                 EquipmentStateId = Guid.NewGuid(),
-                Value = 10,
+                Value = 16,
                 EquipmentModel = new EquipmentModel(),
                 EquipmentState = new EquipmentState()
             };
 
-            mockEquipmentModelStateHourlyEarningsRepository.Setup(repo => repo.GetByIdAsync(validId))
+            var equipmentModelStateHourlyEarningsVM = new EquipmentModelStateHourlyEarningsVM
+            {
+                EquipmentModelStateHourlyEarningsId = equipmentModelStateHourlyEarnings.EquipmentModelStateHourlyEarningsId,
+                EquipmentModelId = equipmentModelStateHourlyEarnings.EquipmentModelId,
+                EquipmentStateId = equipmentModelStateHourlyEarnings.EquipmentStateId,
+                Value = equipmentModelStateHourlyEarnings.Value
+            };
+
+            _equipmentModelStateHourlyEarningsRMock.Setup(repo => repo.GetByIdAsync(validId))
                 .ReturnsAsync(equipmentModelStateHourlyEarnings);
 
-            var equipmentModelStateHourlyEarningService = new EquipmentModelStateHourlyEarningS(
-                mockEquipmentModelStateHourlyEarningsRepository.Object,
-                mapperMock.Object,
-                validatorMock.Object);
+            _mapperMock.Setup(m => m.Map<EquipmentModelStateHourlyEarningsVM>(equipmentModelStateHourlyEarnings))
+                .Returns(equipmentModelStateHourlyEarningsVM);
 
-            var result = await equipmentModelStateHourlyEarningService.GetByIdAsync(validId);
+            var result = await _service.GetByIdAsync(validId);
 
             Assert.NotNull(result);
-            Assert.IsType<EquipmentModelStateHourlyEarnings>(result);
-            Assert.Equal(equipmentModelStateHourlyEarnings.EquipmentModelStateHourlyEarningsId, result.EquipmentModelStateHourlyEarningsId);
-            Assert.Equal(equipmentModelStateHourlyEarnings.EquipmentModelId, result.EquipmentModelId);
-            Assert.Equal(equipmentModelStateHourlyEarnings.EquipmentStateId, result.EquipmentStateId);
-            Assert.Equal(equipmentModelStateHourlyEarnings.Value, result.Value);
-            Assert.Equal(equipmentModelStateHourlyEarnings.EquipmentModel, result.EquipmentModel);
-            Assert.Equal(equipmentModelStateHourlyEarnings.EquipmentState, result.EquipmentState);
+            Assert.IsType<EquipmentModelStateHourlyEarningsVM>(result);
+            Assert.Equal(equipmentModelStateHourlyEarningsVM.EquipmentModelStateHourlyEarningsId, result.EquipmentModelStateHourlyEarningsId);
+            Assert.Equal(equipmentModelStateHourlyEarningsVM.EquipmentModelId, result.EquipmentModelId);
+            Assert.Equal(equipmentModelStateHourlyEarningsVM.EquipmentStateId, result.EquipmentStateId);
+            Assert.Equal(equipmentModelStateHourlyEarningsVM.Value, result.Value);
 
-            mockEquipmentModelStateHourlyEarningsRepository.Verify(repo => repo.GetByIdAsync(validId), Times.Once);
+            _equipmentModelStateHourlyEarningsRMock.Verify(repo => repo.GetByIdAsync(validId), Times.Once);
+            _mapperMock.Verify(m => m.Map<EquipmentModelStateHourlyEarningsVM>(equipmentModelStateHourlyEarnings), Times.Once);
         }
 
         [Fact]
         public async Task GetByIdAsync_InvalidId_ThrowsArgumentException()
         {
-            var mockEquipmentModelStateHourlyEarningsRepository = new Mock<IEquipmentModelStateHourlyEarningsR>();
-            var validatorMock = new Mock<IValidator<EquipmentModelStateHourlyEarningsIM>>();
-            var mapperMock = new Mock<IMapper>();
             var invalidId = Guid.Empty;
 
-            var equipmentModelStateHourlyEarningService = new EquipmentModelStateHourlyEarningS(
-                mockEquipmentModelStateHourlyEarningsRepository.Object,
-                mapperMock.Object,
-                validatorMock.Object);
-
-            var exception = await Assert.ThrowsAsync<ArgumentException>(() => equipmentModelStateHourlyEarningService.GetByIdAsync(invalidId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(() => _service.GetByIdAsync(invalidId));
             Assert.Equal("Invalid ID.", exception.Message);
         }
 
         [Fact]
-        public async Task UpdateAsync_ValidEquipmentModel_CallsUpdateAsyncInRepository()
+        public async Task UpdateAsync_ValidEquipmentModelStateHourlyEarnings_CallsUpdateAsyncInRepository()
         {
-            var mockEquipmentModelStateHourlyEarningsRepository = new Mock<IEquipmentModelStateHourlyEarningsR>();
-            var validatorMock = new Mock<IValidator<EquipmentModelStateHourlyEarningsIM>>();
-            var mapperMock = new Mock<IMapper>();
             var equipmentModelStateHourlyEarnings = new EquipmentModelStateHourlyEarnings
             {
                 EquipmentModelStateHourlyEarningsId = Guid.NewGuid(),
                 EquipmentModelId = Guid.NewGuid(),
                 EquipmentStateId = Guid.NewGuid(),
-                Value = 10,
+                Value = 16,
                 EquipmentModel = new EquipmentModel(),
                 EquipmentState = new EquipmentState()
             };
 
-            mockEquipmentModelStateHourlyEarningsRepository.Setup(repo => repo.UpdateAsync(equipmentModelStateHourlyEarnings))
+            var equipmentModelStateHourlyEarningsIM = new EquipmentModelStateHourlyEarningsIM
+            {
+                EquipmentModelId = equipmentModelStateHourlyEarnings.EquipmentModelId,
+                EquipmentStateId = equipmentModelStateHourlyEarnings.EquipmentStateId,
+                Value = equipmentModelStateHourlyEarnings.Value
+            };
+
+            _validatorMock.Setup(v => v.Validate(equipmentModelStateHourlyEarningsIM))
+                .Returns(new ValidationResult());
+
+            _mapperMock.Setup(m => m.Map<EquipmentModelStateHourlyEarnings>(equipmentModelStateHourlyEarningsIM))
+                .Returns(equipmentModelStateHourlyEarnings);
+
+            _equipmentModelStateHourlyEarningsRMock.Setup(repo => repo.UpdateAsync(equipmentModelStateHourlyEarnings))
                 .Returns(Task.CompletedTask);
 
-            var equipmentModelStateHourlyEarningsService = new EquipmentModelStateHourlyEarningS(
-                mockEquipmentModelStateHourlyEarningsRepository.Object,
-                mapperMock.Object,
-                validatorMock.Object);
+            await _service.UpdateAsync(equipmentModelStateHourlyEarnings.EquipmentModelStateHourlyEarningsId, equipmentModelStateHourlyEarningsIM);
 
-            await equipmentModelStateHourlyEarningsService.UpdateAsync(equipmentModelStateHourlyEarnings);
-
-            mockEquipmentModelStateHourlyEarningsRepository.Verify(repo => repo.UpdateAsync(equipmentModelStateHourlyEarnings), Times.Once);
+            _equipmentModelStateHourlyEarningsRMock.Verify(repo => repo.UpdateAsync(equipmentModelStateHourlyEarnings), Times.Once);
+            _validatorMock.Verify(v => v.Validate(equipmentModelStateHourlyEarningsIM), Times.Once);
+            _mapperMock.Verify(m => m.Map<EquipmentModelStateHourlyEarnings>(equipmentModelStateHourlyEarningsIM), Times.Once);
         }
 
         [Fact]
-        public async Task UpdateAsync_NullEquipmentModel_ThrowsArgumentNullException()
+        public async Task UpdateAsync_InvalidEntity_ThrowsValidationExceptionAndArgumentNullException()
         {
-            var mockEquipmentModelStateHourlyEarningsRepository = new Mock<IEquipmentModelStateHourlyEarningsR>();
-            var validatorMock = new Mock<IValidator<EquipmentModelStateHourlyEarningsIM>>();
-            var mapperMock = new Mock<IMapper>();
-            EquipmentModelStateHourlyEarnings? nullEquipmentModelStateHourlyEarnings = null;
+            var equipmentModelStateHourlyEarningsIM = new EquipmentModelStateHourlyEarningsIM
+            {
+                EquipmentModelId = Guid.Empty,
+                EquipmentStateId = Guid.Empty,
+                Value = 0
+            };
 
-            var equipmentModelStateHourlyEarningsService = new EquipmentModelStateHourlyEarningS(
-                mockEquipmentModelStateHourlyEarningsRepository.Object,
-                mapperMock.Object,
-                validatorMock.Object);
+            var validationFailures = new List<ValidationFailure>
+            {
+                new ValidationFailure("EquipmentModelId", "EquipmentModelId cannot be empty."),
+                new ValidationFailure("EquipmentStateId", "EquipmentStateId cannot be empty.")
+            };
 
-            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => equipmentModelStateHourlyEarningsService.UpdateAsync(nullEquipmentModelStateHourlyEarnings));
-            Assert.Equal("entity", exception.ParamName);
+            _validatorMock.Setup(v => v.Validate(equipmentModelStateHourlyEarningsIM))
+                         .Returns(new ValidationResult(validationFailures));
+
+            var exception = await Assert.ThrowsAsync<ValidationException>(() => _service.UpdateAsync(Guid.NewGuid(), equipmentModelStateHourlyEarningsIM));
+            Assert.Contains("Validation failed", exception.Message);
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _service.UpdateAsync(Guid.NewGuid(), null));
+
+            foreach (var failure in validationFailures)
+            {
+                Assert.Contains(failure.ErrorMessage, exception.Message);
+            }
+
+            _validatorMock.Verify(v => v.Validate(equipmentModelStateHourlyEarningsIM), Times.Once);
         }
-
     }
 }

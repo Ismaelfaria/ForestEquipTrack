@@ -12,7 +12,5 @@ namespace BusOnTime.Application.Mapping.DTOs.ViewModel
         public Guid StateId { get; set; }
         public string? Name { get; set; }
         public string? Color { get; set; }
-        public ICollection<EquipmentModelStateHourlyEarnings>? EquipmentModelStateHourlyEarnings { get; set; }
-        public ICollection<EquipmentStateHistory>? EquipmentStateHistories { get; set; }
     }
 }
