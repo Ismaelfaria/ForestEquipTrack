@@ -13,7 +13,6 @@ namespace BusOnTime.Application.Mapping.DTOs.ViewModel
         public Guid EquipmentModelId { get; set; }
         public Guid EquipmentStateId { get; set; }
         public decimal Value { get; set; }
-        public EquipmentModel? EquipmentModel { get; set; }
-        public EquipmentState? EquipmentState { get; set; }
+ 
     }
 }

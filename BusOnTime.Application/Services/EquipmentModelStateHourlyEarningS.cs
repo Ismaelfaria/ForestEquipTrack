@@ -33,6 +33,8 @@ namespace BusOnTime.Application.Services
         {
             try
             {
+                if (entity == null) throw new ArgumentNullException("Entity Invalid.");
+
                 var validResult = validator.Validate(entity);
 
                 if (!validResult.IsValid)
@@ -42,13 +44,15 @@ namespace BusOnTime.Application.Services
 
                 var createMapObject = mapper.Map<EquipmentModelStateHourlyEarnings>(entity);
 
-                if (createMapObject == null) throw new ArgumentNullException(nameof(createMapObject));
-
                 var view = await equipmentModelStateHourlyEarningsR.CreateAsync(createMapObject);
 
                 var viewModel = mapper.Map<EquipmentModelStateHourlyEarningsVM>(view);
 
                 return viewModel;
+            }
+            catch (ArgumentNullException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
@@ -121,7 +125,11 @@ namespace BusOnTime.Application.Services
 
                 var validResult = validator.Validate(entity);
 
-                if (!validResult.IsValid) throw new ValidationException("Erro na validação ao criar 'EquipmentModelStateHourlyEarnings'");
+                if (!validResult.IsValid)
+                {
+                    var errorMessage = string.Join(", ", validResult.Errors.Select(e => e.ErrorMessage));
+                    throw new ValidationException($"Validation failed, {errorMessage}");
+                }
 
                 var createMapObject = mapper.Map<EquipmentModelStateHourlyEarnings>(entity);
 
@@ -132,8 +140,10 @@ namespace BusOnTime.Application.Services
             catch (ArgumentNullException)
             {
                 throw;
-            }
-            catch (Exception ex)
+            }catch (ValidationException)
+            {
+                throw;
+            }catch (Exception ex)
             {
                 throw new Exception("BusOnTime/Application/Services/EquipmentModelStateHourlyEarningsS/UpdateAsync", ex);
             }

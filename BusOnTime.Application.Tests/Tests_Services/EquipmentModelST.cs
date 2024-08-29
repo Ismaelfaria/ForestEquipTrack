@@ -87,7 +87,7 @@ namespace Application.Tests.Tests_Services
         }
         
         [Fact]
-        public async Task CreateAsync__EntityNull_ThrowsArgumentNullException()
+        public async Task CreateAsync_ExceptionEquipmentModelNull_ThrowsArgumentNullException()
         {
 
             EquipmentModelIM? equipmentModelIM = null;
