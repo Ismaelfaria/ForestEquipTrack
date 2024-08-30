@@ -35,7 +35,8 @@ namespace BusOnTime.Application.Services
 
                 if (!validResult.IsValid)
                 {
-                    throw new ValidationException("Erro na validação ao criar 'EquipmentModel'");
+                    var errorMessage = string.Join(", ", validResult.Errors.Select(e => e.ErrorMessage));
+                    throw new ValidationException($"Validation failed, {errorMessage}");
                 }
 
                 var createMapObject = mapper.Map<EquipmentModel>(entity);
@@ -47,6 +48,10 @@ namespace BusOnTime.Application.Services
                 return viewModel;
             }
             catch (ArgumentNullException)
+            {
+                throw;
+            }
+            catch (ValidationException)
             {
                 throw;
             }
