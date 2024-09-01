@@ -92,6 +92,32 @@ namespace Application.Tests.Tests_Services
         }
 
         [Fact]
+        public async Task CreateAsync_InvalidEntity_ThrowsValidationException()
+        {
+            var equipmentModelStateHourlyEarningsIM = new EquipmentModelStateHourlyEarningsIM();
+
+            var validationFailures = new List<ValidationFailure>
+            {
+                new ValidationFailure("EquipmentModelId", "EquipmentModelId cannot be empty."),
+                new ValidationFailure("EquipmentStateId", "EquipmentStateId cannot be empty.")
+            };
+
+            _validatorMock.Setup(v => v.Validate(equipmentModelStateHourlyEarningsIM))
+                         .Returns(new ValidationResult(validationFailures));
+
+            var exception = await Assert.ThrowsAsync<ValidationException>(() => _service.CreateAsync(equipmentModelStateHourlyEarningsIM));
+
+            Assert.Contains("Validation failed", exception.Message);
+
+            foreach (var failure in validationFailures)
+            {
+                Assert.Contains(failure.ErrorMessage, exception.Message);
+            }
+
+            _validatorMock.Verify(v => v.Validate(equipmentModelStateHourlyEarningsIM), Times.Once);
+        }
+
+        [Fact]
         public async Task CreateAsync_ExceptionEquipmentModelStateHourlyEarningsNull_ThrowsArgumentNullException()
         {
 
@@ -272,14 +298,9 @@ namespace Application.Tests.Tests_Services
         }
 
         [Fact]
-        public async Task UpdateAsync_InvalidEntity_ThrowsValidationExceptionAndArgumentNullException()
+        public async Task UpdateAsync_InvalidEntity_ThrowsValidationException()
         {
-            var equipmentModelStateHourlyEarningsIM = new EquipmentModelStateHourlyEarningsIM
-            {
-                EquipmentModelId = Guid.Empty,
-                EquipmentStateId = Guid.Empty,
-                Value = 0
-            };
+            EquipmentModelStateHourlyEarningsIM invalidEquipmentModelStateHourlyEarningsIM = new EquipmentModelStateHourlyEarningsIM();
 
             var validationFailures = new List<ValidationFailure>
             {
@@ -287,20 +308,26 @@ namespace Application.Tests.Tests_Services
                 new ValidationFailure("EquipmentStateId", "EquipmentStateId cannot be empty.")
             };
 
-            _validatorMock.Setup(v => v.Validate(equipmentModelStateHourlyEarningsIM))
+            _validatorMock.Setup(v => v.Validate(invalidEquipmentModelStateHourlyEarningsIM))
                          .Returns(new ValidationResult(validationFailures));
 
-            var exception = await Assert.ThrowsAsync<ValidationException>(() => _service.UpdateAsync(Guid.NewGuid(), equipmentModelStateHourlyEarningsIM));
+            var exception = await Assert.ThrowsAsync<ValidationException>(() => _service.UpdateAsync(Guid.NewGuid(), invalidEquipmentModelStateHourlyEarningsIM));
             Assert.Contains("Validation failed", exception.Message);
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _service.UpdateAsync(Guid.NewGuid(), null));
 
             foreach (var failure in validationFailures)
             {
                 Assert.Contains(failure.ErrorMessage, exception.Message);
             }
 
-            _validatorMock.Verify(v => v.Validate(equipmentModelStateHourlyEarningsIM), Times.Once);
+            _validatorMock.Verify(v => v.Validate(invalidEquipmentModelStateHourlyEarningsIM), Times.Once);
+        }
+
+        [Fact]
+        public async Task UpdateAsync_NullEntity_ThrowsArgumentNullException()
+        {
+            EquipmentModelStateHourlyEarningsIM invalidEquipmentModelStateHourlyEarningsIM = null;
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _service.UpdateAsync(Guid.NewGuid(), invalidEquipmentModelStateHourlyEarningsIM));
         }
     }
 }

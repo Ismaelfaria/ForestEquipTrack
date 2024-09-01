@@ -9,7 +9,6 @@ namespace BusOnTime.Application.Mapping.DTOs.InputModel
 {
     public class EquipmentStateHistoryIM
     {
-        public Guid EquipmentStateId { get; set; }
         public Guid EquipmentId { get; set; }
         public DateTime Date { get; set; }
     }
