@@ -33,22 +33,31 @@ namespace BusOnTime.Application.Services
         {
             try
             {
+                if (entity == null) throw new ArgumentNullException("Entity Invalid.");
+
                 var validResult = validator.Validate(entity);
 
                 if (!validResult.IsValid)
                 {
-                    throw new ValidationException("Erro na validação ao criar 'EquipmentModel'");
+                    var errorMessage = string.Join(", ", validResult.Errors.Select(e => e.ErrorMessage));
+                    throw new ValidationException($"Validation failed, {errorMessage}");
                 }
 
                 var createMapObject = mapper.Map<EquipmentState>(entity);
-
-                if (createMapObject == null) throw new ArgumentNullException(nameof(createMapObject));
 
                 var view = await equipmentStateR.CreateAsync(createMapObject);
 
                 var viewModel = mapper.Map<EquipmentStateVM>(view);
 
                 return viewModel;
+            }
+            catch (ArgumentNullException)
+            {
+                throw;
+            }
+            catch (ValidationException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
@@ -123,7 +132,8 @@ namespace BusOnTime.Application.Services
 
                 if (!validResult.IsValid)
                 {
-                    throw new ValidationException("Erro na validação ao criar 'EquipmentState'");
+                    var errorMessage = string.Join(", ", validResult.Errors.Select(e => e.ErrorMessage));
+                    throw new ValidationException($"Validation failed, {errorMessage}");
                 }
 
                 var createMapObject = mapper.Map<EquipmentState>(entity);
@@ -135,7 +145,12 @@ namespace BusOnTime.Application.Services
             catch (ArgumentNullException)
             {
                 throw;
-            }catch (Exception ex)
+            }
+            catch (ValidationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
             {
                 throw new Exception("BusOnTime/Application/Services/EquipmentStateS/UpdateAsync", ex);
             }
