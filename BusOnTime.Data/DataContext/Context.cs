@@ -1,6 +1,5 @@
 ﻿using BusOnTime.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace BusOnTime.Data.DataContext
 {
@@ -8,7 +7,6 @@ namespace BusOnTime.Data.DataContext
     {
         public Context(DbContextOptions<Context> options) : base(options)
         { }
-
         public DbSet<EquipmentModelStateHourlyEarnings> EquipmentModelStateHourlyEarnings { get; set; }
         public DbSet<EquipmentState> EquipmentState { get; set; }
         public DbSet<EquipmentModel> EquipmentModel { get; set; }
@@ -20,50 +18,113 @@ namespace BusOnTime.Data.DataContext
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configuração de Equipment e EquipmentModel
-            modelBuilder.Entity<Equipment>()
-                .HasOne(e => e.EquipmentModel)
-                .WithMany(m => m.Equipment)
-                .HasForeignKey(e => e.EquipmentModelId)
-                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Equipment>(entity =>
+            {
+                entity.HasKey(e => e.EquipmentId); 
 
-            // Configuração de EquipmentModel e EquipmentModelStateHourlyEarnings
-            modelBuilder.Entity<EquipmentModelStateHourlyEarnings>()
-                .HasKey(em => new { em.EquipmentModelId, em.EquipmentStateId });
+                entity.Property(e => e.Name)
+                      .HasMaxLength(100); 
 
-            modelBuilder.Entity<EquipmentModelStateHourlyEarnings>()
-                .HasOne(em => em.EquipmentModel)
-                .WithMany(m => m.EquipmentModelStateHourlyEarnings)
-                .HasForeignKey(em => em.EquipmentModelId);
+                //Relacionamentos
+                entity.HasOne(e => e.EquipmentModel)
+                      .WithMany(m => m.Equipment)
+                      .HasForeignKey(e => e.EquipmentModelId)
+                      .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired(false);
 
-            modelBuilder.Entity<EquipmentModelStateHourlyEarnings>()
-                .HasOne(em => em.EquipmentState)
-                .WithMany(s => s.EquipmentModelStateHourlyEarnings)
-                .HasForeignKey(em => em.EquipmentStateId);
+                entity.HasMany(e => e.EquipmentStateHistories)
+                      .WithOne(eh => eh.Equipment)
+                      .HasForeignKey(eh => eh.EquipmentId);
 
-            // Configuração de EquipmentState e EquipmentStateHistory
-            modelBuilder.Entity<EquipmentStateHistory>()
-                .HasKey(e => new { e.EquipmentId, e.Date });
+                entity.HasMany(e => e.EquipmentPositionHistories)
+                      .WithOne(ep => ep.Equipment)
+                      .HasForeignKey(ep => ep.EquipmentId);
+            });
 
-            modelBuilder.Entity<EquipmentStateHistory>()
-                .HasOne(e => e.Equipment)
-                .WithMany(eq => eq.EquipmentStateHistories)
-                .HasForeignKey(e => e.EquipmentId);
+            modelBuilder.Entity<EquipmentModel>(entity =>
+            {
+                entity.HasKey(m => m.EquipmentModelId);
 
-            modelBuilder.Entity<EquipmentStateHistory>()
-                .HasOne(e => e.EquipmentState)
-                .WithMany(s => s.EquipmentStateHistories)
-                .HasForeignKey(e => e.EquipmentStateId);
+                entity.Property(m => m.Name)
+                      .HasMaxLength(100);
 
-            // Configuração de Equipment e EquipmentPositionHistory
-            modelBuilder.Entity<EquipmentPositionHistory>()
-                .HasKey(e => new { e.EquipmentId, e.Date });
+                //Relacionamentos
+                entity.HasMany(m => m.Equipment)
+                      .WithOne(e => e.EquipmentModel)
+                      .HasForeignKey(e => e.EquipmentModelId)
+                      .IsRequired(false);
 
-            modelBuilder.Entity<EquipmentPositionHistory>()
-                .HasOne(e => e.Equipment)
-                .WithMany(eq => eq.EquipmentPositionHistories)
-                .HasForeignKey(e => e.EquipmentId);
+                entity.HasMany(m => m.EquipmentModelStateHourlyEarnings)
+                      .WithOne(em => em.EquipmentModel)
+                      .HasForeignKey(em => em.EquipmentModelId);
+            });
 
+            modelBuilder.Entity<EquipmentModelStateHourlyEarnings>(entity =>
+            {
+                entity.HasKey(em => em.EquipmentModelStateHourlyEarningsId); 
+
+                entity.Property(em => em.Value)
+                .HasPrecision(18, 2);
+
+                //Relacionamentos
+                entity.HasOne(em => em.EquipmentModel)
+                      .WithMany(m => m.EquipmentModelStateHourlyEarnings)
+                      .HasForeignKey(em => em.EquipmentModelId)
+                      .IsRequired(false);
+
+                entity.HasOne(em => em.EquipmentState)
+                      .WithMany(es => es.EquipmentModelStateHourlyEarnings)
+                      .HasForeignKey(em => em.EquipmentStateId)
+                      .IsRequired(false);
+            });
+
+            modelBuilder.Entity<EquipmentPositionHistory>(entity =>
+            {
+                entity.HasKey(ep => ep.EquipmentPositionId);
+
+                //Relacionamentos
+                entity.HasOne(ep => ep.Equipment)
+                      .WithMany(e => e.EquipmentPositionHistories)
+                      .HasForeignKey(ep => ep.EquipmentId)
+                      .IsRequired(false);
+            });
+
+            modelBuilder.Entity<EquipmentState>(entity =>
+            {
+                entity.HasKey(es => es.StateId); 
+
+                entity.Property(es => es.Name)
+                      .HasMaxLength(100);
+
+                entity.Property(es => es.Color)
+                      .HasMaxLength(50);
+
+                //Relacionamentos
+                entity.HasMany(es => es.EquipmentModelStateHourlyEarnings)
+                      .WithOne(em => em.EquipmentState)
+                      .HasForeignKey(em => em.EquipmentStateId);
+
+                entity.HasMany(es => es.EquipmentStateHistories)
+                      .WithOne(esh => esh.EquipmentState)
+                      .HasForeignKey(esh => esh.EquipmentStateId);
+            });
+
+            modelBuilder.Entity<EquipmentStateHistory>(entity =>
+            {
+                entity.HasKey(esh => new { esh.EquipmentId, esh.Date });
+
+
+                //Relacionamentos
+                entity.HasOne(esh => esh.Equipment)
+                      .WithMany(e => e.EquipmentStateHistories)
+                      .HasForeignKey(esh => esh.EquipmentId)
+                      .IsRequired(false);
+
+                entity.HasOne(esh => esh.EquipmentState)
+                      .WithMany(es => es.EquipmentStateHistories)
+                      .HasForeignKey(esh => esh.EquipmentStateId)
+                      .IsRequired(false);
+            });
         }
     }
 }

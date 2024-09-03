@@ -12,7 +12,6 @@ namespace BusOnTime.Application.Validators
     {
         public EquipmentStateHistoryInputValidator()
         {
-            RuleFor(e => e.EquipmentId).NotEmpty().WithMessage("Preencha o campo 'Id do equipamento'.");
             RuleFor(e => e.Date).NotEmpty().WithMessage("Preencha o campo 'Data'.");
         }
     }

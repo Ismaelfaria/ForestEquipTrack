@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using BusOnTime.Application.Interfaces;
 using BusOnTime.Application.Mapping.DTOs.InputModel;
+using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BusOnTime.Web.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class EquipmentController : Controller
     {
         private readonly IEquipmentS equipmentS;
@@ -36,13 +39,13 @@ namespace BusOnTime.Web.Controllers
         /// <response code="201">Retorna o novo item criado</response>
         /// <response code="500">Se o item não for criado</response> 
         [HttpPost]
-        public IActionResult PostE([FromForm] EquipmentIM entityDTO)
+        public async Task<IActionResult> PostE([FromForm] EquipmentIM entityDTO)
         {
             try
             {
-                var create = equipmentS.CreateAsync(entityDTO);
+                var create = await equipmentS.CreateAsync(entityDTO);
 
-                return CreatedAtAction(nameof(GetByIdE), new { id = create.Result.EquipmentId }, create);
+                return CreatedAtAction(nameof(GetByIdE), new { id = create.EquipmentId }, create);
             }
             catch (ValidationException ex)
             {
@@ -59,17 +62,17 @@ namespace BusOnTime.Web.Controllers
         /// </summary>
         /// <response code="404">Se o item não for encontrado</response> 
         [HttpGet]
-        public IActionResult FindAllE()
+        public async Task<ActionResult<IEnumerable<EquipmentVM>>> FindAllE()
         {
             try
             {
-                var clientAll = equipmentS.FindAllAsync();
+                var clientAll = await equipmentS.FindAllAsync(); 
 
                 return Ok(clientAll);
             }
             catch (Exception ex)
             {
-                return StatusCode(404, $"Modelo não encontrados, Erro na operação {ex.Message}");
+                return StatusCode(404, $"Modelo não encontrado, Erro na operação: {ex.Message}");
             }
         }
 
@@ -79,11 +82,11 @@ namespace BusOnTime.Web.Controllers
         ///
         /// <response code="404">Se o item não for encontrado</response> 
         [HttpGet("equipamento/{id}")]
-        public IActionResult GetByIdE(Guid id)
+        public async Task<IActionResult> GetByIdE(Guid id)
         {
             try
             {
-                var equipment = equipmentS.GetByIdAsync(id);
+                var equipment = await equipmentS.GetByIdAsync(id);
 
                 return Ok(equipment);
             }
@@ -112,11 +115,11 @@ namespace BusOnTime.Web.Controllers
         /// <response code="201">Retorna o novo item atualizado</response>
         /// <response code="400">Se o item não for atualizado</response> 
         [HttpPut]
-        public IActionResult PutE([FromForm] Guid id, EquipmentIM entityDTO)
+        public async Task<IActionResult> PutE([FromForm] Guid id, EquipmentIM entityDTO)
         {
             try
             {
-                equipmentS.UpdateAsync(id, entityDTO);
+               await equipmentS.UpdateAsync(id, entityDTO);
 
                 return NoContent();
             }
@@ -132,11 +135,11 @@ namespace BusOnTime.Web.Controllers
         ///
         /// <response code="400">Se o item não for deletado</response> 
         [HttpDelete]
-        public IActionResult DeleteE(Guid id)
+        public async Task<IActionResult> DeleteE(Guid id)
         {
             try
             {
-                equipmentS.DeleteAsync(id);
+               await equipmentS.DeleteAsync(id);
 
                 return NoContent();
             }

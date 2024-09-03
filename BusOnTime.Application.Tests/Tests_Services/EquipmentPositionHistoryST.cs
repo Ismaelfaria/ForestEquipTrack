@@ -57,7 +57,7 @@ namespace Application.Tests.Tests_Services
             var equipmentPositionHistoryVM = new EquipmentPositionHistoryVM
             {
                 EquipmentPositionId = Guid.NewGuid(),
-                EquipmentId = equipmentPositionHistoryEntity.EquipmentId,
+                EquipmentId = equipmentPositionHistoryEntity.EquipmentId.Value,
                 Date = equipmentPositionHistoryEntity.Date,
                 Lat = equipmentPositionHistoryEntity.Lat,
                 Lon = equipmentPositionHistoryEntity.Lon
@@ -124,7 +124,7 @@ namespace Application.Tests.Tests_Services
         public async Task CreateAsync_ExceptionEquipmentPositionHistoryNull_ThrowsArgumentNullException()
         {
 
-            EquipmentPositionHistoryIM? equipmentPositionHistoryIM = null;
+            EquipmentPositionHistoryIM equipmentPositionHistoryIM = null;
 
             var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => _service.CreateAsync(equipmentPositionHistoryIM));
             Assert.Equal("Value cannot be null. (Parameter 'Entity Invalid.')", exception.Message);
@@ -182,7 +182,7 @@ namespace Application.Tests.Tests_Services
             {
                 new EquipmentPositionHistoryVM
                 {
-                    EquipmentId = equipmentPositionHistorys[0].EquipmentId,
+                    EquipmentId = equipmentPositionHistorys[0].EquipmentId.Value,
                     EquipmentPositionId = equipmentPositionHistorys[0].EquipmentPositionId,
                     Date = equipmentPositionHistorys[0].Date,
                     Lon = equipmentPositionHistorys[0].Lon,
@@ -190,7 +190,7 @@ namespace Application.Tests.Tests_Services
                 },
                 new EquipmentPositionHistoryVM
                 {
-                    EquipmentId = equipmentPositionHistorys[1].EquipmentId,
+                    EquipmentId = equipmentPositionHistorys[1].EquipmentId.Value,
                     EquipmentPositionId = equipmentPositionHistorys[1].EquipmentPositionId,
                     Date = equipmentPositionHistorys[1].Date,
                     Lon = equipmentPositionHistorys[1].Lon,
@@ -234,7 +234,7 @@ namespace Application.Tests.Tests_Services
             var equipmentPositionHistoryVM = new EquipmentPositionHistoryVM
             {
                 EquipmentPositionId = Guid.NewGuid(),
-                EquipmentId = equipmentPositionHistory.EquipmentId,
+                EquipmentId = equipmentPositionHistory.EquipmentId.Value,
                 Date = equipmentPositionHistory.Date,
                 Lat = equipmentPositionHistory.Lat,
                 Lon = equipmentPositionHistory.Lon

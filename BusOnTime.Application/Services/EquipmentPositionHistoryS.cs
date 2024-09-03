@@ -4,14 +4,7 @@ using BusOnTime.Application.Mapping.DTOs.InputModel;
 using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
-using BusOnTime.Data.Repositories.Concrete;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusOnTime.Application.Services
 {
@@ -123,24 +116,23 @@ namespace BusOnTime.Application.Services
             }
         }
 
-        public async Task UpdateAsync(Guid id, EquipmentPositionHistoryIM entity)
+        public async Task UpdateAsync(Guid? id, EquipmentPositionHistoryIM entity)
         {
             try
             {
+                if (id == null) throw new ArgumentNullException(nameof(id));
                 if (entity == null) throw new ArgumentNullException(nameof(entity));
 
                 var validResult = validator.Validate(entity);
 
                 if (!validResult.IsValid)
                 {
-
                     var errorMessage = string.Join(", ", validResult.Errors.Select(e => e.ErrorMessage));
                     throw new ValidationException($"Validation failed, {errorMessage}");
                 }
 
                 var createMapObject = mapper.Map<EquipmentPositionHistory>(entity);
-
-                createMapObject.EquipmentPositionId = id;
+                createMapObject.EquipmentPositionId = id.Value;
 
                 await equipmentPositionHistoryR.UpdateAsync(createMapObject);
             }

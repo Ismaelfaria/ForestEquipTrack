@@ -2,16 +2,12 @@
 using BusOnTime.Data.Entities.Generic;
 using BusOnTime.Data.Interfaces.Generic;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace BusOnTime.Data.Repositories.Generic
 {
     public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : BaseEntity
     {
         protected readonly Context _context;
-
         public RepositoryBase(Context context)
         {
             _context = context;
@@ -19,13 +15,13 @@ namespace BusOnTime.Data.Repositories.Generic
 
         public async virtual Task<TEntity> CreateAsync(TEntity entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity), "A entidade não pode ser nula.");
-            }
-
             try
             {
+                if (entity == null)
+                {
+                    throw new ArgumentNullException(nameof(entity), "A entidade não pode ser nula.");
+                }
+
                 await _context.Set<TEntity>().AddAsync(entity);
                 await _context.SaveChangesAsync();
                 return entity;
@@ -52,13 +48,14 @@ namespace BusOnTime.Data.Repositories.Generic
 
         public async virtual Task UpdateAsync(TEntity entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity), "A entidade não pode ser nula.");
-            }
 
             try
             {
+                if (entity == null)
+                {
+                    throw new ArgumentNullException(nameof(entity), "A entidade não pode ser nula.");
+                }
+
                 _context.Set<TEntity>().Update(entity);
                 await _context.SaveChangesAsync();
             }
@@ -71,14 +68,21 @@ namespace BusOnTime.Data.Repositories.Generic
 
         public async virtual Task<TEntity> GetByIdAsync(Guid id)
         {
-            if (id == Guid.Empty)
-            {
-                throw new ArgumentException("O ID não pode ser vazio.", nameof(id));
-            }
-
             try
             {
-                return await _context.Set<TEntity>().FindAsync(id);
+                if (id == Guid.Empty)
+                {
+                    throw new ArgumentException("O ID não pode ser vazio.", nameof(id));
+                }
+
+                var entity = await _context.Set<TEntity>().FindAsync(id);
+
+                if (entity == null)
+                {
+                    throw new KeyNotFoundException($"Entidade com ID {id} não encontrada.");
+                }
+
+                return entity;
             }
             catch (Exception ex)
             {

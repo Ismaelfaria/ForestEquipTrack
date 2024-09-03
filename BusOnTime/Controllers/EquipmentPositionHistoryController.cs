@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using BusOnTime.Application.Interfaces;
 using BusOnTime.Application.Mapping.DTOs.InputModel;
+using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BusOnTime.Web.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class EquipmentPositionHistoryController : Controller
     {
         private readonly IEquipmentPositionHistoryS equipmentPositionHistoryS;
@@ -38,13 +41,13 @@ namespace BusOnTime.Web.Controllers
         /// <response code="201">Retorna o novo item criado</response>
         /// <response code="500">Se o item não for criado</response> 
         [HttpPost]
-        public IActionResult PostPH([FromForm] EquipmentPositionHistoryIM entityDTO)
+        public async Task<IActionResult> PostPH([FromForm] EquipmentPositionHistoryIM entityDTO)
         {
             try
             {
-                var create = equipmentPositionHistoryS.CreateAsync(entityDTO);
+                var create = await equipmentPositionHistoryS.CreateAsync(entityDTO);
 
-                return CreatedAtAction(nameof(GetByIdPH), new { id = create.Result.EquipmentPositionId }, create);
+                return CreatedAtAction(nameof(GetByIdPH), new { id = create.EquipmentPositionId }, create);
             }
             catch (ValidationException ex)
             {
@@ -61,11 +64,11 @@ namespace BusOnTime.Web.Controllers
         /// </summary>
         /// <response code="404">Se o item não for encontrado</response> 
         [HttpGet]
-        public IActionResult FindAllPH()
+        public async Task<ActionResult<IEnumerable<EquipmentPositionHistoryVM>>> FindAllPH()
         {
             try
             {
-                var clientAll = equipmentPositionHistoryS.FindAllAsync();
+                var clientAll = await equipmentPositionHistoryS.FindAllAsync();
 
                 return Ok(clientAll);
             }
@@ -81,11 +84,11 @@ namespace BusOnTime.Web.Controllers
         ///
         /// <response code="404">Se o item não for encontrado</response> 
         [HttpGet("historicoPosicao/{id}")]
-        public IActionResult GetByIdPH(Guid id)
+        public async Task<IActionResult> GetByIdPH(Guid id)
         {
             try
             {
-                var equipment = equipmentPositionHistoryS.GetByIdAsync(id);
+                var equipment = await equipmentPositionHistoryS.GetByIdAsync(id);
 
                 return Ok(equipment);
             }
@@ -116,11 +119,11 @@ namespace BusOnTime.Web.Controllers
         /// <response code="201">Retorna o novo item atualizado</response>
         /// <response code="400">Se o item não for atualizado</response> 
         [HttpPut]
-        public IActionResult PutPH([FromForm] Guid id, EquipmentPositionHistoryIM entityDTO)
+        public async Task<IActionResult> PutPH([FromForm] Guid id, EquipmentPositionHistoryIM entityDTO)
         {
             try
             {
-                equipmentPositionHistoryS.UpdateAsync(id, entityDTO);
+                await equipmentPositionHistoryS.UpdateAsync(id, entityDTO);
 
                 return NoContent();
             }
@@ -136,11 +139,11 @@ namespace BusOnTime.Web.Controllers
         ///
         /// <response code="400">Se o item não for deletado</response> 
         [HttpDelete]
-        public IActionResult DeletePH(Guid id)
+        public async Task<IActionResult> DeletePH(Guid id)
         {
             try
             {
-                equipmentPositionHistoryS.DeleteAsync(id);
+                await equipmentPositionHistoryS.DeleteAsync(id);
 
                 return NoContent();
             }

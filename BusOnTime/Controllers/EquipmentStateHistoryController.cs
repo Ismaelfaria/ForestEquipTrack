@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using BusOnTime.Application.Interfaces;
 using BusOnTime.Application.Mapping.DTOs.InputModel;
+using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BusOnTime.Web.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class EquipmentStateHistoryController : Controller
     {
         private readonly IEquipmentStateHistoryS equipmentStateHistoryS;
@@ -37,13 +40,13 @@ namespace BusOnTime.Web.Controllers
         /// <response code="201">Retorna o novo item criado</response>
         /// <response code="500">Se o item não for criado</response> 
         [HttpPost]
-        public IActionResult PostSH([FromForm] EquipmentStateHistoryIM entityDTO)
+        public async Task<IActionResult> PostSH([FromForm] EquipmentStateHistoryIM entityDTO)
         {
             try
             {
-                var create = equipmentStateHistoryS.CreateAsync(entityDTO);
+                var create = await equipmentStateHistoryS.CreateAsync(entityDTO);
 
-                return CreatedAtAction(nameof(GetByIdSH), new { id = create.Result.EquipmentStateId }, create);
+                return CreatedAtAction(nameof(GetByIdSH), new { id = create.EquipmentStateId }, create);
             }
             catch (ValidationException ex)
             {
@@ -60,11 +63,11 @@ namespace BusOnTime.Web.Controllers
         /// </summary>
         /// <response code="404">Se o item não for encontrado</response> 
         [HttpGet]
-        public IActionResult FindAllSH()
+        public async Task<ActionResult<IEnumerable<EquipmentStateHistoryVM>>> FindAllSH()
         {
             try
             {
-                var clientAll = equipmentStateHistoryS.FindAllAsync();
+                var clientAll = await equipmentStateHistoryS.FindAllAsync();
 
                 return Ok(clientAll);
             }
@@ -80,11 +83,11 @@ namespace BusOnTime.Web.Controllers
         ///
         /// <response code="404">Se o item não for encontrado</response> 
         [HttpGet("historicoEstado/{id}")]
-        public IActionResult GetByIdSH(Guid id)
+        public async Task<IActionResult> GetByIdSH(Guid id)
         {
             try
             {
-                var equipment = equipmentStateHistoryS.GetByIdAsync(id);
+                var equipment = await equipmentStateHistoryS.GetByIdAsync(id);
 
                 return Ok(equipment);
             }
@@ -114,11 +117,11 @@ namespace BusOnTime.Web.Controllers
         /// <response code="201">Retorna o novo item atualizado</response>
         /// <response code="400">Se o item não for atualizado</response> 
         [HttpPut]
-        public IActionResult PutSH([FromForm] Guid id, EquipmentStateHistoryIM entityDTO)
+        public async Task<IActionResult> PutSH([FromForm] Guid id, EquipmentStateHistoryIM entityDTO)
         {
             try
             {
-                equipmentStateHistoryS.UpdateAsync(id, entityDTO);
+                await equipmentStateHistoryS.UpdateAsync(id, entityDTO);
 
                 return NoContent();
             }
@@ -134,11 +137,11 @@ namespace BusOnTime.Web.Controllers
         ///
         /// <response code="400">Se o item não for deletado</response> 
         [HttpDelete]
-        public IActionResult DeleteSH(Guid id)
+        public async Task<IActionResult> DeleteSH(Guid id)
         {
             try
             {
-                equipmentStateHistoryS.DeleteAsync(id);
+                await equipmentStateHistoryS.DeleteAsync(id);
 
                 return NoContent();
             }

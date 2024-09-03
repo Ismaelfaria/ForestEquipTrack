@@ -3,11 +3,6 @@ using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
 using BusOnTime.Data.Repositories.Generic;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusOnTime.Data.Repositories.Concrete
 {

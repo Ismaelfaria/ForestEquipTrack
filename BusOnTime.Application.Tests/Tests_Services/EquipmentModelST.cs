@@ -32,7 +32,6 @@ namespace Application.Tests.Tests_Services
             _service = new EquipmentModelS(_equipmentModelRMock.Object, _mapperMock.Object, _validatorMock.Object);
         }
 
-
         [Fact]
         public async void CreateAsync_ValidEquipmentModel_ReturnsCreatedEquipmentModelVM()
         {
@@ -45,7 +44,7 @@ namespace Application.Tests.Tests_Services
 
             var equipmentModelEntity = new EquipmentModel
             {
-                ModelId = Guid.NewGuid(),
+                EquipmentModelId = Guid.NewGuid(),
                 EquipmentId = equipmentModelIM.EquipmentId,
                 Name = equipmentModelIM.Name,
                 Equipment = new List<Equipment>(),
@@ -54,7 +53,7 @@ namespace Application.Tests.Tests_Services
 
             var equipmentModelVM = new EquipmentModelVM
             {
-                ModelId = equipmentModelEntity.ModelId,
+                EquipmentModelId = equipmentModelEntity.EquipmentModelId,
                 EquipmentId = equipmentModelEntity.EquipmentId,
                 Name = equipmentModelEntity.Name
             };
@@ -76,7 +75,7 @@ namespace Application.Tests.Tests_Services
 
             Assert.NotNull(result);
             Assert.IsType<EquipmentModelVM>(result);
-            Assert.Equal(equipmentModelVM.ModelId, result.ModelId);
+            Assert.Equal(equipmentModelVM.EquipmentModelId, result.EquipmentModelId);
             Assert.Equal(equipmentModelVM.EquipmentId, result.EquipmentId);
             Assert.Equal(equipmentModelVM.Name, result.Name);
 
@@ -115,7 +114,7 @@ namespace Application.Tests.Tests_Services
         public async Task CreateAsync_ExceptionEquipmentModelNull_ThrowsArgumentNullException()
         {
 
-            EquipmentModelIM? equipmentModelIM = null;
+            EquipmentModelIM equipmentModelIM = null;
 
             var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => _service.CreateAsync(equipmentModelIM));
             Assert.Equal("Value cannot be null. (Parameter 'Entity Invalid.')", exception.Message);
@@ -151,7 +150,7 @@ namespace Application.Tests.Tests_Services
             {
                 new EquipmentModel
                 {
-                    ModelId = Guid.NewGuid(),
+                    EquipmentModelId = Guid.NewGuid(),
                     EquipmentId = Guid.NewGuid(),
                     Name = "Excavator",
                     Equipment = new List<Equipment>(),
@@ -159,7 +158,7 @@ namespace Application.Tests.Tests_Services
                 },
                 new EquipmentModel
                 {
-                    ModelId = Guid.NewGuid(),
+                    EquipmentModelId = Guid.NewGuid(),
                     EquipmentId = Guid.NewGuid(),
                     Name = "Bulldozer",
                     Equipment = new List<Equipment>(),
@@ -171,13 +170,13 @@ namespace Application.Tests.Tests_Services
             {
                 new EquipmentModelVM
                 {
-                    ModelId = equipmentModels[0].ModelId,
+                    EquipmentModelId = equipmentModels[0].EquipmentModelId,
                     EquipmentId = equipmentModels[0].EquipmentId,
                     Name = equipmentModels[0].Name
                 },
                 new EquipmentModelVM
                 {
-                    ModelId = equipmentModels[1].ModelId,
+                    EquipmentModelId = equipmentModels[1].EquipmentModelId,
                     EquipmentId = equipmentModels[1].EquipmentId,
                     Name = equipmentModels[1].Name
                 }
@@ -208,7 +207,7 @@ namespace Application.Tests.Tests_Services
 
             var equipmentModel = new EquipmentModel
             {
-                ModelId = validId,
+                EquipmentModelId = validId,
                 EquipmentId = Guid.NewGuid(),
                 Name = "Excavator",
                 Equipment = new List<Equipment>(),
@@ -217,7 +216,7 @@ namespace Application.Tests.Tests_Services
 
             var equipmentModelVM = new EquipmentModelVM
             {
-                ModelId = equipmentModel.ModelId,
+                EquipmentModelId = equipmentModel.EquipmentModelId,
                 EquipmentId = equipmentModel.EquipmentId,
                 Name = equipmentModel.Name
             };
@@ -232,7 +231,7 @@ namespace Application.Tests.Tests_Services
 
             Assert.NotNull(result);
             Assert.IsType<EquipmentModelVM>(result);
-            Assert.Equal(equipmentModelVM.ModelId, result.ModelId);
+            Assert.Equal(equipmentModelVM.EquipmentModelId, result.EquipmentModelId);
             Assert.Equal(equipmentModelVM.EquipmentId, result.EquipmentId);
             Assert.Equal(equipmentModelVM.Name, result.Name);
 
@@ -254,7 +253,7 @@ namespace Application.Tests.Tests_Services
         {
             var equipmentModel = new EquipmentModel
             {
-                ModelId = Guid.NewGuid(),
+                EquipmentModelId = Guid.NewGuid(),
                 EquipmentId = Guid.NewGuid(),
                 Name = "Excavator",
                 Equipment = new List<Equipment>(),
@@ -276,7 +275,7 @@ namespace Application.Tests.Tests_Services
             _equipmentModelRMock.Setup(repo => repo.UpdateAsync(equipmentModel))
                 .Returns(Task.CompletedTask);
 
-            await _service.UpdateAsync(equipmentModel.ModelId, equipmentModelIM);
+            await _service.UpdateAsync(equipmentModel.EquipmentModelId, equipmentModelIM);
 
             _equipmentModelRMock.Verify(repo => repo.UpdateAsync(equipmentModel), Times.Once);
             _validatorMock.Verify(v => v.Validate(equipmentModelIM), Times.Once);
@@ -316,4 +315,5 @@ namespace Application.Tests.Tests_Services
             await Assert.ThrowsAsync<ArgumentNullException>(() => _service.UpdateAsync(Guid.NewGuid(), invalidEquipmentModelIM));
         }
     }
+#nullable restore
 }

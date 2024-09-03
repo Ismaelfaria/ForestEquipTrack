@@ -9,7 +9,7 @@ namespace BusOnTime.Application.Mapping.DTOs.InputModel
 {
     public class EquipmentPositionHistoryIM
     {
-        public Guid EquipmentId { get; set; }
+        public Guid? EquipmentId { get; set; }
         public DateTime Date { get; set; }
         public int Lat { get; set; }
         public int Lon { get; set; }

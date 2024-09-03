@@ -12,8 +12,6 @@ namespace BusOnTime.Application.Validators
     {
         public EquipmentModelStateHourlyEarningsInputValidator()
         {
-            RuleFor(e => e.EquipmentModelId).NotEmpty().WithMessage("Preencha o campo 'Id do equipamento'.");
-            RuleFor(e => e.EquipmentStateId).NotEmpty().WithMessage("Preencha o campo 'Id do estado do equipamento'.");
             RuleFor(e => e.Value).NotEmpty().WithMessage("Preencha o campo 'Valor'.");
         }
     }

@@ -114,7 +114,7 @@ namespace Application.Tests.Tests_Services
         public async Task CreateAsync_ExceptionEquipmentStateNull_ThrowsArgumentNullException()
         {
 
-            EquipmentStateIM? equipmentStateIM = null;
+            EquipmentStateIM equipmentStateIM = null;
 
             var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => _service.CreateAsync(equipmentStateIM));
             Assert.Equal("Value cannot be null. (Parameter 'Entity Invalid.')", exception.Message);

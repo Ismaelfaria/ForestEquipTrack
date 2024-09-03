@@ -13,7 +13,6 @@ namespace BusOnTime.Application.Validators
         public EquipmentInputValidator()
         {
             RuleFor(e => e.Name).NotEmpty().WithMessage("Preencha o campo 'Nome'.");
-            RuleFor(e => e.EquipmentModelId).NotEmpty().WithMessage("Preencha o campo 'Id do modelo'.");
         }
     }
 }

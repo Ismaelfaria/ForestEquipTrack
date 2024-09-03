@@ -33,7 +33,7 @@ namespace Application.Tests.Tests_Services
             _service = new EquipmentModelStateHourlyEarningS(_equipmentModelStateHourlyEarningsRMock.Object, _mapperMock.Object, _validatorMock.Object);
         }
 
-
+        #nullable enable
         [Fact]
         public async void CreateAsync_ValidEquipmentModelStateHourlyEarning_ReturnsCreatedEquipmentModelStateHourlyEarningsVM()
         {
@@ -116,14 +116,14 @@ namespace Application.Tests.Tests_Services
 
             _validatorMock.Verify(v => v.Validate(equipmentModelStateHourlyEarningsIM), Times.Once);
         }
-
+        
         [Fact]
         public async Task CreateAsync_ExceptionEquipmentModelStateHourlyEarningsNull_ThrowsArgumentNullException()
         {
 
             EquipmentModelStateHourlyEarningsIM? equipmentModelStateHourlyEarningsIM = null;
 
-            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => _service.CreateAsync(null));
+            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => _service.CreateAsync(equipmentModelStateHourlyEarningsIM));
             Assert.Equal("Value cannot be null. (Parameter 'Entity Invalid.')", exception.Message);
         }
 
@@ -321,7 +321,7 @@ namespace Application.Tests.Tests_Services
 
             _validatorMock.Verify(v => v.Validate(invalidEquipmentModelStateHourlyEarningsIM), Times.Once);
         }
-
+        
         [Fact]
         public async Task UpdateAsync_NullEntity_ThrowsArgumentNullException()
         {
@@ -329,5 +329,6 @@ namespace Application.Tests.Tests_Services
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => _service.UpdateAsync(Guid.NewGuid(), invalidEquipmentModelStateHourlyEarningsIM));
         }
+        #nullable restore
     }
 }

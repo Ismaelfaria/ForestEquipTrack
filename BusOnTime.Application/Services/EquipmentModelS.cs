@@ -5,12 +5,6 @@ using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusOnTime.Application.Services
 {
@@ -118,10 +112,11 @@ namespace BusOnTime.Application.Services
             }
         }
 
-        public async Task UpdateAsync(Guid id, EquipmentModelIM entity)
+        public async Task UpdateAsync(Guid? id, EquipmentModelIM entity)
         {
             try
             {
+                if (id == null) throw new ArgumentNullException(nameof(id));
                 if (entity == null) throw new ArgumentNullException(nameof(entity));
 
                 var validResult = validator.Validate(entity);
@@ -133,8 +128,7 @@ namespace BusOnTime.Application.Services
                 }
 
                 var createMapObject = mapper.Map<EquipmentModel>(entity);
-
-                createMapObject.EquipmentId = id;
+                createMapObject.EquipmentModelId = id.Value;
 
                 await equipmentModelR.UpdateAsync(createMapObject);
             }

@@ -14,7 +14,7 @@ namespace BusOnTime.Data.Entities
             IsDeleted = false;
         }
         public Guid EquipmentPositionId { get; set; }
-        public Guid EquipmentId { get; set; }
+        public Guid? EquipmentId { get; set; }
         public DateTime Date { get; set; }
         public int Lat { get; set; }
         public int Lon { get; set; }

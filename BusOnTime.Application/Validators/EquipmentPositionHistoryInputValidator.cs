@@ -12,7 +12,6 @@ namespace BusOnTime.Application.Validators
     {
         public EquipmentPositionHistoryInputValidator()
         {
-            RuleFor(e => e.EquipmentId).NotEmpty().WithMessage("Preencha o campo 'Id do equipamento'.");
             RuleFor(e => e.Date).NotEmpty().WithMessage("Preencha o campo 'Data'.");
             RuleFor(e => e.Lat).NotEmpty().WithMessage("Preencha o campo 'Latitude'.");
             RuleFor(e => e.Lon).NotEmpty().WithMessage("Preencha o campo 'Longitude'.");

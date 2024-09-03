@@ -13,8 +13,8 @@ namespace BusOnTime.Data.Entities
         {
             IsDeleted = false;
         }
-        public Guid ModelId { get; set; }
-        public Guid EquipmentId { get; set; }
+        public Guid EquipmentModelId { get; set; }
+        public Guid? EquipmentId { get; set; }
         public string? Name { get; set; }
         public ICollection<Equipment>? Equipment { get; set; }
         public ICollection<EquipmentModelStateHourlyEarnings>? EquipmentModelStateHourlyEarnings { get; set; }

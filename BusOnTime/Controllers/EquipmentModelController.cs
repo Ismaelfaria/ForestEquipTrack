@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using BusOnTime.Application.Interfaces;
 using BusOnTime.Application.Mapping.DTOs.InputModel;
+using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using BusOnTime.Application.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BusOnTime.Web.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class EquipmentModelController : Controller
     {
         private readonly IEquipmentModelS equipmentModelS;
@@ -37,13 +40,13 @@ namespace BusOnTime.Web.Controllers
         /// <response code="201">Retorna o novo item criado</response>
         /// <response code="500">Se o item não for criado</response> 
         [HttpPost]
-        public IActionResult PostEM([FromForm] EquipmentModelIM entityDTO)
+        public async Task<IActionResult> PostEM([FromForm] EquipmentModelIM entityDTO)
         {
             try
             {
-                var create = equipmentModelS.CreateAsync(entityDTO);
+                var create = await equipmentModelS.CreateAsync(entityDTO);
 
-                return CreatedAtAction(nameof(GetByIdEM), new { id = create.Result.ModelId }, create);
+                return CreatedAtAction(nameof(GetByIdEM), new { id = create.EquipmentModelId }, create);
             }
             catch (ValidationException ex)
             {
@@ -60,11 +63,11 @@ namespace BusOnTime.Web.Controllers
         /// </summary>
         /// <response code="404">Se o item não for encontrado</response> 
         [HttpGet("buscar-todos-clientes")]
-        public IActionResult FindAllEM()
+        public async Task<ActionResult<IEnumerable<EquipmentModelVM>>> FindAllEM()
         {
             try
             {
-                var clientAll = equipmentModelS.FindAllAsync();
+                var clientAll = await equipmentModelS.FindAllAsync();
 
                 return Ok(clientAll);
             }

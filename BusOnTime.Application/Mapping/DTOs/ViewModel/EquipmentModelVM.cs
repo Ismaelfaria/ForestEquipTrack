@@ -9,8 +9,8 @@ namespace BusOnTime.Application.Mapping.DTOs.ViewModel
 {
     public class EquipmentModelVM
     {
-        public Guid ModelId { get; set; }
-        public Guid EquipmentId { get; set; }
+        public Guid EquipmentModelId { get; set; }
+        public Guid? EquipmentId { get; set; }
         public string? Name { get; set; }
     }
 }
