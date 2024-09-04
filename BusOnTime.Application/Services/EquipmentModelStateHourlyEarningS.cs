@@ -4,6 +4,7 @@ using BusOnTime.Application.Mapping.DTOs.InputModel;
 using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
+using BusOnTime.Data.Repositories.Concrete;
 using FluentValidation;
 
 namespace BusOnTime.Application.Services

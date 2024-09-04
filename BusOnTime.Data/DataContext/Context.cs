@@ -111,7 +111,7 @@ namespace BusOnTime.Data.DataContext
 
             modelBuilder.Entity<EquipmentStateHistory>(entity =>
             {
-                entity.HasKey(esh => new { esh.EquipmentId, esh.Date });
+                entity.HasKey(esh => esh.EquipmentStateHistoryId);
 
 
                 //Relacionamentos

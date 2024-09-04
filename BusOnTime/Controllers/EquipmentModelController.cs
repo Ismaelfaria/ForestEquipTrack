@@ -83,7 +83,7 @@ namespace BusOnTime.Web.Controllers
         ///
         /// <response code="404">Se o item não for encontrado</response> 
         [HttpGet("equipamentoModelo/{id}")]
-        public IActionResult GetByIdEM(Guid id)
+        public IActionResult GetByIdEM([FromForm] Guid id)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace BusOnTime.Web.Controllers
         /// <response code="201">Retorna o novo item atualizado</response>
         /// <response code="400">Se o item não for atualizado</response> 
         [HttpPut]
-        public IActionResult PutEM([FromForm] Guid id, EquipmentModelIM entityDTO)
+        public IActionResult PutEM([FromForm] Guid id, [FromForm] EquipmentModelIM entityDTO)
         {
             try
             {
@@ -136,7 +136,7 @@ namespace BusOnTime.Web.Controllers
         ///
         /// <response code="400">Se o item não for deletado</response> 
         [HttpDelete]
-        public IActionResult DeleteEM(Guid id)
+        public IActionResult DeleteEM([FromForm] Guid id)
         {
             try
             {

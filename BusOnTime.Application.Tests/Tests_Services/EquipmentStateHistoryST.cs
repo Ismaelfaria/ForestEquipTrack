@@ -40,13 +40,15 @@ namespace Application.Tests.Tests_Services
             var equipmentStateHistoryIM = new EquipmentStateHistoryIM
             {
                 EquipmentId = Guid.NewGuid(),
+                EquipmentStateId = Guid.NewGuid(),
                 Date = DateTime.Now
             };
 
             var equipmentStateHistoryEntity = new EquipmentStateHistory
             {
-                EquipmentStateId = Guid.NewGuid(),
+                EquipmentStateHistoryId = Guid.NewGuid(),
                 EquipmentId = equipmentStateHistoryIM.EquipmentId,
+                EquipmentStateId = equipmentStateHistoryIM.EquipmentStateId,
                 Date = equipmentStateHistoryIM.Date,
                 Equipment = new Equipment(),
                 EquipmentState = new EquipmentState()
@@ -54,6 +56,7 @@ namespace Application.Tests.Tests_Services
 
             var equipmentStateHistoryVM = new EquipmentStateHistoryVM
             {
+                EquipmentStatehistoryId = equipmentStateHistoryEntity.EquipmentStateHistoryId,
                 EquipmentStateId = equipmentStateHistoryEntity.EquipmentStateId,
                 EquipmentId = equipmentStateHistoryEntity.EquipmentId,
                 Date = equipmentStateHistoryEntity.Date

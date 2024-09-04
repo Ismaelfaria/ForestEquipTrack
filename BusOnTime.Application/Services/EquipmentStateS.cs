@@ -4,6 +4,7 @@ using BusOnTime.Application.Mapping.DTOs.InputModel;
 using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using BusOnTime.Data.Entities;
 using BusOnTime.Data.Interfaces.Interface;
+using BusOnTime.Data.Repositories.Concrete;
 using FluentValidation;
 
 namespace BusOnTime.Application.Services
@@ -37,6 +38,13 @@ namespace BusOnTime.Application.Services
                 }
 
                 var createMapObject = mapper.Map<EquipmentState>(entity);
+
+                var exists = await equipmentStateR.AnyAsync(e => e.Name == createMapObject.Name && !e.IsDeleted);
+
+                if (exists)
+                {
+                    throw new InvalidOperationException("Um estato com o mesmo nome já existe.");
+                }
 
                 var view = await equipmentStateR.CreateAsync(createMapObject);
 

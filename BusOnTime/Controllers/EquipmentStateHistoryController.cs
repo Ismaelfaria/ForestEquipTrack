@@ -83,7 +83,7 @@ namespace BusOnTime.Web.Controllers
         ///
         /// <response code="404">Se o item não for encontrado</response> 
         [HttpGet("historicoEstado/{id}")]
-        public async Task<IActionResult> GetByIdSH(Guid id)
+        public async Task<IActionResult> GetByIdSH([FromForm] Guid id)
         {
             try
             {
@@ -117,7 +117,7 @@ namespace BusOnTime.Web.Controllers
         /// <response code="201">Retorna o novo item atualizado</response>
         /// <response code="400">Se o item não for atualizado</response> 
         [HttpPut]
-        public async Task<IActionResult> PutSH([FromForm] Guid id, EquipmentStateHistoryIM entityDTO)
+        public async Task<IActionResult> PutSH([FromForm] Guid id, [FromForm] EquipmentStateHistoryIM entityDTO)
         {
             try
             {
@@ -137,7 +137,7 @@ namespace BusOnTime.Web.Controllers
         ///
         /// <response code="400">Se o item não for deletado</response> 
         [HttpDelete]
-        public async Task<IActionResult> DeleteSH(Guid id)
+        public async Task<IActionResult> DeleteSH([FromForm] Guid id)
         {
             try
             {

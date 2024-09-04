@@ -35,6 +35,13 @@ namespace BusOnTime.Application.Services
 
                 var createMapObject = mapper.Map<EquipmentModel>(entity);
 
+                var exists = await equipmentModelR.AnyAsync(e => e.Name == createMapObject.Name && !e.IsDeleted);
+                
+                if (exists)
+                {
+                    throw new InvalidOperationException("Um modelo com o mesmo nome já existe.");
+                }
+
                 var view = await equipmentModelR.CreateAsync(createMapObject);
 
                 var viewModel = mapper.Map<EquipmentModelVM>(view);

@@ -2,6 +2,7 @@
 using BusOnTime.Data.Entities.Generic;
 using BusOnTime.Data.Interfaces.Generic;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace BusOnTime.Data.Repositories.Generic
 {
@@ -37,7 +38,9 @@ namespace BusOnTime.Data.Repositories.Generic
         {
             try
             {
-                return await _context.Set<TEntity>().ToListAsync();
+                return await _context.Set<TEntity>()
+                 .Where(entity => !entity.IsDeleted)
+                                     .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -126,6 +129,11 @@ namespace BusOnTime.Data.Repositories.Generic
                 Console.WriteLine($"Erro inesperado: {ex.Message}");
                 throw;
             }
+        }
+
+        public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await _context.Set<TEntity>().AnyAsync(predicate);
         }
     }
 }

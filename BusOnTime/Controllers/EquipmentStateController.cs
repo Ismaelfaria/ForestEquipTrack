@@ -115,7 +115,7 @@ namespace BusOnTime.Web.Controllers
         /// <response code="201">Retorna o novo item atualizado</response>
         /// <response code="400">Se o item não for atualizado</response> 
         [HttpPut]
-        public async Task<IActionResult> PutEM([FromForm] Guid id, EquipmentStateIM entityDTO)
+        public async Task<IActionResult> PutEM([FromForm] Guid id, [FromForm] EquipmentStateIM entityDTO)
         {
             try
             {
@@ -135,7 +135,7 @@ namespace BusOnTime.Web.Controllers
         ///
         /// <response code="400">Se o item não for deletado</response> 
         [HttpDelete]
-        public async Task<IActionResult> DeleteEM(Guid id)
+        public async Task<IActionResult> DeleteEM([FromForm] Guid id)
         {
             try
             {

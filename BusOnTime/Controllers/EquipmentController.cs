@@ -82,7 +82,7 @@ namespace BusOnTime.Web.Controllers
         ///
         /// <response code="404">Se o item não for encontrado</response> 
         [HttpGet("equipamento/{id}")]
-        public async Task<IActionResult> GetByIdE(Guid id)
+        public async Task<IActionResult> GetByIdE([FromForm] Guid id)
         {
             try
             {
@@ -115,7 +115,7 @@ namespace BusOnTime.Web.Controllers
         /// <response code="201">Retorna o novo item atualizado</response>
         /// <response code="400">Se o item não for atualizado</response> 
         [HttpPut]
-        public async Task<IActionResult> PutE([FromForm] Guid id, EquipmentIM entityDTO)
+        public async Task<IActionResult> PutE([FromForm] Guid id, [FromForm] EquipmentIM entityDTO)
         {
             try
             {

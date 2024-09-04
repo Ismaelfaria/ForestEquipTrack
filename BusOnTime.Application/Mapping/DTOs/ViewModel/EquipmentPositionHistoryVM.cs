@@ -12,7 +12,7 @@ namespace BusOnTime.Application.Mapping.DTOs.ViewModel
         public Guid EquipmentPositionId { get; set; }
         public Guid EquipmentId { get; set; }
         public DateTime Date { get; set; }
-        public int Lat { get; set; }
-        public int Lon { get; set; }
+        public double Lat { get; set; }
+        public double Lon { get; set; }
     }
 }
