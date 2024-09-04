@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BusOnTime.Web.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/valor-equipamento")]
     public class EquipmentModelStateHourlyEarningController : Controller
     {
         private readonly IEquipmentModelStateHourlyEarningS equipmentModelStateHourlyEarningS;
@@ -39,7 +39,7 @@ namespace BusOnTime.Web.Controllers
         /// <returns>Um novo item criado</returns>
         /// <response code="201">Retorna o novo item criado</response>
         /// <response code="500">Se o item não for criado</response> 
-        [HttpPost]
+        [HttpPost("novo")]
         public async Task<IActionResult> PostEMS([FromForm] EquipmentModelStateHourlyEarningsIM entityDTO)
         {
             try
@@ -62,7 +62,7 @@ namespace BusOnTime.Web.Controllers
         /// Buscar todos os itens.
         /// </summary>
         /// <response code="404">Se o item não for encontrado</response> 
-        [HttpGet]
+        [HttpGet("todos-valores")]
         public async Task<ActionResult<IEnumerable<EquipmentModelStateHourlyEarningsVM>>> FindAllEMS()
         {
             try
@@ -82,7 +82,7 @@ namespace BusOnTime.Web.Controllers
         /// </summary>
         ///
         /// <response code="404">Se o item não for encontrado</response> 
-        [HttpGet("equipamentoValorEstado/{id}")]
+        [HttpGet("valor/{id}")]
         public async Task<IActionResult> GetByIdEMS([FromForm] Guid id)
         {
             try
@@ -116,7 +116,7 @@ namespace BusOnTime.Web.Controllers
         /// <returns>Um novo item atualizado</returns>
         /// <response code="201">Retorna o novo item atualizado</response>
         /// <response code="400">Se o item não for atualizado</response> 
-        [HttpPut]
+        [HttpPut("atualizar")]
         public async Task<IActionResult> PutEMS([FromForm] Guid id, [FromForm] EquipmentModelStateHourlyEarningsIM entityDTO)
         {
             try
@@ -136,7 +136,7 @@ namespace BusOnTime.Web.Controllers
         /// </summary>
         ///
         /// <response code="400">Se o item não for deletado</response> 
-        [HttpDelete]
+        [HttpDelete("remover")]
         public async Task<IActionResult> DeleteEMS([FromForm] Guid id)
         {
             try

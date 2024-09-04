@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BusOnTime.Web.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/modelo")]
     public class EquipmentModelController : Controller
     {
         private readonly IEquipmentModelS equipmentModelS;
@@ -39,7 +39,7 @@ namespace BusOnTime.Web.Controllers
         /// <returns>Um novo item criado</returns>
         /// <response code="201">Retorna o novo item criado</response>
         /// <response code="500">Se o item não for criado</response> 
-        [HttpPost]
+        [HttpPost("Novo")]
         public async Task<IActionResult> PostEM([FromForm] EquipmentModelIM entityDTO)
         {
             try
@@ -62,7 +62,7 @@ namespace BusOnTime.Web.Controllers
         /// Buscar todos os itens.
         /// </summary>
         /// <response code="404">Se o item não for encontrado</response> 
-        [HttpGet("buscar-todos-clientes")]
+        [HttpGet("todos-modelos")]
         public async Task<ActionResult<IEnumerable<EquipmentModelVM>>> FindAllEM()
         {
             try
@@ -82,7 +82,7 @@ namespace BusOnTime.Web.Controllers
         /// </summary>
         ///
         /// <response code="404">Se o item não for encontrado</response> 
-        [HttpGet("equipamentoModelo/{id}")]
+        [HttpGet("modelo/{id}")]
         public IActionResult GetByIdEM([FromForm] Guid id)
         {
             try
@@ -115,7 +115,7 @@ namespace BusOnTime.Web.Controllers
         /// <returns>Um novo item atualizado</returns>
         /// <response code="201">Retorna o novo item atualizado</response>
         /// <response code="400">Se o item não for atualizado</response> 
-        [HttpPut]
+        [HttpPut("atualizar")]
         public IActionResult PutEM([FromForm] Guid id, [FromForm] EquipmentModelIM entityDTO)
         {
             try
@@ -135,7 +135,7 @@ namespace BusOnTime.Web.Controllers
         /// </summary>
         ///
         /// <response code="400">Se o item não for deletado</response> 
-        [HttpDelete]
+        [HttpDelete("remover")]
         public IActionResult DeleteEM([FromForm] Guid id)
         {
             try

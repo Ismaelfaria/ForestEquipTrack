@@ -45,7 +45,7 @@ namespace Application.Tests.Tests_Services
 
             var equipmentStateEntity = new EquipmentState
             {
-                StateId = Guid.NewGuid(),
+                EquipmentStateId = Guid.NewGuid(),
                 Name = equipmentStateIM.Name, 
                 Color = equipmentStateIM.Color,
                 EquipmentStateHistories = new List<EquipmentStateHistory>(),
@@ -56,7 +56,7 @@ namespace Application.Tests.Tests_Services
             {
                 Name = equipmentStateEntity.Name,
                 Color = equipmentStateEntity.Color,
-                StateId = equipmentStateEntity.StateId
+                EquipmentStateId = equipmentStateEntity.EquipmentStateId
             };
 
 
@@ -78,7 +78,7 @@ namespace Application.Tests.Tests_Services
             Assert.IsType<EquipmentStateVM>(result);
             Assert.Equal(equipmentStateVM.Name, result.Name);
             Assert.Equal(equipmentStateVM.Color, result.Color);
-            Assert.Equal(equipmentStateVM.StateId, result.StateId);
+            Assert.Equal(equipmentStateVM.EquipmentStateId, result.EquipmentStateId);
 
             _equipmentRMock.Verify(repo => repo.CreateAsync(equipmentStateEntity), Times.Once);
             _mapperMock.Verify(m => m.Map<EquipmentState>(equipmentStateIM), Times.Once);
@@ -150,7 +150,7 @@ namespace Application.Tests.Tests_Services
             {
                 new EquipmentState
                 {
-                    StateId = Guid.NewGuid(),
+                    EquipmentStateId = Guid.NewGuid(),
                     Name = "TestName1",
                     Color = "TestColor1",
                     EquipmentStateHistories = new List<EquipmentStateHistory>(),
@@ -158,7 +158,7 @@ namespace Application.Tests.Tests_Services
                 },
                 new EquipmentState
                 {
-                    StateId = Guid.NewGuid(),
+                    EquipmentStateId = Guid.NewGuid(),
                     Name = "TestName2",
                     Color = "TestColor2",
                     EquipmentStateHistories = new List<EquipmentStateHistory>(),
@@ -172,13 +172,13 @@ namespace Application.Tests.Tests_Services
                 {
                     Color = equipmentStates[0].Color,
                     Name = equipmentStates[0].Name,
-                    StateId = equipmentStates[0].StateId
+                    EquipmentStateId = equipmentStates[0].EquipmentStateId
                 },
                 new EquipmentStateVM
                 {
                     Color = equipmentStates[1].Color,
                     Name = equipmentStates[1].Name,
-                    StateId = equipmentStates[1].StateId
+                    EquipmentStateId = equipmentStates[1].EquipmentStateId
                 }
             };
 
@@ -207,7 +207,7 @@ namespace Application.Tests.Tests_Services
 
             var equipmentState = new EquipmentState
             {
-                StateId = Guid.NewGuid(),
+                EquipmentStateId = Guid.NewGuid(),
                 Name = "TestName1",
                 Color = "TestColor1",
                 EquipmentStateHistories = new List<EquipmentStateHistory>(),
@@ -218,7 +218,7 @@ namespace Application.Tests.Tests_Services
             {
                 Color = equipmentState.Color,
                 Name = equipmentState.Name,
-                StateId = equipmentState.StateId
+                EquipmentStateId = equipmentState.EquipmentStateId
             };
 
             _equipmentRMock.Setup(repo => repo.GetByIdAsync(validId))
@@ -233,7 +233,7 @@ namespace Application.Tests.Tests_Services
             Assert.IsType<EquipmentStateVM>(result);
             Assert.Equal(equipmentStateVM.Color, result.Color);
             Assert.Equal(equipmentStateVM.Name, result.Name);
-            Assert.Equal(equipmentStateVM.StateId, result.StateId);
+            Assert.Equal(equipmentStateVM.EquipmentStateId, result.EquipmentStateId);
 
             _equipmentRMock.Verify(repo => repo.GetByIdAsync(validId), Times.Once);
             _mapperMock.Verify(m => m.Map<EquipmentStateVM>(equipmentState), Times.Once);
@@ -253,7 +253,7 @@ namespace Application.Tests.Tests_Services
         {
             var equipmentState = new EquipmentState
             {
-                StateId = Guid.NewGuid(),
+                EquipmentStateId = Guid.NewGuid(),
                 Name = "TestName1",
                 Color = "TestColor1",
                 EquipmentStateHistories = new List<EquipmentStateHistory>(),
@@ -275,7 +275,7 @@ namespace Application.Tests.Tests_Services
             _equipmentRMock.Setup(repo => repo.UpdateAsync(equipmentState))
                 .Returns(Task.CompletedTask);
 
-            await _service.UpdateAsync(equipmentState.StateId, equipmentStateIM);
+            await _service.UpdateAsync(equipmentState.EquipmentStateId, equipmentStateIM);
 
             _equipmentRMock.Verify(repo => repo.UpdateAsync(equipmentState), Times.Once);
             _validatorMock.Verify(v => v.Validate(equipmentStateIM), Times.Once);

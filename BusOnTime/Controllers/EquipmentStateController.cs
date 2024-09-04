@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BusOnTime.Web.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/estado")]
     public class EquipmentStateController : Controller
     {
         private readonly IEquipmentStateS equipmentStateS;
@@ -38,14 +38,14 @@ namespace BusOnTime.Web.Controllers
         /// <returns>Um novo item criado</returns>
         /// <response code="201">Retorna o novo item criado</response>
         /// <response code="500">Se o item não for criado</response> 
-        [HttpPost]
+        [HttpPost("novo")]
         public async Task<IActionResult> PostS([FromForm] EquipmentStateIM entityDTO)
         {
             try
             {
                 var create = await equipmentStateS.CreateAsync(entityDTO);
 
-                return CreatedAtAction(nameof(GetByIdEM), new { id = create.StateId }, create);
+                return CreatedAtAction(nameof(GetByIdEM), new { id = create.EquipmentStateId }, create);
             }
             catch (ValidationException ex)
             {
@@ -61,7 +61,7 @@ namespace BusOnTime.Web.Controllers
         /// Buscar todos os itens.
         /// </summary>
         /// <response code="404">Se o item não for encontrado</response> 
-        [HttpGet]
+        [HttpGet("todos-estados")]
         public async Task<ActionResult<IEnumerable<EquipmentStateVM>>> FindAllS()
         {
             try
@@ -81,7 +81,7 @@ namespace BusOnTime.Web.Controllers
         /// </summary>
         ///
         /// <response code="404">Se o item não for encontrado</response> 
-        [HttpGet("equipamentoEstado/{id}")]
+        [HttpGet("equipamento-estado/{id}")]
         public async Task<IActionResult> GetByIdEM(Guid id)
         {
             try
@@ -114,7 +114,7 @@ namespace BusOnTime.Web.Controllers
         /// <returns>Um novo item atualizado</returns>
         /// <response code="201">Retorna o novo item atualizado</response>
         /// <response code="400">Se o item não for atualizado</response> 
-        [HttpPut]
+        [HttpPut("atualizar")]
         public async Task<IActionResult> PutEM([FromForm] Guid id, [FromForm] EquipmentStateIM entityDTO)
         {
             try
@@ -134,7 +134,7 @@ namespace BusOnTime.Web.Controllers
         /// </summary>
         ///
         /// <response code="400">Se o item não for deletado</response> 
-        [HttpDelete]
+        [HttpDelete("remover")]
         public async Task<IActionResult> DeleteEM([FromForm] Guid id)
         {
             try

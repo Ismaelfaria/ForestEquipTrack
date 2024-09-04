@@ -79,6 +79,7 @@ namespace Application.Tests.Tests_Services
 
             Assert.NotNull(result);
             Assert.IsType<EquipmentStateHistoryVM>(result);
+            Assert.Equal(equipmentStateHistoryVM.EquipmentStatehistoryId, result.EquipmentStatehistoryId);
             Assert.Equal(equipmentStateHistoryVM.EquipmentStateId, result.EquipmentStateId);
             Assert.Equal(equipmentStateHistoryVM.EquipmentId, result.EquipmentId);
             Assert.Equal(equipmentStateHistoryVM.Date, result.Date);
@@ -96,6 +97,7 @@ namespace Application.Tests.Tests_Services
             var validationFailures = new List<ValidationFailure>
             {
                 new ValidationFailure("EquipmentId", "EquipmentId cannot be empty."),
+                new ValidationFailure("EquipmentStateId", "EquipmentStateId cannot be empty."),
                 new ValidationFailure("Date", "Date cannot be empty.")
             };
 
@@ -153,6 +155,7 @@ namespace Application.Tests.Tests_Services
             {
                 new EquipmentStateHistory
                 {
+                    EquipmentStateHistoryId = Guid.NewGuid(),
                     EquipmentStateId = Guid.NewGuid(),
                     EquipmentId = Guid.NewGuid(),
                     Date = new DateTime(2023, 1, 1, 15, 30, 0),
@@ -161,6 +164,7 @@ namespace Application.Tests.Tests_Services
                 },
                 new EquipmentStateHistory
                 {
+                    EquipmentStateHistoryId = Guid.NewGuid(),
                     EquipmentStateId = Guid.NewGuid(),
                     EquipmentId = Guid.NewGuid(),
                     Date = new DateTime(2024, 1, 1, 15, 30, 0),
@@ -173,12 +177,14 @@ namespace Application.Tests.Tests_Services
             {
                 new EquipmentStateHistoryVM
                 {
+                    EquipmentStatehistoryId = equipmentStateHistorys[0].EquipmentStateHistoryId,
                     EquipmentStateId = equipmentStateHistorys[0].EquipmentStateId,
                     EquipmentId = equipmentStateHistorys[0].EquipmentId,
                     Date = equipmentStateHistorys[0].Date
                 },
                 new EquipmentStateHistoryVM
                 {
+                    EquipmentStatehistoryId = equipmentStateHistorys[1].EquipmentStateHistoryId,
                     EquipmentStateId = equipmentStateHistorys[1].EquipmentStateId,
                     EquipmentId = equipmentStateHistorys[1].EquipmentId,
                     Date = equipmentStateHistorys[1].Date
@@ -210,6 +216,7 @@ namespace Application.Tests.Tests_Services
 
             var equipmentStateHistory = new EquipmentStateHistory
             {
+                EquipmentStateHistoryId = Guid.NewGuid(),
                 EquipmentStateId = Guid.NewGuid(),
                 EquipmentId = Guid.NewGuid(),
                 Date = DateTime.Now,
@@ -219,6 +226,7 @@ namespace Application.Tests.Tests_Services
 
             var equipmentStateHistoryVM = new EquipmentStateHistoryVM
             {
+                EquipmentStatehistoryId = equipmentStateHistory.EquipmentStateHistoryId,
                 EquipmentStateId = equipmentStateHistory.EquipmentStateId,
                 EquipmentId = equipmentStateHistory.EquipmentId,
                 Date = equipmentStateHistory.Date
@@ -234,6 +242,7 @@ namespace Application.Tests.Tests_Services
 
             Assert.NotNull(result);
             Assert.IsType<EquipmentStateHistoryVM>(result);
+            Assert.Equal(equipmentStateHistoryVM.EquipmentStatehistoryId, result.EquipmentStatehistoryId);
             Assert.Equal(equipmentStateHistoryVM.EquipmentStateId, result.EquipmentStateId);
             Assert.Equal(equipmentStateHistoryVM.EquipmentId, result.EquipmentId);
             Assert.Equal(equipmentStateHistoryVM.Date, result.Date);
@@ -256,6 +265,7 @@ namespace Application.Tests.Tests_Services
         {
             var equipmentStateHistory = new EquipmentStateHistory
             {
+                EquipmentStateHistoryId = Guid.NewGuid(),
                 EquipmentStateId = Guid.NewGuid(),
                 EquipmentId = Guid.NewGuid(),
                 Date = DateTime.Now,
@@ -266,6 +276,7 @@ namespace Application.Tests.Tests_Services
             var equipmentStateHistoryIM = new EquipmentStateHistoryIM
             {
                 EquipmentId = equipmentStateHistory.EquipmentId,
+                EquipmentStateId = equipmentStateHistory.EquipmentStateId,
                 Date = equipmentStateHistory.Date
             };
 
@@ -293,6 +304,7 @@ namespace Application.Tests.Tests_Services
             var validationFailures = new List<ValidationFailure>
             {
                 new ValidationFailure("EquipmentId", "EquipmentId cannot be empty."),
+                new ValidationFailure("EquipmentStateId", "EquipmentStateId cannot be empty."),
                 new ValidationFailure("Date", "Date is required.")
             };
 

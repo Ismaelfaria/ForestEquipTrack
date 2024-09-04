@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BusOnTime.Web.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/equipamento")]
     public class EquipmentController : Controller
     {
         private readonly IEquipmentS equipmentS;
@@ -38,7 +38,7 @@ namespace BusOnTime.Web.Controllers
         /// <returns>Um novo item criado</returns>
         /// <response code="201">Retorna o novo item criado</response>
         /// <response code="500">Se o item não for criado</response> 
-        [HttpPost]
+        [HttpPost("novo")]
         public async Task<IActionResult> PostE([FromForm] EquipmentIM entityDTO)
         {
             try
@@ -61,7 +61,7 @@ namespace BusOnTime.Web.Controllers
         /// Buscar todos os itens.
         /// </summary>
         /// <response code="404">Se o item não for encontrado</response> 
-        [HttpGet]
+        [HttpGet("todos-equipamentos")]
         public async Task<ActionResult<IEnumerable<EquipmentVM>>> FindAllE()
         {
             try
@@ -114,7 +114,7 @@ namespace BusOnTime.Web.Controllers
         /// <returns>Um novo item atualizado</returns>
         /// <response code="201">Retorna o novo item atualizado</response>
         /// <response code="400">Se o item não for atualizado</response> 
-        [HttpPut]
+        [HttpPut("atualizar")]
         public async Task<IActionResult> PutE([FromForm] Guid id, [FromForm] EquipmentIM entityDTO)
         {
             try
@@ -134,7 +134,7 @@ namespace BusOnTime.Web.Controllers
         /// </summary>
         ///
         /// <response code="400">Se o item não for deletado</response> 
-        [HttpDelete]
+        [HttpDelete("Remover")]
         public async Task<IActionResult> DeleteE(Guid id)
         {
             try

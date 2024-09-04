@@ -10,7 +10,7 @@ namespace BusOnTime.Data.Entities
     public class EquipmentState : BaseEntity
     {
         
-        public Guid StateId { get; set; }
+        public Guid EquipmentStateId { get; set; }
         public string? Name { get; set; }
         public string? Color { get; set; }
         public ICollection<EquipmentModelStateHourlyEarnings>? EquipmentModelStateHourlyEarnings { get; set; }

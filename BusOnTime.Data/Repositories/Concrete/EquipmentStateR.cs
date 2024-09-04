@@ -19,7 +19,7 @@ namespace BusOnTime.Data.Repositories.Concrete
                     throw new ArgumentException("O ID não pode ser vazio.", nameof(id));
                 }
 
-                var entity = await _context.EquipmentState.SingleOrDefaultAsync(a => a.StateId == id);
+                var entity = await _context.EquipmentState.SingleOrDefaultAsync(a => a.EquipmentStateId == id);
 
                 if (entity == null)
                 {

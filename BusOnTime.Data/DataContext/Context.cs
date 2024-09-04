@@ -91,7 +91,7 @@ namespace BusOnTime.Data.DataContext
 
             modelBuilder.Entity<EquipmentState>(entity =>
             {
-                entity.HasKey(es => es.StateId); 
+                entity.HasKey(es => es.EquipmentStateId); 
 
                 entity.Property(es => es.Name)
                       .HasMaxLength(100);

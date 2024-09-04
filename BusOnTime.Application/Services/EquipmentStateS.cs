@@ -139,7 +139,7 @@ namespace BusOnTime.Application.Services
                 }
 
                 var createMapObject = mapper.Map<EquipmentState>(entity);
-                createMapObject.StateId = id.Value;
+                createMapObject.EquipmentStateId = id.Value;
 
                 await equipmentStateR.UpdateAsync(createMapObject);
             }

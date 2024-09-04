@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BusOnTime.Web.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/estado-historico")]
     public class EquipmentStateHistoryController : Controller
     {
         private readonly IEquipmentStateHistoryS equipmentStateHistoryS;
@@ -39,7 +39,7 @@ namespace BusOnTime.Web.Controllers
         /// <returns>Um novo item criado</returns>
         /// <response code="201">Retorna o novo item criado</response>
         /// <response code="500">Se o item não for criado</response> 
-        [HttpPost]
+        [HttpPost("novo")]
         public async Task<IActionResult> PostSH([FromForm] EquipmentStateHistoryIM entityDTO)
         {
             try
@@ -62,7 +62,7 @@ namespace BusOnTime.Web.Controllers
         /// Buscar todos os itens.
         /// </summary>
         /// <response code="404">Se o item não for encontrado</response> 
-        [HttpGet]
+        [HttpGet("todos-historicos-estados")]
         public async Task<ActionResult<IEnumerable<EquipmentStateHistoryVM>>> FindAllSH()
         {
             try
@@ -82,7 +82,7 @@ namespace BusOnTime.Web.Controllers
         /// </summary>
         ///
         /// <response code="404">Se o item não for encontrado</response> 
-        [HttpGet("historicoEstado/{id}")]
+        [HttpGet("historico-estado/{id}")]
         public async Task<IActionResult> GetByIdSH([FromForm] Guid id)
         {
             try
@@ -116,7 +116,7 @@ namespace BusOnTime.Web.Controllers
         /// <returns>Um novo item atualizado</returns>
         /// <response code="201">Retorna o novo item atualizado</response>
         /// <response code="400">Se o item não for atualizado</response> 
-        [HttpPut]
+        [HttpPut("atualizar")]
         public async Task<IActionResult> PutSH([FromForm] Guid id, [FromForm] EquipmentStateHistoryIM entityDTO)
         {
             try
@@ -136,7 +136,7 @@ namespace BusOnTime.Web.Controllers
         /// </summary>
         ///
         /// <response code="400">Se o item não for deletado</response> 
-        [HttpDelete]
+        [HttpDelete("remover")]
         public async Task<IActionResult> DeleteSH([FromForm] Guid id)
         {
             try

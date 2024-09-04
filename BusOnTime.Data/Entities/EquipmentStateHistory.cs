@@ -12,6 +12,7 @@ namespace BusOnTime.Data.Entities
         public EquipmentStateHistory()
         {
             IsDeleted = false;
+            EquipmentStateHistoryId = Guid.NewGuid();
         }
         public Guid EquipmentStateHistoryId { get; set; }
         public Guid? EquipmentId { get; set; }
