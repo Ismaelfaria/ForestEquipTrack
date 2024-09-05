@@ -82,7 +82,7 @@ Endpoints Principais
   
 Outros endpoints para Modelos de Equipamentos, Estados e Histórico estão documentados no Swagger.
 
-##Estrutura do Projeto
+## Estrutura do Projeto
 ```bash
 BusOnTime/
 │
@@ -97,29 +97,29 @@ BusOnTime/
 │
 └── README.md
 ```
-##Testes
+## Testes
 Para executar os testes de unidade do projeto, utilize o comando:
 
 ```bash
 dotnet test
 O projeto de testes usa xUnit para testar as funcionalidades CRUD dos controladores e serviços, garantindo que todas as operações funcionem conforme o esperado.
 ```
-##Contribuição
+## Contribuição
 - Se você deseja contribuir com o projeto, siga os passos abaixo:
 
 - Faça um fork do projeto.
 
-##Crie uma nova branch para suas alterações:
+## Crie uma nova branch para suas alterações:
 
 ```bash
 git checkout -b minha-branch
 ```
-##Envie suas alterações:
+## Envie suas alterações:
 
 ```bash
 git commit -m 'Minha nova feature'
 ```
-##Faça um push da branch:
+## Faça um push da branch:
 
 ```bash
 git push origin minha-branch
