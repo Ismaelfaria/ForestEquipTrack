@@ -53,6 +53,9 @@
             list-style-type: disc;
             margin-left: 20px;
         }
+        .section ol {
+            margin-left: 20px;
+        }
     </style>
 </head>
 <body>
@@ -179,9 +182,15 @@ cd BusOnTime</code></pre>
             <p>Se você deseja contribuir com o projeto, siga os passos abaixo:</p>
             <ol>
                 <li>Faça um fork do projeto.</li>
-                <li>Crie uma nova branch para suas alterações: <code>git checkout -b minha-branch</code></li>
-                <li>Envie suas alterações: <code>git commit -m 'Minha nova feature'</code></li>
-                <li>Faça um push da branch: <code>git push origin minha-branch</code></li>
+                <li>Crie uma nova branch para suas alterações:
+                    <pre><code>git checkout -b minha-branch</code></pre>
+                </li>
+                <li>Envie suas alterações:
+                    <pre><code>git commit -m 'Minha nova feature'</code></pre>
+                </li>
+                <li>Faça um push da branch:
+                    <pre><code>git push origin minha-branch</code></pre>
+                </li>
                 <li>Envie um pull request.</li>
             </ol>
         </div>
