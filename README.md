@@ -59,10 +59,10 @@ O objetivo principal é otimizar o acompanhamento em tempo real, oferecendo uma 
    ```bash
    dotnet restore
    
-4.Execute o projeto:
+4. Execute o projeto:
    ```bash
    dotnet run
-```
+   
 5. Configure o banco de dados no arquivo `appsettings.json`, atualizando a string de conexão:
  ```bash
   "ConnectionStrings": {
