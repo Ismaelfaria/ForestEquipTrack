@@ -51,24 +51,23 @@ O objetivo principal é otimizar o acompanhamento em tempo real, oferecendo uma 
    git clone https://github.com/seu-usuario/BusOnTime.git
    cd BusOnTime
 
-2. Configure o banco de dados no arquivo `appsettings.json`, atualizando a string de conexão:
-
-   ```bash
-  "ConnectionStrings": {
-  "DefaultConnection": "Server=seu-servidor;Database=BusOnTimeDb;Trusted_Connection=True;"
-   }
-
-3. Execute as migrações para criar o banco de dados:
+2. Execute as migrações para criar o banco de dados:
    ```bash
    dotnet ef database update
 
-4. Restaure as dependências do projeto:
+3. Restaure as dependências do projeto:
    ```bash
    dotnet restore
    
-5.Execute o projeto:
+4.Execute o projeto:
    ```bash
    dotnet run
+```
+5. Configure o banco de dados no arquivo `appsettings.json`, atualizando a string de conexão:
+ ```bash
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=seu-servidor;Database=seu-bancoDeDados;Trusted_Connection=True"
+  }
 ```
 
 6.Uso
