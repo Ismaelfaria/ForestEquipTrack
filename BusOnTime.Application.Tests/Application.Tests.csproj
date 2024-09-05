@@ -46,7 +46,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BusOnTime.Application\BusOnTime.Application.csproj" />
-    <ProjectReference Include="..\BusOnTime.Data\BusOnTime.Data.csproj" />
+    <ProjectReference Include="..\BusOnTime.Data\BusOnTime.Domain.csproj" />
+    <ProjectReference Include="..\BusOnTime.Infrastructure\BusOnTime.Infrastructure\BusOnTime.Infrastructure.csproj" />
+    <ProjectReference Include="..\BusOnTime\BusOnTime.Api.csproj" />
   </ItemGroup>
 
 </Project>

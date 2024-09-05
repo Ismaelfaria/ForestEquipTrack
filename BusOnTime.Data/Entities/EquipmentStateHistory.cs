@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BusOnTime.Data.Entities.Generic;
+﻿using BusOnTime.Domain.Entities.Generic;
 
-namespace BusOnTime.Data.Entities
+namespace BusOnTime.Domain.Entities
 {
     public class EquipmentStateHistory : BaseEntity
     {

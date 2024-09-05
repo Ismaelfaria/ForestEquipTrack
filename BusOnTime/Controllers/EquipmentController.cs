@@ -5,7 +5,7 @@ using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BusOnTime.Web.Controllers
+namespace BusOnTime.Api.Controllers
 {
     [ApiController]
     [Route("api/equipamento")]

@@ -2,11 +2,10 @@
 using BusOnTime.Application.Interfaces;
 using BusOnTime.Application.Mapping.DTOs.InputModel;
 using BusOnTime.Application.Mapping.DTOs.ViewModel;
-using BusOnTime.Application.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BusOnTime.Web.Controllers
+namespace BusOnTime.Api.Controllers
 {
     [ApiController]
     [Route("api/modelo")]

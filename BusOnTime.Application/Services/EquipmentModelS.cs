@@ -2,8 +2,8 @@
 using BusOnTime.Application.Interfaces;
 using BusOnTime.Application.Mapping.DTOs.InputModel;
 using BusOnTime.Application.Mapping.DTOs.ViewModel;
-using BusOnTime.Data.Entities;
-using BusOnTime.Data.Interfaces.Interface;
+using BusOnTime.Domain.Entities;
+using BusOnTime.Infrastructure.Interfaces.Interface;
 using FluentValidation;
 
 namespace BusOnTime.Application.Services

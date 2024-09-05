@@ -3,9 +3,9 @@ using BusOnTime.Application.Mapping.DTOs.InputModel;
 using BusOnTime.Application.Mapping.Profiles;
 using BusOnTime.Application.Services;
 using BusOnTime.Application.Validators;
-using BusOnTime.Data.DataContext;
-using BusOnTime.Data.Interfaces.Interface;
-using BusOnTime.Data.Repositories.Concrete;
+using BusOnTime.Infrastructure.DataContext;
+using BusOnTime.Infrastructure.Interfaces.Interface;
+using BusOnTime.Infrastructure.Repositories.Concrete;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
