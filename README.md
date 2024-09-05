@@ -50,3 +50,79 @@ O objetivo principal é otimizar o acompanhamento em tempo real, oferecendo uma 
    ```bash
    git clone https://github.com/seu-usuario/BusOnTime.git
    cd BusOnTime
+
+2. Configure o banco de dados no arquivo `appsettings.json`, atualizando a string de conexão:
+
+   ```bash
+  "ConnectionStrings": {
+  "DefaultConnection": "Server=seu-servidor;Database=BusOnTimeDb;Trusted_Connection=True;"
+   }
+
+3. Execute as migrações para criar o banco de dados:
+   ```bash
+   dotnet ef database update
+
+4. Restaure as dependências do projeto:
+   ```bash
+   dotnet restore
+   
+5.Execute o projeto:
+   ```bash
+   dotnet run
+```
+
+6.Uso
+A API oferece vários endpoints para gerenciar as entidades do sistema. Para interagir com os serviços, utilize um cliente como o Postman ou Swagger.
+
+Endpoints Principais
+
+- GET /api/equipments: Retorna todos os equipamentos ativos.
+- POST /api/equipments: Cria um novo equipamento.
+- PUT /api/equipments/{id}: Atualiza um equipamento existente.
+- DELETE /api/equipments/{id}: Remove um equipamento (exclusão lógica).
+  
+Outros endpoints para Modelos de Equipamentos, Estados e Histórico estão documentados no Swagger.
+
+##Estrutura do Projeto
+```bash
+BusOnTime/
+│
+├── src/
+│   ├── BusOnTime.Api/            # Projeto Web API
+│   ├── BusOnTime.Application/    # Camada de Aplicação (Serviços)
+│   ├── BusOnTime.Domain/         # Entidades e Interfaces
+│   └── BusOnTime.Infrastructure/ # Repositórios, contexto de banco de dados
+│
+├── tests/
+│   └── BusOnTime.Tests/          # Testes de Unidade (xUnit)
+│
+└── README.md
+```
+##Testes
+Para executar os testes de unidade do projeto, utilize o comando:
+
+```bash
+dotnet test
+O projeto de testes usa xUnit para testar as funcionalidades CRUD dos controladores e serviços, garantindo que todas as operações funcionem conforme o esperado.
+```
+##Contribuição
+- Se você deseja contribuir com o projeto, siga os passos abaixo:
+
+- Faça um fork do projeto.
+
+##Crie uma nova branch para suas alterações:
+
+```bash
+git checkout -b minha-branch
+```
+##Envie suas alterações:
+
+```bash
+git commit -m 'Minha nova feature'
+```
+##Faça um push da branch:
+
+```bash
+git push origin minha-branch
+Envie um pull request.
+```
