@@ -75,10 +75,10 @@ A API oferece vários endpoints para gerenciar as entidades do sistema. Para int
 
 Endpoints Principais
 
-- GET /api/equipments: Retorna todos os equipamentos ativos.
-- POST /api/equipments: Cria um novo equipamento.
-- PUT /api/equipments/{id}: Atualiza um equipamento existente.
-- DELETE /api/equipments/{id}: Remove um equipamento (exclusão lógica).
+- `GET /api/equipments`: Retorna todos os equipamentos ativos.
+- `POST /api/equipments`: Cria um novo equipamento.
+- `PUT /api/equipments/{id}`: Atualiza um equipamento existente.
+- `DELETE /api/equipments/{id}`: Remove um equipamento (exclusão lógica).
   
 Outros endpoints para Modelos de Equipamentos, Estados e Histórico estão documentados no Swagger.
 
