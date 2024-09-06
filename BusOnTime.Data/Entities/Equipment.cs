@@ -1,6 +1,6 @@
-﻿using BusOnTime.Domain.Entities.Generic;
+﻿using ForestEquipTrack.Domain.Entities.Generic;
 
-namespace BusOnTime.Domain.Entities
+namespace ForestEquipTrack.Domain.Entities
 {
     public class Equipment : BaseEntity
     {

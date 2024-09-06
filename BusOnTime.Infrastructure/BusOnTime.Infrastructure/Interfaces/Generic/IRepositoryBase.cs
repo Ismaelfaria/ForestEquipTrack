@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace BusOnTime.Infrastructure.Interfaces.Generic
+namespace ForestEquipTrack.Infrastructure.Interfaces.Generic
 {
     public interface IRepositoryBase<TEntity> where TEntity : class
     {

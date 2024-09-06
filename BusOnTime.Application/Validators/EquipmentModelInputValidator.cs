@@ -1,7 +1,7 @@
-﻿using BusOnTime.Application.Mapping.DTOs.InputModel;
+﻿using ForestEquipTrack.Application.Mapping.DTOs.InputModel;
 using FluentValidation;
 
-namespace BusOnTime.Application.Validators
+namespace ForestEquipTrack.Application.Validators
 {
     public class EquipmentModelInputValidator : AbstractValidator<EquipmentModelIM>
     {

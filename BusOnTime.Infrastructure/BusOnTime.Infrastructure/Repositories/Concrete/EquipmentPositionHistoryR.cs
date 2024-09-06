@@ -1,10 +1,10 @@
-﻿using BusOnTime.Infrastructure.DataContext;
-using BusOnTime.Domain.Entities;
-using BusOnTime.Infrastructure.Interfaces.Interface;
-using BusOnTime.Infrastructure.Repositories.Generic;
+﻿using ForestEquipTrack.Infrastructure.DataContext;
+using ForestEquipTrack.Domain.Entities;
+using ForestEquipTrack.Infrastructure.Interfaces.Interface;
+using ForestEquipTrack.Infrastructure.Repositories.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace BusOnTime.Infrastructure.Repositories.Concrete
+namespace ForestEquipTrack.Infrastructure.Repositories.Concrete
 {
     public class EquipmentPositionHistoryR : RepositoryBase<EquipmentPositionHistory>, IEquipmentPositionHistoryR
     {

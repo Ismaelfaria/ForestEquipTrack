@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
-using BusOnTime.Application.Interfaces;
-using BusOnTime.Application.Mapping.DTOs.InputModel;
-using BusOnTime.Application.Mapping.DTOs.ViewModel;
+using ForestEquipTrack.Application.Interfaces;
+using ForestEquipTrack.Application.Mapping.DTOs.InputModel;
+using ForestEquipTrack.Application.Mapping.DTOs.ViewModel;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.HttpResults;
+using ForestEquipTrack.Domain.Entities;
 
-namespace BusOnTime.Api.Controllers
+namespace ForestEquipTrack.Api.Controllers
 {
     [ApiController]
     [Route("api/equipamento")]
@@ -49,7 +51,8 @@ namespace BusOnTime.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                return BadRequest(new { errors = ex.Errors.Select(e => e.ErrorMessage) });
+                var errors = ex.Errors.Select(x => x.ErrorMessage).ToList();
+                return BadRequest(new { Message = "Solicitação inválida, informe todos os campos válidos.", Errors = errors });
             }
             catch (Exception ex)
             {
@@ -66,13 +69,23 @@ namespace BusOnTime.Api.Controllers
         {
             try
             {
-                var clientAll = await equipmentS.FindAllAsync(); 
+                var equipmentAll = await equipmentS.FindAllAsync();
 
-                return Ok(clientAll);
+                if (equipmentAll == null)
+                {
+                    return StatusCode(404, $"Usuarios não encontrados");
+                }
+
+                return Ok(equipmentAll);
+            }
+            catch (ValidationException ex)
+            {
+                var errors = ex.Errors.Select(x => x.ErrorMessage).ToList();
+                return BadRequest(new { Message = "Solicitação inválida, informe todos os campos válidos.", Errors = errors });
             }
             catch (Exception ex)
             {
-                return StatusCode(404, $"Modelo não encontrado, Erro na operação: {ex.Message}");
+                return StatusCode(500, $"Erro na operação: {ex.Message}");
             }
         }
 
@@ -88,11 +101,16 @@ namespace BusOnTime.Api.Controllers
             {
                 var equipment = await equipmentS.GetByIdAsync(id);
 
+                if (equipment == null)
+                {
+                    return StatusCode(404, $"Usuario não encontrados");
+                }
+
                 return Ok(equipment);
             }
             catch (Exception ex)
             {
-                return StatusCode(404, $"Equipamento não encontrado, Erro na operação {ex.Message}");
+                return StatusCode(500, $"Erro na operação: {ex.Message}");
             }
         }
 
@@ -121,11 +139,11 @@ namespace BusOnTime.Api.Controllers
             {
                await equipmentS.UpdateAsync(id, entityDTO);
 
-                return NoContent();
+               return NoContent();
             }
             catch (Exception ex)
             {
-                return StatusCode(400, $"Request Error: {ex.Message}");
+                return StatusCode(500, $"Request Error: {ex.Message}");
             }
         }
 
@@ -139,13 +157,13 @@ namespace BusOnTime.Api.Controllers
         {
             try
             {
-               await equipmentS.DeleteAsync(id);
+                await equipmentS.DeleteAsync(id);
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                return StatusCode(400, $"Request Error: {ex.Message}");
+                return StatusCode(500, $"Request Error: {ex.Message}");
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace BusOnTime.Application.Mapping.DTOs.InputModel
+﻿namespace ForestEquipTrack.Application.Mapping.DTOs.InputModel
 {
     public class EquipmentPositionHistoryIM
     {

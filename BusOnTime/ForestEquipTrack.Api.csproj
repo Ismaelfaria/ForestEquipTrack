@@ -18,9 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BusOnTime.Application\BusOnTime.Application.csproj" />
-    <ProjectReference Include="..\BusOnTime.Data\BusOnTime.Domain.csproj" />
-    <ProjectReference Include="..\BusOnTime.Infrastructure\BusOnTime.Infrastructure\BusOnTime.Infrastructure.csproj" />
+    <ProjectReference Include="..\BusOnTime.Application\ForestEquipTrack.Application.csproj" />
+    <ProjectReference Include="..\BusOnTime.Data\ForestEquipTrack.Domain.csproj" />
+    <ProjectReference Include="..\BusOnTime.Infrastructure\BusOnTime.Infrastructure\ForestEquipTrack.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

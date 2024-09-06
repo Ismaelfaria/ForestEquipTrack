@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using BusOnTime.Application.Interfaces;
-using BusOnTime.Application.Mapping.DTOs.InputModel;
-using BusOnTime.Application.Mapping.DTOs.ViewModel;
-using BusOnTime.Domain.Entities;
-using BusOnTime.Infrastructure.Interfaces.Interface;
+using ForestEquipTrack.Application.Interfaces;
+using ForestEquipTrack.Application.Mapping.DTOs.InputModel;
+using ForestEquipTrack.Application.Mapping.DTOs.ViewModel;
+using ForestEquipTrack.Domain.Entities;
+using ForestEquipTrack.Infrastructure.Interfaces.Interface;
 using FluentValidation;
 
-namespace BusOnTime.Application.Services
+namespace ForestEquipTrack.Application.Services
 {
     public class EquipmentModelStateHourlyEarningS : IEquipmentModelStateHourlyEarningS
     {
@@ -32,8 +32,7 @@ namespace BusOnTime.Application.Services
 
                 if (!validResult.IsValid)
                 {
-                    var errorMessage = string.Join(", ", validResult.Errors.Select(e => e.ErrorMessage));
-                    throw new ValidationException($"Validation failed, {errorMessage}");
+                    throw new ValidationException(validResult.Errors);
                 }
 
                 var createMapObject = mapper.Map<EquipmentModelStateHourlyEarnings>(entity);

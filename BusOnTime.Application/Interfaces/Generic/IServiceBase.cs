@@ -1,4 +1,4 @@
-﻿namespace BusOnTime.Application.Interfaces.Generic
+﻿namespace ForestEquipTrack.Application.Interfaces.Generic
 {
     public interface IServiceBase<TEntity, TViewMode> where TEntity : class
     {

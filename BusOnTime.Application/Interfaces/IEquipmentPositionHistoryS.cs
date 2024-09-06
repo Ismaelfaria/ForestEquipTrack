@@ -1,8 +1,8 @@
-﻿using BusOnTime.Application.Interfaces.Generic;
-using BusOnTime.Application.Mapping.DTOs.InputModel;
-using BusOnTime.Application.Mapping.DTOs.ViewModel;
+﻿using ForestEquipTrack.Application.Interfaces.Generic;
+using ForestEquipTrack.Application.Mapping.DTOs.InputModel;
+using ForestEquipTrack.Application.Mapping.DTOs.ViewModel;
 
-namespace BusOnTime.Application.Interfaces
+namespace ForestEquipTrack.Application.Interfaces
 {
     public interface IEquipmentPositionHistoryS : IServiceBase<EquipmentPositionHistoryIM, EquipmentPositionHistoryVM>
     {}

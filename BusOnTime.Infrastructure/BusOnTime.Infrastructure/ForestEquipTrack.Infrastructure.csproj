@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BusOnTime.Data\BusOnTime.Domain.csproj" />
+    <ProjectReference Include="..\..\BusOnTime.Data\ForestEquipTrack.Domain.csproj" />
   </ItemGroup>
 
 </Project>

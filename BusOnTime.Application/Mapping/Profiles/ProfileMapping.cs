@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using BusOnTime.Application.Mapping.DTOs.InputModel;
-using BusOnTime.Application.Mapping.DTOs.ViewModel;
-using BusOnTime.Domain.Entities;
+using ForestEquipTrack.Application.Mapping.DTOs.InputModel;
+using ForestEquipTrack.Application.Mapping.DTOs.ViewModel;
+using ForestEquipTrack.Domain.Entities;
 
-namespace BusOnTime.Application.Mapping.Profiles
+namespace ForestEquipTrack.Application.Mapping.Profiles
 {
     public class ProfileMapping : Profile
     {

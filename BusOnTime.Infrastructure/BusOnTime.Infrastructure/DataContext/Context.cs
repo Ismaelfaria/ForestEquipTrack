@@ -1,7 +1,7 @@
-﻿using BusOnTime.Domain.Entities;
+﻿using ForestEquipTrack.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace BusOnTime.Infrastructure.DataContext
+namespace ForestEquipTrack.Infrastructure.DataContext
 {
     public class Context : DbContext
     {

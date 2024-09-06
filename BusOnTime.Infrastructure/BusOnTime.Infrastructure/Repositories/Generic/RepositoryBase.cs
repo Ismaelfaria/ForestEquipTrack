@@ -1,10 +1,10 @@
-﻿using BusOnTime.Infrastructure.DataContext;
-using BusOnTime.Domain.Entities.Generic;
-using BusOnTime.Infrastructure.Interfaces.Generic;
+﻿using ForestEquipTrack.Infrastructure.DataContext;
+using ForestEquipTrack.Domain.Entities.Generic;
+using ForestEquipTrack.Infrastructure.Interfaces.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace BusOnTime.Infrastructure.Repositories.Generic
+namespace ForestEquipTrack.Infrastructure.Repositories.Generic
 {
     public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : BaseEntity
     {

@@ -1,6 +1,0 @@
-@BusOnTime_HostAddress = http://localhost:5220
-
-GET {{BusOnTime_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

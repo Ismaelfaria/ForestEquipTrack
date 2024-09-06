@@ -1,4 +1,4 @@
-﻿namespace BusOnTime.Application.Mapping.DTOs.ViewModel
+﻿namespace ForestEquipTrack.Application.Mapping.DTOs.ViewModel
 {
     public class EquipmentStateHistoryVM
     {

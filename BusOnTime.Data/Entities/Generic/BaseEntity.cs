@@ -1,4 +1,4 @@
-﻿namespace BusOnTime.Domain.Entities.Generic
+﻿namespace ForestEquipTrack.Domain.Entities.Generic
 {
     public class BaseEntity
     {

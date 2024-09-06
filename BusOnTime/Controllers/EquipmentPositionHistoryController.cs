@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using BusOnTime.Application.Interfaces;
-using BusOnTime.Application.Mapping.DTOs.InputModel;
-using BusOnTime.Application.Mapping.DTOs.ViewModel;
 using FluentValidation;
+using ForestEquipTrack.Application.Interfaces;
+using ForestEquipTrack.Application.Mapping.DTOs.InputModel;
+using ForestEquipTrack.Application.Mapping.DTOs.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BusOnTime.Api.Controllers
+namespace ForestEquipTrack.Api.Controllers
 {
     [ApiController]
     [Route("api/historico-posicao")]
@@ -51,7 +51,8 @@ namespace BusOnTime.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                return BadRequest(new { errors = ex.Errors.Select(e => e.ErrorMessage) });
+                var errors = ex.Errors.Select(x => x.ErrorMessage).ToList();
+                return BadRequest(new { Message = "Solicitação inválida, informe todos os campos válidos.", Errors = errors });
             }
             catch (Exception ex)
             {
@@ -63,18 +64,24 @@ namespace BusOnTime.Api.Controllers
         /// Buscar todos os itens.
         /// </summary>
         /// <response code="404">Se o item não for encontrado</response> 
+        /// <response code="500">Se o item não for encontrado</response> 
         [HttpGet("todos-historicos")]
         public async Task<ActionResult<IEnumerable<EquipmentPositionHistoryVM>>> FindAllPH()
         {
             try
             {
-                var clientAll = await equipmentPositionHistoryS.FindAllAsync();
+                var equipmentPositionAll = await equipmentPositionHistoryS.FindAllAsync();
 
-                return Ok(clientAll);
+                if (equipmentPositionAll == null)
+                {
+                    return StatusCode(404, $"Usuarios não encontrados");
+                }
+
+                return Ok(equipmentPositionAll);
             }
             catch (Exception ex)
             {
-                return StatusCode(404, $"histórico não encontrados, Erro na operação {ex.Message}");
+                return StatusCode(500, $"Erro na operação: {ex.Message}");
             }
         }
 
@@ -83,18 +90,24 @@ namespace BusOnTime.Api.Controllers
         /// </summary>
         ///
         /// <response code="404">Se o item não for encontrado</response> 
+        /// <response code="500">Se o item não for encontrado</response> 
         [HttpGet("historicoPosicao/{id}")]
         public async Task<IActionResult> GetByIdPH([FromForm] Guid id)
         {
             try
             {
-                var equipment = await equipmentPositionHistoryS.GetByIdAsync(id);
+                var equipmentPosition = await equipmentPositionHistoryS.GetByIdAsync(id);
 
-                return Ok(equipment);
+                if (equipmentPosition == null)
+                {
+                    return StatusCode(404, $"Usuarios não encontrados");
+                }
+
+                return Ok(equipmentPosition);
             }
             catch (Exception ex)
             {
-                return StatusCode(404, $"Histórico não encontrado, Erro na operação {ex.Message}");
+                return StatusCode(500, $"Erro na operação: {ex.Message}");
             }
         }
 
@@ -117,7 +130,7 @@ namespace BusOnTime.Api.Controllers
         /// </remarks>
         /// <returns>Um novo item atualizado</returns>
         /// <response code="201">Retorna o novo item atualizado</response>
-        /// <response code="400">Se o item não for atualizado</response> 
+        /// <response code="500">Se o item não for atualizado</response> 
         [HttpPut("atualizar")]
         public async Task<IActionResult> PutPH([FromForm] Guid id, [FromForm] EquipmentPositionHistoryIM entityDTO)
         {
@@ -129,7 +142,7 @@ namespace BusOnTime.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(400, $"Request Error: {ex.Message}");
+                return StatusCode(500, $"Request Error: {ex.Message}");
             }
         }
 
@@ -137,7 +150,7 @@ namespace BusOnTime.Api.Controllers
         /// Deletar o item pelo ID.
         /// </summary>
         ///
-        /// <response code="400">Se o item não for deletado</response> 
+        /// <response code="500">Se o item não for deletado</response> 
         [HttpDelete("remover")]
         public async Task<IActionResult> DeletePH([FromForm] Guid id)
         {
@@ -149,7 +162,7 @@ namespace BusOnTime.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(400, $"Request Error: {ex.Message}");
+                return StatusCode(500, $"Request Error: {ex.Message}");
             }
         }
     }
