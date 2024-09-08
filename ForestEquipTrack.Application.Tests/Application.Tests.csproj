@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Tests_Services\EquipmentModelStateHourlyEarningS\**" />
+    <Compile Remove="Tests_Services\EquipmentPositionHistoryS\**" />
+    <Compile Remove="Tests_Services\EquipmentStateHistoryS\**" />
+    <Compile Remove="Tests_Services\EquipmentStateS\**" />
+    <Compile Remove="Tests_Services\EquipmentS\**" />
+    <EmbeddedResource Remove="Tests_Services\EquipmentModelStateHourlyEarningS\**" />
+    <EmbeddedResource Remove="Tests_Services\EquipmentPositionHistoryS\**" />
+    <EmbeddedResource Remove="Tests_Services\EquipmentStateHistoryS\**" />
+    <EmbeddedResource Remove="Tests_Services\EquipmentStateS\**" />
+    <EmbeddedResource Remove="Tests_Services\EquipmentS\**" />
+    <None Remove="Tests_Services\EquipmentModelStateHourlyEarningS\**" />
+    <None Remove="Tests_Services\EquipmentPositionHistoryS\**" />
+    <None Remove="Tests_Services\EquipmentStateHistoryS\**" />
+    <None Remove="Tests_Services\EquipmentStateS\**" />
+    <None Remove="Tests_Services\EquipmentS\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="GoogleMaps.LocationServices" Version="1.2.0.5" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Moq" Version="4.20.70" />
+    <PackageReference Include="xunit" Version="2.5.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ForestEquipTrack.Application\ForestEquipTrack.Application.csproj" />
+    <ProjectReference Include="..\ForestEquipTrack.Data\ForestEquipTrack.Domain.csproj" />
+    <ProjectReference Include="..\ForestEquipTrack.Infrastructure\ForestEquipTrack.Infrastructure\ForestEquipTrack.Infrastructure.csproj" />
+    <ProjectReference Include="..\ForestEquipTrack\ForestEquipTrack.Api.csproj" />
+  </ItemGroup>
+
+</Project>
