@@ -8,7 +8,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForestEquipTrack.Api", "For
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForestEquipTrack.Application", "ForestEquipTrack.Application\ForestEquipTrack.Application.csproj", "{EBDCA0F0-651B-4FFE-93BC-4357CA6E0F56}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForestEquipTrack.Domain", "ForestEquipTrack.Data\ForestEquipTrack.Domain.csproj", "{83F58364-579E-4CDC-8034-DEA089DBA41C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForestEquipTrack.Domain", "ForestEquipTrack.Domain\ForestEquipTrack.Domain.csproj", "{83F58364-579E-4CDC-8034-DEA089DBA41C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Tests", "ForestEquipTrack.Application.Tests\Application.Tests.csproj", "{9AFBDB71-BD04-45D3-B3B6-6F1389A6F58E}"
 EndProject
