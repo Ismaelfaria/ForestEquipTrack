@@ -12,9 +12,6 @@
 		<ProjectReference Include="..\ForestEquipTrack.Data\ForestEquipTrack.Domain.csproj" />
 		<ProjectReference Include="..\ForestEquipTrack.Infrastructure\ForestEquipTrack.Infrastructure\ForestEquipTrack.Infrastructure.csproj" />
 		<ProjectReference Include="..\ForestEquipTrack.Application\ForestEquipTrack.Application.csproj" />
-		<ProjectReference Include="..\ForestEquipTrack.Data\ForestEquipTrack.Domain.csproj" />
-		<ProjectReference Include="..\ForestEquipTrack.Infrastructure\ForestEquipTrack.Infrastructure\ForestEquipTrack.Infrastructure.csproj" />
-		<ProjectReference Include="..\ForestEquipTrack.Application\ForestEquipTrack.Application.csproj" />
 	</ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.9.2" />
