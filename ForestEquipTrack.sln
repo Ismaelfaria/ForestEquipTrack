@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-<<<<<<< HEAD
+
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForestEquipTrack.Api", "ForestEquipTrack\ForestEquipTrack.Api.csproj", "{DE0F0955-56A5-4A28-A542-5BE8FCB3E7FC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForestEquipTrack.Application", "ForestEquipTrack.Application\ForestEquipTrack.Application.csproj", "{EBDCA0F0-651B-4FFE-93BC-4357CA6E0F56}"
@@ -13,17 +13,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Tests", "ForestEquipTrack.Application.Tests\Application.Tests.csproj", "{9AFBDB71-BD04-45D3-B3B6-6F1389A6F58E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForestEquipTrack.Infrastructure", "ForestEquipTrack.Infrastructure\ForestEquipTrack.Infrastructure\ForestEquipTrack.Infrastructure.csproj", "{E6D9AE43-8ACE-45A4-B794-28A22EE2B43D}"
-=======
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForestEquipTrack.Api", "BusOnTime\ForestEquipTrack.Api.csproj", "{DE0F0955-56A5-4A28-A542-5BE8FCB3E7FC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForestEquipTrack.Application", "BusOnTime.Application\ForestEquipTrack.Application.csproj", "{EBDCA0F0-651B-4FFE-93BC-4357CA6E0F56}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForestEquipTrack.Domain", "BusOnTime.Data\ForestEquipTrack.Domain.csproj", "{83F58364-579E-4CDC-8034-DEA089DBA41C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForestEquipTrack.Tests", "BusOnTime.Application.Tests\ForestEquipTrack.Tests.csproj", "{9AFBDB71-BD04-45D3-B3B6-6F1389A6F58E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForestEquipTrack.Infrastructure", "BusOnTime.Infrastructure\BusOnTime.Infrastructure\ForestEquipTrack.Infrastructure.csproj", "{E6D9AE43-8ACE-45A4-B794-28A22EE2B43D}"
->>>>>>> 8b0414dc44985badb6962e4e8c6480cfba5f1092
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{26D1525E-0BE2-441F-AFF2-D7A65397EF8A}"
 EndProject
