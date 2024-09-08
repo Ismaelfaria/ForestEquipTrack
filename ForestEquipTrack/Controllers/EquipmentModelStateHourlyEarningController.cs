@@ -50,7 +50,8 @@ namespace ForestEquipTrack.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                return BadRequest(new { errors = ex.Errors.Select(e => e.ErrorMessage) });
+                var errors = ex.Errors.Select(x => x.ErrorMessage).ToList();
+                return BadRequest(new { Message = "Solicitação inválida, informe todos os campos válidos.", Errors = errors });
             }
             catch (Exception ex)
             {
@@ -62,18 +63,24 @@ namespace ForestEquipTrack.Api.Controllers
         /// Buscar todos os itens.
         /// </summary>
         /// <response code="404">Se o item não for encontrado</response> 
+        ///  <response code="500">Se ocorrer algum erro</response>
         [HttpGet("todos-valores")]
         public async Task<ActionResult<IEnumerable<EquipmentModelStateHourlyEarningsVM>>> FindAllEMS()
         {
             try
             {
-                var clientAll = await equipmentModelStateHourlyEarningS.FindAllAsync();
+                var equipmentModelStateHourlyAll = await equipmentModelStateHourlyEarningS.FindAllAsync();
 
-                return Ok(clientAll);
+                if (equipmentModelStateHourlyAll == null)
+                {
+                    return StatusCode(404, $"Usuarios não encontrados");
+                }
+
+                return Ok(equipmentModelStateHourlyAll);
             }
             catch (Exception ex)
             {
-                return StatusCode(404, $"Registros não encontrados, Erro na operação {ex.Message}");
+                return StatusCode(500, $"Erro na operação: {ex.Message}");
             }
         }
 
@@ -82,18 +89,24 @@ namespace ForestEquipTrack.Api.Controllers
         /// </summary>
         ///
         /// <response code="404">Se o item não for encontrado</response> 
+        ///  <response code="500">Se ocorrer algum erro</response>
         [HttpGet("valor/{id}")]
         public async Task<IActionResult> GetByIdEMS([FromForm] Guid id)
         {
             try
             {
-                var equipment = await equipmentModelStateHourlyEarningS.GetByIdAsync(id);
+                var equipmentModelStateHourly = await equipmentModelStateHourlyEarningS.GetByIdAsync(id);
 
-                return Ok(equipment);
+                if (equipmentModelStateHourly == null)
+                {
+                    return StatusCode(404, $"Usuarios não encontrados");
+                }
+
+                return Ok(equipmentModelStateHourly);
             }
             catch (Exception ex)
             {
-                return StatusCode(404, $"Modelo não encontrado, Erro na operação {ex.Message}");
+                return StatusCode(500, $"Modelo não encontrado, Erro na operação {ex.Message}");
             }
         }
 
@@ -115,7 +128,7 @@ namespace ForestEquipTrack.Api.Controllers
         /// </remarks>
         /// <returns>Um novo item atualizado</returns>
         /// <response code="201">Retorna o novo item atualizado</response>
-        /// <response code="400">Se o item não for atualizado</response> 
+        ///  <response code="500">Se ocorrer algum erro</response>
         [HttpPut("atualizar")]
         public async Task<IActionResult> PutEMS([FromForm] Guid id, [FromForm] EquipmentModelStateHourlyEarningsIM entityDTO)
         {
@@ -127,7 +140,7 @@ namespace ForestEquipTrack.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(400, $"Request Error: {ex.Message}");
+                return StatusCode(500, $"Request Error: {ex.Message}");
             }
         }
 
@@ -135,7 +148,7 @@ namespace ForestEquipTrack.Api.Controllers
         /// Deletar o item pelo ID.
         /// </summary>
         ///
-        /// <response code="400">Se o item não for deletado</response> 
+        ///  <response code="500">Se ocorrer algum erro</response>
         [HttpDelete("remover")]
         public async Task<IActionResult> DeleteEMS([FromForm] Guid id)
         {
@@ -147,7 +160,7 @@ namespace ForestEquipTrack.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(400, $"Request Error: {ex.Message}");
+                return StatusCode(500, $"Request Error: {ex.Message}");
             }
         }
     }

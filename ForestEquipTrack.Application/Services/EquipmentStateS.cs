@@ -32,8 +32,7 @@ namespace ForestEquipTrack.Application.Services
 
                 if (!validResult.IsValid)
                 {
-                    var errorMessage = string.Join(", ", validResult.Errors.Select(e => e.ErrorMessage));
-                    throw new ValidationException($"Validation failed, {errorMessage}");
+                    throw new ValidationException(validResult.Errors);
                 }
 
                 var createMapObject = mapper.Map<EquipmentState>(entity);
@@ -56,6 +55,10 @@ namespace ForestEquipTrack.Application.Services
                 throw;
             }
             catch (ValidationException)
+            {
+                throw;
+            }
+            catch (InvalidOperationException)
             {
                 throw;
             }

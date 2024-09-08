@@ -49,7 +49,8 @@ namespace ForestEquipTrack.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                return BadRequest(new { errors = ex.Errors.Select(e => e.ErrorMessage) });
+                var errors = ex.Errors.Select(x => x.ErrorMessage).ToList();
+                return BadRequest(new { Message = "Solicitação inválida, informe todos os campos válidos.", Errors = errors });
             }
             catch (Exception ex)
             {
@@ -61,18 +62,24 @@ namespace ForestEquipTrack.Api.Controllers
         /// Buscar todos os itens.
         /// </summary>
         /// <response code="404">Se o item não for encontrado</response> 
+        /// <response code="500">Erro na operação</response> 
         [HttpGet("todos-estados")]
         public async Task<ActionResult<IEnumerable<EquipmentStateVM>>> FindAllS()
         {
             try
             {
-                var clientAll = await equipmentStateS.FindAllAsync();
+                var equipmentStateAll = await equipmentStateS.FindAllAsync();
 
-                return Ok(clientAll);
+                if (equipmentStateAll == null)
+                {
+                    return StatusCode(404, $"Usuarios não encontrados");
+                }
+
+                return Ok(equipmentStateAll);
             }
             catch (Exception ex)
             {
-                return StatusCode(404, $"Estado dos equipamentos não encontrados, Erro na operação {ex.Message}");
+                return StatusCode(500, $"Erro na operação: {ex.Message}");
             }
         }
 
@@ -81,18 +88,24 @@ namespace ForestEquipTrack.Api.Controllers
         /// </summary>
         ///
         /// <response code="404">Se o item não for encontrado</response> 
+        /// <response code="500">Erro na operação</response> 
         [HttpGet("equipamento-estado/{id}")]
         public async Task<IActionResult> GetByIdEM(Guid id)
         {
             try
             {
-                var equipment = await equipmentStateS.GetByIdAsync(id);
+                var equipmentState = await equipmentStateS.GetByIdAsync(id);
 
-                return Ok(equipment);
+                if (equipmentState == null)
+                {
+                    return StatusCode(404, $"Usuarios não encontrados");
+                }
+
+                return Ok(equipmentState);
             }
             catch (Exception ex)
             {
-                return StatusCode(404, $"Estado não encontrado, Erro na operação {ex.Message}");
+                return StatusCode(500, $"Erro na operação: {ex.Message}");
             }
         }
 
@@ -113,7 +126,7 @@ namespace ForestEquipTrack.Api.Controllers
         /// </remarks>
         /// <returns>Um novo item atualizado</returns>
         /// <response code="201">Retorna o novo item atualizado</response>
-        /// <response code="400">Se o item não for atualizado</response> 
+        /// <response code="500">Erro na operação</response> 
         [HttpPut("atualizar")]
         public async Task<IActionResult> PutEM([FromForm] Guid id, [FromForm] EquipmentStateIM entityDTO)
         {
@@ -125,7 +138,7 @@ namespace ForestEquipTrack.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(400, $"Request Error: {ex.Message}");
+                return StatusCode(500, $"Request Error: {ex.Message}");
             }
         }
 
@@ -133,7 +146,7 @@ namespace ForestEquipTrack.Api.Controllers
         /// Deletar o item pelo ID.
         /// </summary>
         ///
-        /// <response code="400">Se o item não for deletado</response> 
+        /// <response code="500">Erro na operação</response> 
         [HttpDelete("remover")]
         public async Task<IActionResult> DeleteEM([FromForm] Guid id)
         {
@@ -145,7 +158,7 @@ namespace ForestEquipTrack.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(400, $"Request Error: {ex.Message}");
+                return StatusCode(500, $"Request Error: {ex.Message}");
             }
         }
     }

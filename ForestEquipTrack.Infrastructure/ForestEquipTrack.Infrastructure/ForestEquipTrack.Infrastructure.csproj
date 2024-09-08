@@ -20,7 +20,11 @@
   </ItemGroup>
 
   <ItemGroup>
+<<<<<<< HEAD:ForestEquipTrack.Infrastructure/ForestEquipTrack.Infrastructure/ForestEquipTrack.Infrastructure.csproj
     <ProjectReference Include="..\..\ForestEquipTrack.Data\ForestEquipTrack.Domain.csproj" />
+=======
+    <ProjectReference Include="..\..\BusOnTime.Data\ForestEquipTrack.Domain.csproj" />
+>>>>>>> 8b0414dc44985badb6962e4e8c6480cfba5f1092:BusOnTime.Infrastructure/BusOnTime.Infrastructure/ForestEquipTrack.Infrastructure.csproj
   </ItemGroup>
 
 </Project>

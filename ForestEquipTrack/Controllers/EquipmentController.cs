@@ -4,6 +4,8 @@ using ForestEquipTrack.Application.Mapping.DTOs.InputModel;
 using ForestEquipTrack.Application.Mapping.DTOs.ViewModel;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.HttpResults;
+using ForestEquipTrack.Domain.Entities;
 
 namespace ForestEquipTrack.Api.Controllers
 {
@@ -49,7 +51,8 @@ namespace ForestEquipTrack.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                return BadRequest(new { errors = ex.Errors.Select(e => e.ErrorMessage) });
+                var errors = ex.Errors.Select(x => x.ErrorMessage).ToList();
+                return BadRequest(new { Message = "Solicitação inválida, informe todos os campos válidos.", Errors = errors });
             }
             catch (Exception ex)
             {
@@ -66,13 +69,27 @@ namespace ForestEquipTrack.Api.Controllers
         {
             try
             {
+<<<<<<< HEAD:ForestEquipTrack/Controllers/EquipmentController.cs
                 var clientAll = await equipmentS.FindAllAsync();
+=======
+                var equipmentAll = await equipmentS.FindAllAsync();
+>>>>>>> 8b0414dc44985badb6962e4e8c6480cfba5f1092:BusOnTime/Controllers/EquipmentController.cs
 
-                return Ok(clientAll);
+                if (equipmentAll == null)
+                {
+                    return StatusCode(404, $"Usuarios não encontrados");
+                }
+
+                return Ok(equipmentAll);
+            }
+            catch (ValidationException ex)
+            {
+                var errors = ex.Errors.Select(x => x.ErrorMessage).ToList();
+                return BadRequest(new { Message = "Solicitação inválida, informe todos os campos válidos.", Errors = errors });
             }
             catch (Exception ex)
             {
-                return StatusCode(404, $"Modelo não encontrado, Erro na operação: {ex.Message}");
+                return StatusCode(500, $"Erro na operação: {ex.Message}");
             }
         }
 
@@ -88,11 +105,16 @@ namespace ForestEquipTrack.Api.Controllers
             {
                 var equipment = await equipmentS.GetByIdAsync(id);
 
+                if (equipment == null)
+                {
+                    return StatusCode(404, $"Usuario não encontrados");
+                }
+
                 return Ok(equipment);
             }
             catch (Exception ex)
             {
-                return StatusCode(404, $"Equipamento não encontrado, Erro na operação {ex.Message}");
+                return StatusCode(500, $"Erro na operação: {ex.Message}");
             }
         }
 
@@ -121,11 +143,11 @@ namespace ForestEquipTrack.Api.Controllers
             {
                 await equipmentS.UpdateAsync(id, entityDTO);
 
-                return NoContent();
+               return NoContent();
             }
             catch (Exception ex)
             {
-                return StatusCode(400, $"Request Error: {ex.Message}");
+                return StatusCode(500, $"Request Error: {ex.Message}");
             }
         }
 
@@ -145,7 +167,7 @@ namespace ForestEquipTrack.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(400, $"Request Error: {ex.Message}");
+                return StatusCode(500, $"Request Error: {ex.Message}");
             }
         }
     }

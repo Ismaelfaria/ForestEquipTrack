@@ -4,6 +4,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
+<<<<<<< HEAD:ForestEquipTrack.Data/ForestEquipTrack.Domain.csproj
 		<RootNamespace>ForestEquipTrack.Domain</RootNamespace>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
@@ -14,4 +15,17 @@
 	<PropertyGroup>
 		<RootNamespace>ForestEquipTrack.Domain</RootNamespace>
 	</PropertyGroup>
+=======
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="GoogleMaps.LocationServices" Version="1.2.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="8.0.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+>>>>>>> 8b0414dc44985badb6962e4e8c6480cfba5f1092:BusOnTime.Data/ForestEquipTrack.Domain.csproj
 </Project>
