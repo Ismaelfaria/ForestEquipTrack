@@ -164,7 +164,7 @@ A API oferece vários endpoints para gerenciar as entidades do sistema. Para int
     }
   
 Outros endpoints para Modelos de Equipamentos, Estados e Histórico estão documentados no Swagger.
-<br>
+
 ## Estrutura do Projeto
 ```bash
 ForestEquipTrack/
