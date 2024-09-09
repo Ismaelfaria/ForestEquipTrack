@@ -86,7 +86,8 @@ Cada etapa foi uma ótima oportunidade para aprender e aplicar conceitos fundame
 A API oferece vários endpoints para gerenciar as entidades do sistema. Para interagir com os serviços, utilize um cliente como o Postman ou Swagger.
 
 **Endpoints Principais**
- `GET /api/equipments`
+
+ **`GET /api/equipments`**
 - Descrição: Retorna todos os equipamentos ativos.
 
 - Parâmetros de Consulta (Query Params): Nenhum.
@@ -108,7 +109,7 @@ A API oferece vários endpoints para gerenciar as entidades do sistema. Para int
     }
   ]
 
- `POST /api/equipments`
+ **`POST /api/equipments`**
 - Descrição: Cria um novo equipamento.
 
 - Entrada (Body):
@@ -127,7 +128,7 @@ A API oferece vários endpoints para gerenciar as entidades do sistema. Para int
       "isActive": true
     }
   
- `PUT /api/equipments/{id}`
+ **`PUT /api/equipments/{id}`**
 - Descrição: Atualiza um equipamento existente.
 
 - Entrada (Body):
@@ -148,7 +149,7 @@ A API oferece vários endpoints para gerenciar as entidades do sistema. Para int
       "isActive": false
     }
 
-   `DELETE /api/equipments/{id}`
+**`DELETE /api/equipments/{id}`**
 - Descrição: Remove um equipamento (exclusão lógica).
 
 - Resposta de Sucesso (200 OK):
