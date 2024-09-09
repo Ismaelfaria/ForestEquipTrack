@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="http://www.amitmerchant.com/electron-markdownify"><img src="https://escolaeducacao.com.br/wp-content/uploads/2019/04/super-gas.png" alt="Markdownify" width="200"></a>
+  <a href="http://www.amitmerchant.com/electron-markdownify"><img src="https://github.com/aikodigital/teste-backend-estagio-v3/blob/master/img/aiko.png" alt="Markdownify" width="200"></a>
   <br>
   # ForestEquipTrack
   <br>
