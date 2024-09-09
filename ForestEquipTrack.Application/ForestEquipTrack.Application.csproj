@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ForestEquipTrack.Data\ForestEquipTrack.Domain.csproj" />
+    <ProjectReference Include="..\ForestEquipTrack.Domain\ForestEquipTrack.Domain.csproj" />
     <ProjectReference Include="..\ForestEquipTrack.Infrastructure\ForestEquipTrack.Infrastructure\ForestEquipTrack.Infrastructure.csproj" />
   </ItemGroup>
 
