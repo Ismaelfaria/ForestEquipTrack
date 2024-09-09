@@ -69,11 +69,7 @@ namespace ForestEquipTrack.Api.Controllers
         {
             try
             {
-<<<<<<< HEAD:ForestEquipTrack/Controllers/EquipmentController.cs
-                var clientAll = await equipmentS.FindAllAsync();
-=======
                 var equipmentAll = await equipmentS.FindAllAsync();
->>>>>>> 8b0414dc44985badb6962e4e8c6480cfba5f1092:BusOnTime/Controllers/EquipmentController.cs
 
                 if (equipmentAll == null)
                 {

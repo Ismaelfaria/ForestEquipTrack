@@ -1,10 +1,4 @@
 ﻿using AutoMapper;
-<<<<<<< HEAD:ForestEquipTrack/Controllers/EquipmentPositionHistoryController.cs
-using ForestEquipTrack.Application.Interfaces;
-using ForestEquipTrack.Application.Mapping.DTOs.InputModel;
-using ForestEquipTrack.Application.Mapping.DTOs.ViewModel;
-=======
->>>>>>> 8b0414dc44985badb6962e4e8c6480cfba5f1092:BusOnTime/Controllers/EquipmentPositionHistoryController.cs
 using FluentValidation;
 using ForestEquipTrack.Application.Interfaces;
 using ForestEquipTrack.Application.Mapping.DTOs.InputModel;
