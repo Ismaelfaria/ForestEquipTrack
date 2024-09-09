@@ -21,7 +21,8 @@
    <a href="#contribuição">Contribuição</a> •
    <a href="#licença">Licença</a>
 </p>
-**Projeto de Desafio Técnico - Coleta de Dados de Equipamentos**
+
+## Projeto de Desafio Técnico - Coleta de Dados de Equipamentos
 
 Neste projeto, tive a oportunidade de trabalhar em um desafio técnico bastante interessante, que envolvia o desenvolvimento de uma aplicação backend para a coleta e gerenciamento de dados de equipamentos utilizados em operações florestais. O desafio consistiu em expor, através de uma API, informações sobre o histórico de posições e estados dos equipamentos, como por exemplo, se estavam operando, parados ou em manutenção.
 
