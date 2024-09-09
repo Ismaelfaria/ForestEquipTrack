@@ -85,12 +85,82 @@ Cada etapa foi uma ótima oportunidade para aprender e aplicar conceitos fundame
 6.Uso
 A API oferece vários endpoints para gerenciar as entidades do sistema. Para interagir com os serviços, utilize um cliente como o Postman ou Swagger.
 
-Endpoints Principais
+**Endpoints Principais**
+ `GET /api/equipments`
+- Descrição: Retorna todos os equipamentos ativos.
 
-- `GET /api/equipments`: Retorna todos os equipamentos ativos.
-- `POST /api/equipments`: Cria um novo equipamento.
-- `PUT /api/equipments/{id}`: Atualiza um equipamento existente.
-- `DELETE /api/equipments/{id}`: Remove um equipamento (exclusão lógica).
+- Parâmetros de Consulta (Query Params): Nenhum.
+
+- Resposta de Sucesso (200 OK):
+  ```json
+  [
+    {
+      "id": "1a2b3c4d",
+      "name": "Trator Florestal",
+      "model": "Modelo X",
+      "isActive": true
+    },
+    {
+      "id": "5e6f7g8h",
+      "name": "Caminhão Madeireiro",
+      "model": "Modelo Y",
+      "isActive": true
+    }
+  ]
+
+ `POST /api/equipments`
+- Descrição: Cria um novo equipamento.
+
+- Entrada (Body):
+  ```json
+    {
+      "name": "Novo Equipamento",
+      "modelId": "123456",
+      "isActive": true
+    }  
+- Resposta de Sucesso (201 Created):
+  ```json
+    {
+      "id": "1a2b3c4d",
+      "name": "Novo Equipamento",
+      "modelId": "123456",
+      "isActive": true
+    }
+  
+ `PUT /api/equipments/{id}`
+- Descrição: Atualiza um equipamento existente.
+
+- Entrada (Body):
+  ```json
+    {
+      "id": "1a2b3c4d",
+  
+      "name": "Name Equipamento",
+      "modelId": "654321",
+      "isActive": false
+    }  
+- Resposta de Sucesso (201 Created):
+  ```json
+    {
+      "id": "1a2b3c4d",
+      "name": "Equipamento Atualizado",
+      "modelId": "654321",
+      "isActive": false
+    }
+
+   `DELETE /api/equipments/{id}`
+- Descrição: Remove um equipamento (exclusão lógica).
+
+- Resposta de Sucesso (200 OK):
+  ```json
+    {
+  "message": "Equipamento excluído com sucesso."
+    }
+- Erros Comuns (404 Not Found):
+  ```json
+    {
+  "error": "Equipamento não encontrado."
+    }
   
 Outros endpoints para Modelos de Equipamentos, Estados e Histórico estão documentados no Swagger.
 
