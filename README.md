@@ -19,8 +19,15 @@
    <a href="#estrutura-do-projeto">Estrutura do Projeto</a> •
    <a href="#testes">Testes</a> •
    <a href="#contribuição">Contribuição</a> •
-   <a href="#licença">Licença</a> •
+   <a href="#licença">Licença</a>
 </p>
+## Projeto de Desafio Técnico - Coleta de Dados de Equipamentos
+
+Neste projeto, tive a oportunidade de trabalhar em um desafio técnico bastante interessante, que envolvia o desenvolvimento de uma aplicação backend para a coleta e gerenciamento de dados de equipamentos utilizados em operações florestais. O desafio consistiu em expor, através de uma API, informações sobre o histórico de posições e estados dos equipamentos, como por exemplo, se estavam operando, parados ou em manutenção.
+
+Foi uma experiência enriquecedora que me permitiu aplicar e fortalecer várias habilidades. Ao longo do desenvolvimento, aprofundei meu entendimento sobre relacionamento entre tabelas no banco de dados, bem como reforcei meus conhecimentos em testes unitários, essenciais para garantir a confiabilidade da aplicação. Além disso, o projeto foi estruturado com uma arquitetura organizada em camadas: API, Application, Domain e Infrastructure, seguindo boas práticas de desenvolvimento.
+
+Cada etapa foi uma ótima oportunidade para aprender e aplicar conceitos fundamentais de desenvolvimento backend, além de enfrentar desafios reais que simulam situações encontradas em projetos do mundo real. Sinto que essa experiência contribuiu bastante para o meu crescimento técnico e profissional.
 
 ## Sobre o Projeto
 
