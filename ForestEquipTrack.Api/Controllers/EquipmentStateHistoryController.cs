@@ -47,7 +47,7 @@ namespace ForestEquipTrack.Api.Controllers
             {
                 var create = await equipmentStateHistoryS.CreateAsync(entityDTO);
 
-                return CreatedAtAction(nameof(GetByIdSH), new { id = create.EquipmentStateId }, create);
+                return CreatedAtAction(nameof(GetByIdSH), new { id = create.EquipmentStatehistoryId }, create);
             }
             catch (ValidationException ex)
             {

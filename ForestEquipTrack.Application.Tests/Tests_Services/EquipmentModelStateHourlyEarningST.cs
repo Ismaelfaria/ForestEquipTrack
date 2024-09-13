@@ -7,6 +7,9 @@ using ForestEquipTrack.Infrastructure.Interfaces.Interface;
 using FluentValidation;
 using FluentValidation.Results;
 using Moq;
+using ForestEquipTrack.Application.Interfaces;
+using ForestEquipTrack.Domain.Entities.Enum;
+using ForestEquipTrack.Infrastructure.Repositories.Concrete;
 
 namespace Application.Tests.Tests_Services
 {
@@ -16,15 +19,17 @@ namespace Application.Tests.Tests_Services
         private readonly Mock<IMapper> _mapperMock;
         private readonly Mock<IValidator<EquipmentModelStateHourlyEarningsIM>> _validatorMock;
         private readonly Mock<IEquipmentModelStateHourlyEarningsR> _equipmentModelStateHourlyEarningsRMock;
+        private readonly Mock<IEquipmentModelS> _equipmentModelS;
         private readonly EquipmentModelStateHourlyEarningS _service;
 
         public EquipmentModelStateHourlyEarningST()
         {
             _mapperMock = new Mock<IMapper>();
             _validatorMock = new Mock<IValidator<EquipmentModelStateHourlyEarningsIM>>();
+            _equipmentModelS = new Mock<IEquipmentModelS>();
             _equipmentModelStateHourlyEarningsRMock = new Mock<IEquipmentModelStateHourlyEarningsR>();
-
-            _service = new EquipmentModelStateHourlyEarningS(_equipmentModelStateHourlyEarningsRMock.Object, _mapperMock.Object, _validatorMock.Object);
+           
+            _service = new EquipmentModelStateHourlyEarningS(_equipmentModelS.Object,_equipmentModelStateHourlyEarningsRMock.Object , _mapperMock.Object, _validatorMock.Object);
         }
 
         #nullable enable
@@ -35,7 +40,7 @@ namespace Application.Tests.Tests_Services
             var equipmentModelStateHourlyEarningsIM = new EquipmentModelStateHourlyEarningsIM
             {
                 EquipmentModelId = Guid.NewGuid(),
-                EquipmentStateId = Guid.NewGuid(),
+                Status = EquipmentStateType.Parado,
                 Value = 15
             };
 
@@ -43,17 +48,18 @@ namespace Application.Tests.Tests_Services
             {
                 EquipmentModelStateHourlyEarningsId = Guid.NewGuid(),
                 EquipmentModelId = equipmentModelStateHourlyEarningsIM.EquipmentModelId,
-                EquipmentStateId = equipmentModelStateHourlyEarningsIM.EquipmentStateId,
+                Status = equipmentModelStateHourlyEarningsIM.Status,
+                ModelName = "Makita",
                 Value = equipmentModelStateHourlyEarningsIM.Value,
-                EquipmentModel = new EquipmentModel(),
-                EquipmentState = new EquipmentState()
+                EquipmentModel = new EquipmentModel()
             };
 
             var equipmentModelStateHourlyEarningsVM = new EquipmentModelStateHourlyEarningsVM
             {
                 EquipmentModelStateHourlyEarningsId = equipmentModelStateHourlyEarningEntity.EquipmentModelStateHourlyEarningsId,
                 EquipmentModelId = equipmentModelStateHourlyEarningEntity.EquipmentModelId,
-                EquipmentStateId = equipmentModelStateHourlyEarningEntity.EquipmentStateId,
+                ModelName = equipmentModelStateHourlyEarningEntity.ModelName,
+                Status = equipmentModelStateHourlyEarningEntity.Status,
                 Value = equipmentModelStateHourlyEarningEntity.Value
             };
 
@@ -68,7 +74,13 @@ namespace Application.Tests.Tests_Services
                 .Returns(equipmentModelStateHourlyEarningsVM);
 
             _equipmentModelStateHourlyEarningsRMock.Setup(repo => repo.CreateAsync(equipmentModelStateHourlyEarningEntity))
-                .ReturnsAsync(equipmentModelStateHourlyEarningEntity);
+            .ReturnsAsync(equipmentModelStateHourlyEarningEntity);
+
+            _equipmentModelS.Setup(s => s.GetByIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(new EquipmentModelVM
+                {
+                    Name = "Makita"
+                });
 
             var result = await _service.CreateAsync(equipmentModelStateHourlyEarningsIM);
 
@@ -76,7 +88,8 @@ namespace Application.Tests.Tests_Services
             Assert.IsType<EquipmentModelStateHourlyEarningsVM>(result);
             Assert.Equal(equipmentModelStateHourlyEarningsVM.EquipmentModelStateHourlyEarningsId, result.EquipmentModelStateHourlyEarningsId);
             Assert.Equal(equipmentModelStateHourlyEarningsVM.EquipmentModelId, result.EquipmentModelId);
-            Assert.Equal(equipmentModelStateHourlyEarningsVM.EquipmentStateId, result.EquipmentStateId);
+            Assert.Equal(equipmentModelStateHourlyEarningsVM.ModelName, result.ModelName);
+            Assert.Equal(equipmentModelStateHourlyEarningsVM.Status, result.Status);
             Assert.Equal(equipmentModelStateHourlyEarningsVM.Value, result.Value);
 
             _equipmentModelStateHourlyEarningsRMock.Verify(repo => repo.CreateAsync(equipmentModelStateHourlyEarningEntity), Times.Once);
@@ -152,19 +165,19 @@ namespace Application.Tests.Tests_Services
                 {
                     EquipmentModelStateHourlyEarningsId = Guid.NewGuid(),
                     EquipmentModelId = Guid.NewGuid(),
-                    EquipmentStateId = Guid.NewGuid(),
+                    ModelName = "Makita",
+                    Status = EquipmentStateType.Operando,
                     Value = 15,
-                    EquipmentModel = new EquipmentModel(),
-                    EquipmentState = new EquipmentState()
+                    EquipmentModel = new EquipmentModel()
                 },
                 new EquipmentModelStateHourlyEarnings
                 {
                     EquipmentModelStateHourlyEarningsId = Guid.NewGuid(),
                     EquipmentModelId = Guid.NewGuid(),
-                    EquipmentStateId = Guid.NewGuid(),
+                    ModelName = "Furadeira",
+                    Status= EquipmentStateType.Parado,
                     Value = 16,
-                    EquipmentModel = new EquipmentModel(),
-                    EquipmentState = new EquipmentState()
+                    EquipmentModel = new EquipmentModel()
                 }
             };
 
@@ -174,14 +187,16 @@ namespace Application.Tests.Tests_Services
                 {
                     EquipmentModelStateHourlyEarningsId = equipmentModelStateHourlyEarnings[0].EquipmentModelStateHourlyEarningsId,
                     EquipmentModelId = equipmentModelStateHourlyEarnings[0].EquipmentModelId,
-                    EquipmentStateId = equipmentModelStateHourlyEarnings[0].EquipmentStateId,
+                    ModelName = equipmentModelStateHourlyEarnings[0].ModelName,
+                    Status = equipmentModelStateHourlyEarnings[0].Status,
                     Value = equipmentModelStateHourlyEarnings[0].Value
                 },
                 new EquipmentModelStateHourlyEarningsVM
                 {
                     EquipmentModelStateHourlyEarningsId = equipmentModelStateHourlyEarnings[1].EquipmentModelStateHourlyEarningsId,
                     EquipmentModelId = equipmentModelStateHourlyEarnings[1].EquipmentModelId,
-                    EquipmentStateId = equipmentModelStateHourlyEarnings[1].EquipmentStateId,
+                    ModelName = equipmentModelStateHourlyEarnings[1].ModelName,
+                    Status = equipmentModelStateHourlyEarnings[1].Status,
                     Value = equipmentModelStateHourlyEarnings[1].Value
                 }
             };
@@ -213,17 +228,18 @@ namespace Application.Tests.Tests_Services
             {
                 EquipmentModelStateHourlyEarningsId = Guid.NewGuid(),
                 EquipmentModelId = Guid.NewGuid(),
-                EquipmentStateId = Guid.NewGuid(),
+                ModelName = "Makita",
+                Status = EquipmentStateType.Operando,
                 Value = 16,
-                EquipmentModel = new EquipmentModel(),
-                EquipmentState = new EquipmentState()
+                EquipmentModel = new EquipmentModel()
             };
 
             var equipmentModelStateHourlyEarningsVM = new EquipmentModelStateHourlyEarningsVM
             {
                 EquipmentModelStateHourlyEarningsId = equipmentModelStateHourlyEarnings.EquipmentModelStateHourlyEarningsId,
                 EquipmentModelId = equipmentModelStateHourlyEarnings.EquipmentModelId,
-                EquipmentStateId = equipmentModelStateHourlyEarnings.EquipmentStateId,
+                ModelName = equipmentModelStateHourlyEarnings.ModelName,
+                Status = equipmentModelStateHourlyEarnings.Status,
                 Value = equipmentModelStateHourlyEarnings.Value
             };
 
@@ -239,7 +255,6 @@ namespace Application.Tests.Tests_Services
             Assert.IsType<EquipmentModelStateHourlyEarningsVM>(result);
             Assert.Equal(equipmentModelStateHourlyEarningsVM.EquipmentModelStateHourlyEarningsId, result.EquipmentModelStateHourlyEarningsId);
             Assert.Equal(equipmentModelStateHourlyEarningsVM.EquipmentModelId, result.EquipmentModelId);
-            Assert.Equal(equipmentModelStateHourlyEarningsVM.EquipmentStateId, result.EquipmentStateId);
             Assert.Equal(equipmentModelStateHourlyEarningsVM.Value, result.Value);
 
             _equipmentModelStateHourlyEarningsRMock.Verify(repo => repo.GetByIdAsync(validId), Times.Once);
@@ -262,16 +277,16 @@ namespace Application.Tests.Tests_Services
             {
                 EquipmentModelStateHourlyEarningsId = Guid.NewGuid(),
                 EquipmentModelId = Guid.NewGuid(),
-                EquipmentStateId = Guid.NewGuid(),
+                ModelName = "Furadeira",
+                Status = EquipmentStateType.Operando,
                 Value = 16,
-                EquipmentModel = new EquipmentModel(),
-                EquipmentState = new EquipmentState()
+                EquipmentModel = new EquipmentModel()
             };
 
             var equipmentModelStateHourlyEarningsIM = new EquipmentModelStateHourlyEarningsIM
             {
                 EquipmentModelId = equipmentModelStateHourlyEarnings.EquipmentModelId,
-                EquipmentStateId = equipmentModelStateHourlyEarnings.EquipmentStateId,
+                Status = EquipmentStateType.Operando,
                 Value = equipmentModelStateHourlyEarnings.Value
             };
 

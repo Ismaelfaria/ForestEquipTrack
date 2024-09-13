@@ -20,7 +20,7 @@ namespace ForestEquipTrack.Infrastructure.Repositories.Concrete
                     throw new ArgumentException("O ID não pode ser vazio.", nameof(id));
                 }
 
-                var entity = await _context.EquipmentStateHistory.SingleOrDefaultAsync(a => a.EquipmentStateId == id);
+                var entity = await _context.EquipmentStateHistory.SingleOrDefaultAsync(a => a.EquipmentStateHistoryId == id);
 
                 if (entity == null)
                 {
