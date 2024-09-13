@@ -5,20 +5,24 @@ using ForestEquipTrack.Application.Mapping.DTOs.ViewModel;
 using ForestEquipTrack.Domain.Entities;
 using ForestEquipTrack.Infrastructure.Interfaces.Interface;
 using FluentValidation;
+using ForestEquipTrack.Infrastructure.Repositories.Concrete;
 
 namespace ForestEquipTrack.Application.Services
 {
     public class EquipmentStateHistoryS : IEquipmentStateHistoryS
     {
         private readonly IEquipmentStateHistoryR equipmentStateHistoryR;
+        private readonly IEquipmentS equipmentS;
         private readonly IMapper mapper;
         private readonly IValidator<EquipmentStateHistoryIM> validator;
         public EquipmentStateHistoryS(
+            IEquipmentS _equipmentS,
             IEquipmentStateHistoryR _equipmentStateHistoryR,
             IMapper _mapper,
             IValidator<EquipmentStateHistoryIM> _validator
             )
         {
+            equipmentS = _equipmentS;
             equipmentStateHistoryR = _equipmentStateHistoryR;
             mapper = _mapper;
             validator = _validator;
@@ -37,6 +41,10 @@ namespace ForestEquipTrack.Application.Services
                 }
 
                 var createMapObject = mapper.Map<EquipmentStateHistory>(entity);
+
+                var equipmentName = await equipmentS.GetByIdAsync(createMapObject.EquipmentId);
+
+                createMapObject.EquipmentName = equipmentName.Name;
 
                 var view = await equipmentStateHistoryR.CreateAsync(createMapObject);
 
@@ -131,7 +139,6 @@ namespace ForestEquipTrack.Application.Services
                 }
 
                 var createMapObject = mapper.Map<EquipmentStateHistory>(entity);
-                createMapObject.EquipmentStateId = id.Value;
 
                 await equipmentStateHistoryR.UpdateAsync(createMapObject);
             }

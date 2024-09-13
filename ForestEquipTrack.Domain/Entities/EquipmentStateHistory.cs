@@ -1,4 +1,6 @@
-﻿using ForestEquipTrack.Domain.Entities.Generic;
+﻿using ForestEquipTrack.Domain.Entities.Enum;
+using ForestEquipTrack.Domain.Entities.Generic;
+using System.Text.Json.Serialization;
 
 namespace ForestEquipTrack.Domain.Entities
 {
@@ -10,10 +12,11 @@ namespace ForestEquipTrack.Domain.Entities
             EquipmentStateHistoryId = Guid.NewGuid();
         }
         public Guid EquipmentStateHistoryId { get; set; }
-        public Guid? EquipmentId { get; set; }
-        public Guid? EquipmentStateId { get; set; }
+        public Guid EquipmentId { get; set; }
+        public string? EquipmentName { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public EquipmentStateType? Status { get; set; }
         public DateTime Date { get; set; }
         public Equipment? Equipment { get; set; }
-        public EquipmentState? EquipmentState { get; set; }
     }
 }

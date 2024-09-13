@@ -8,6 +8,7 @@ using ForestEquipTrack.Infrastructure.Interfaces.Interface;
 using ForestEquipTrack.Infrastructure.Repositories.Concrete;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +17,13 @@ var ConnectionString = builder.Configuration.GetConnectionString("BusOnTimeConne
 builder.Services.AddDbContext<Context>(o => o.UseSqlServer(ConnectionString));
 
 // Add services to the container.
+builder.Services.AddControllers()
+    .AddJsonOptions
+        (
+        options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter())
+        );
 
-builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -31,7 +37,6 @@ builder.Services.AddTransient<IValidator<EquipmentModelIM>, EquipmentModelInputV
 builder.Services.AddTransient<IValidator<EquipmentModelStateHourlyEarningsIM>, EquipmentModelStateHourlyEarningsInputValidator>();
 builder.Services.AddTransient<IValidator<EquipmentPositionHistoryIM>, EquipmentPositionHistoryInputValidator>();
 builder.Services.AddTransient<IValidator<EquipmentStateHistoryIM>, EquipmentStateHistoryInputValidator>();
-builder.Services.AddTransient<IValidator<EquipmentStateIM>, EquipmentStateInputValidator>();
 
 ///////////////////////
 
@@ -41,7 +46,6 @@ builder.Services.AddScoped<IEquipmentR, EquipmentR>();
 builder.Services.AddScoped<IEquipmentModelR, EquipmentModelR>();
 builder.Services.AddScoped<IEquipmentPositionHistoryR, EquipmentPositionHistoryR>();
 builder.Services.AddScoped<IEquipmentStateHistoryR, EquipmentStateHistoryR>();
-builder.Services.AddScoped<IEquipmentStateR, EquipmentStateR>();
 builder.Services.AddScoped<IEquipmentModelStateHourlyEarningsR, EquipmentModelStateHourlyEarningsR>();
 //////////////////////
 
@@ -51,7 +55,6 @@ builder.Services.AddScoped<IEquipmentS, EquipmentS>();
 builder.Services.AddScoped<IEquipmentModelS, EquipmentModelS>();
 builder.Services.AddScoped<IEquipmentPositionHistoryS, EquipmentPositionHistoryS>();
 builder.Services.AddScoped<IEquipmentStateHistoryS, EquipmentStateHistoryS>();
-builder.Services.AddScoped<IEquipmentStateS, EquipmentStateS>();
 builder.Services.AddScoped<IEquipmentModelStateHourlyEarningS, EquipmentModelStateHourlyEarningS>();
 
 var app = builder.Build();

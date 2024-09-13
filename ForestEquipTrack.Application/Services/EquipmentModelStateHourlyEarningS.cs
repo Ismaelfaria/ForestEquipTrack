@@ -11,13 +11,16 @@ namespace ForestEquipTrack.Application.Services
     public class EquipmentModelStateHourlyEarningS : IEquipmentModelStateHourlyEarningS
     {
         private readonly IEquipmentModelStateHourlyEarningsR equipmentModelStateHourlyEarningsR;
+        private readonly IEquipmentModelS equipmentModelS;
         private readonly IMapper mapper;
         private readonly IValidator<EquipmentModelStateHourlyEarningsIM> validator;
         public EquipmentModelStateHourlyEarningS(
+            IEquipmentModelS _equipmentModelS,
             IEquipmentModelStateHourlyEarningsR _equipmentModelStateHourlyEarningsR,
             IMapper _mapper,
             IValidator<EquipmentModelStateHourlyEarningsIM> _validator)
         {
+            equipmentModelS = _equipmentModelS;
             equipmentModelStateHourlyEarningsR = _equipmentModelStateHourlyEarningsR;
             mapper = _mapper;
             validator = _validator;
@@ -36,6 +39,10 @@ namespace ForestEquipTrack.Application.Services
                 }
 
                 var createMapObject = mapper.Map<EquipmentModelStateHourlyEarnings>(entity);
+
+                var modelName = await equipmentModelS.GetByIdAsync(createMapObject.EquipmentModelId);
+
+                createMapObject.ModelName = modelName.Name;
 
                 var view = await equipmentModelStateHourlyEarningsR.CreateAsync(createMapObject);
 

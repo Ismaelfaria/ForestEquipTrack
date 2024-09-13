@@ -8,7 +8,6 @@ namespace ForestEquipTrack.Infrastructure.DataContext
         public Context(DbContextOptions<Context> options) : base(options)
         { }
         public DbSet<EquipmentModelStateHourlyEarnings> EquipmentModelStateHourlyEarnings { get; set; }
-        public DbSet<EquipmentState> EquipmentState { get; set; }
         public DbSet<EquipmentModel> EquipmentModel { get; set; }
         public DbSet<EquipmentStateHistory> EquipmentStateHistory { get; set; }
         public DbSet<Equipment> Equipment { get; set; }
@@ -71,11 +70,6 @@ namespace ForestEquipTrack.Infrastructure.DataContext
                       .WithMany(m => m.EquipmentModelStateHourlyEarnings)
                       .HasForeignKey(em => em.EquipmentModelId)
                       .IsRequired(false);
-
-                entity.HasOne(em => em.EquipmentState)
-                      .WithMany(es => es.EquipmentModelStateHourlyEarnings)
-                      .HasForeignKey(em => em.EquipmentStateId)
-                      .IsRequired(false);
             });
 
             modelBuilder.Entity<EquipmentPositionHistory>(entity =>
@@ -89,26 +83,7 @@ namespace ForestEquipTrack.Infrastructure.DataContext
                       .IsRequired(false);
             });
 
-            modelBuilder.Entity<EquipmentState>(entity =>
-            {
-                entity.HasKey(es => es.EquipmentStateId); 
-
-                entity.Property(es => es.Name)
-                      .HasMaxLength(100);
-
-                entity.Property(es => es.Color)
-                      .HasMaxLength(50);
-
-                //Relacionamentos
-                entity.HasMany(es => es.EquipmentModelStateHourlyEarnings)
-                      .WithOne(em => em.EquipmentState)
-                      .HasForeignKey(em => em.EquipmentStateId);
-
-                entity.HasMany(es => es.EquipmentStateHistories)
-                      .WithOne(esh => esh.EquipmentState)
-                      .HasForeignKey(esh => esh.EquipmentStateId);
-            });
-
+            
             modelBuilder.Entity<EquipmentStateHistory>(entity =>
             {
                 entity.HasKey(esh => esh.EquipmentStateHistoryId);
@@ -118,11 +93,6 @@ namespace ForestEquipTrack.Infrastructure.DataContext
                 entity.HasOne(esh => esh.Equipment)
                       .WithMany(e => e.EquipmentStateHistories)
                       .HasForeignKey(esh => esh.EquipmentId)
-                      .IsRequired(false);
-
-                entity.HasOne(esh => esh.EquipmentState)
-                      .WithMany(es => es.EquipmentStateHistories)
-                      .HasForeignKey(esh => esh.EquipmentStateId)
                       .IsRequired(false);
             });
         }

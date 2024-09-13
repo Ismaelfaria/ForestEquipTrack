@@ -37,14 +37,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Xunit" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\ForestEquipTrack.Api\ForestEquipTrack.Api.csproj" />
     <ProjectReference Include="..\ForestEquipTrack.Application\ForestEquipTrack.Application.csproj" />
     <ProjectReference Include="..\ForestEquipTrack.Domain\ForestEquipTrack.Domain.csproj" />
     <ProjectReference Include="..\ForestEquipTrack.Infrastructure\ForestEquipTrack.Infrastructure\ForestEquipTrack.Infrastructure.csproj" />
-    <ProjectReference Include="..\ForestEquipTrack.Api\ForestEquipTrack.Api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
   </ItemGroup>
 
 </Project>

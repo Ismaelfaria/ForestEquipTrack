@@ -7,6 +7,8 @@ using ForestEquipTrack.Infrastructure.Interfaces.Interface;
 using FluentValidation;
 using FluentValidation.Results;
 using Moq;
+using ForestEquipTrack.Application.Interfaces;
+using ForestEquipTrack.Domain.Entities.Enum;
 
 namespace Application.Tests.Tests_Services
 {
@@ -16,6 +18,8 @@ namespace Application.Tests.Tests_Services
         private readonly Mock<IMapper> _mapperMock;
         private readonly Mock<IValidator<EquipmentStateHistoryIM>> _validatorMock;
         private readonly Mock<IEquipmentStateHistoryR> _equipmentRMock;
+        private readonly Mock<IEquipmentS> _equipmentS;
+
         private readonly EquipmentStateHistoryS _service;
 
         public EquipmentStateHistoryST()
@@ -23,19 +27,20 @@ namespace Application.Tests.Tests_Services
             _mapperMock = new Mock<IMapper>();
             _validatorMock = new Mock<IValidator<EquipmentStateHistoryIM>>();
             _equipmentRMock = new Mock<IEquipmentStateHistoryR>();
+            _equipmentS = new Mock<IEquipmentS>();
 
-            _service = new EquipmentStateHistoryS(_equipmentRMock.Object, _mapperMock.Object, _validatorMock.Object);
+            _service = new EquipmentStateHistoryS(_equipmentS.Object , _equipmentRMock.Object, _mapperMock.Object, _validatorMock.Object);
+
         }
 
 
         [Fact]
         public async void CreateAsync_ValidEquipment_ReturnsCreatedEquipmentStateHistoryVM()
         {
-
             var equipmentStateHistoryIM = new EquipmentStateHistoryIM
             {
                 EquipmentId = Guid.NewGuid(),
-                EquipmentStateId = Guid.NewGuid(),
+                Status = EquipmentStateType.Operando,
                 Date = DateTime.Now
             };
 
@@ -43,20 +48,20 @@ namespace Application.Tests.Tests_Services
             {
                 EquipmentStateHistoryId = Guid.NewGuid(),
                 EquipmentId = equipmentStateHistoryIM.EquipmentId,
-                EquipmentStateId = equipmentStateHistoryIM.EquipmentStateId,
+                EquipmentName = "equipamento",
+                Status = equipmentStateHistoryIM.Status,
                 Date = equipmentStateHistoryIM.Date,
-                Equipment = new Equipment(),
-                EquipmentState = new EquipmentState()
+                Equipment = new Equipment()
             };
 
             var equipmentStateHistoryVM = new EquipmentStateHistoryVM
             {
                 EquipmentStatehistoryId = equipmentStateHistoryEntity.EquipmentStateHistoryId,
-                EquipmentStateId = equipmentStateHistoryEntity.EquipmentStateId,
                 EquipmentId = equipmentStateHistoryEntity.EquipmentId,
+                EquipmentName = equipmentStateHistoryEntity.EquipmentName,
+                Status = equipmentStateHistoryEntity.Status,
                 Date = equipmentStateHistoryEntity.Date
             };
-
 
             _validatorMock.Setup(v => v.Validate(equipmentStateHistoryIM))
                 .Returns(new ValidationResult());
@@ -70,20 +75,29 @@ namespace Application.Tests.Tests_Services
             _equipmentRMock.Setup(repo => repo.CreateAsync(equipmentStateHistoryEntity))
                 .ReturnsAsync(equipmentStateHistoryEntity);
 
+            _equipmentS.Setup(s => s.GetByIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(new EquipmentVM
+                {
+                    Name = "equipamento"
+                });
+
             var result = await _service.CreateAsync(equipmentStateHistoryIM);
 
             Assert.NotNull(result);
             Assert.IsType<EquipmentStateHistoryVM>(result);
             Assert.Equal(equipmentStateHistoryVM.EquipmentStatehistoryId, result.EquipmentStatehistoryId);
-            Assert.Equal(equipmentStateHistoryVM.EquipmentStateId, result.EquipmentStateId);
             Assert.Equal(equipmentStateHistoryVM.EquipmentId, result.EquipmentId);
+            Assert.Equal(equipmentStateHistoryVM.EquipmentName, result.EquipmentName);
+            Assert.Equal(equipmentStateHistoryVM.Status, result.Status);
             Assert.Equal(equipmentStateHistoryVM.Date, result.Date);
 
             _equipmentRMock.Verify(repo => repo.CreateAsync(equipmentStateHistoryEntity), Times.Once);
             _mapperMock.Verify(m => m.Map<EquipmentStateHistory>(equipmentStateHistoryIM), Times.Once);
             _mapperMock.Verify(m => m.Map<EquipmentStateHistoryVM>(equipmentStateHistoryEntity), Times.Once);
             _validatorMock.Verify(v => v.Validate(equipmentStateHistoryIM), Times.Once);
+            _equipmentS.Verify(s => s.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
         }
+
         [Fact]
         public async Task CreateAsync_InvalidEntity_ThrowsValidationException()
         {
@@ -151,20 +165,20 @@ namespace Application.Tests.Tests_Services
                 new EquipmentStateHistory
                 {
                     EquipmentStateHistoryId = Guid.NewGuid(),
-                    EquipmentStateId = Guid.NewGuid(),
                     EquipmentId = Guid.NewGuid(),
                     Date = new DateTime(2023, 1, 1, 15, 30, 0),
+                    EquipmentName = "equipamento",
+                    Status = EquipmentStateType.Operando,
                     Equipment = new Equipment(),
-                    EquipmentState = new EquipmentState()
                 },
                 new EquipmentStateHistory
                 {
                     EquipmentStateHistoryId = Guid.NewGuid(),
-                    EquipmentStateId = Guid.NewGuid(),
                     EquipmentId = Guid.NewGuid(),
                     Date = new DateTime(2024, 1, 1, 15, 30, 0),
+                    EquipmentName = "equipamento2",
+                    Status = EquipmentStateType.Manutenção,
                     Equipment = new Equipment(),
-                    EquipmentState = new EquipmentState()
                 }
             };
 
@@ -173,15 +187,17 @@ namespace Application.Tests.Tests_Services
                 new EquipmentStateHistoryVM
                 {
                     EquipmentStatehistoryId = equipmentStateHistorys[0].EquipmentStateHistoryId,
-                    EquipmentStateId = equipmentStateHistorys[0].EquipmentStateId,
                     EquipmentId = equipmentStateHistorys[0].EquipmentId,
+                    EquipmentName = equipmentStateHistorys[0].EquipmentName,
+                    Status = equipmentStateHistorys[0].Status,
                     Date = equipmentStateHistorys[0].Date
                 },
                 new EquipmentStateHistoryVM
                 {
                     EquipmentStatehistoryId = equipmentStateHistorys[1].EquipmentStateHistoryId,
-                    EquipmentStateId = equipmentStateHistorys[1].EquipmentStateId,
                     EquipmentId = equipmentStateHistorys[1].EquipmentId,
+                    EquipmentName = equipmentStateHistorys[1].EquipmentName,
+                    Status = equipmentStateHistorys[1].Status,
                     Date = equipmentStateHistorys[1].Date
                 }
             };
@@ -212,18 +228,19 @@ namespace Application.Tests.Tests_Services
             var equipmentStateHistory = new EquipmentStateHistory
             {
                 EquipmentStateHistoryId = Guid.NewGuid(),
-                EquipmentStateId = Guid.NewGuid(),
                 EquipmentId = Guid.NewGuid(),
+                EquipmentName = "equipamento",
+                Status = EquipmentStateType.Operando,
                 Date = DateTime.Now,
                 Equipment = new Equipment(),
-                EquipmentState = new EquipmentState()
             };
 
             var equipmentStateHistoryVM = new EquipmentStateHistoryVM
             {
                 EquipmentStatehistoryId = equipmentStateHistory.EquipmentStateHistoryId,
-                EquipmentStateId = equipmentStateHistory.EquipmentStateId,
                 EquipmentId = equipmentStateHistory.EquipmentId,
+                EquipmentName = equipmentStateHistory.EquipmentName,
+                Status = equipmentStateHistory.Status,
                 Date = equipmentStateHistory.Date
             };
 
@@ -238,8 +255,9 @@ namespace Application.Tests.Tests_Services
             Assert.NotNull(result);
             Assert.IsType<EquipmentStateHistoryVM>(result);
             Assert.Equal(equipmentStateHistoryVM.EquipmentStatehistoryId, result.EquipmentStatehistoryId);
-            Assert.Equal(equipmentStateHistoryVM.EquipmentStateId, result.EquipmentStateId);
             Assert.Equal(equipmentStateHistoryVM.EquipmentId, result.EquipmentId);
+            Assert.Equal(equipmentStateHistoryVM.EquipmentName, result.EquipmentName);
+            Assert.Equal(equipmentStateHistoryVM.Status, result.Status);
             Assert.Equal(equipmentStateHistoryVM.Date, result.Date);
 
             _equipmentRMock.Verify(repo => repo.GetByIdAsync(validId), Times.Once);
@@ -261,17 +279,17 @@ namespace Application.Tests.Tests_Services
             var equipmentStateHistory = new EquipmentStateHistory
             {
                 EquipmentStateHistoryId = Guid.NewGuid(),
-                EquipmentStateId = Guid.NewGuid(),
                 EquipmentId = Guid.NewGuid(),
+                EquipmentName = "equipamento",
+                Status = EquipmentStateType.Operando,
                 Date = DateTime.Now,
                 Equipment = new Equipment(),
-                EquipmentState = new EquipmentState()
             };
 
             var equipmentStateHistoryIM = new EquipmentStateHistoryIM
             {
                 EquipmentId = equipmentStateHistory.EquipmentId,
-                EquipmentStateId = equipmentStateHistory.EquipmentStateId,
+                Status = EquipmentStateType.Operando,
                 Date = equipmentStateHistory.Date
             };
 
