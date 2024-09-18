@@ -88,82 +88,9 @@ A API oferece vários endpoints para gerenciar as entidades do sistema. Para int
 **Endpoints Principais**
 
  **`GET /api/equipments`**
-- Descrição: Retorna todos os equipamentos ativos.
-
-- Parâmetros de Consulta (Query Params): Nenhum.
-
-- Resposta de Sucesso (200 OK):
-  ```json
-  [
-    {
-      "id": "1a2b3c4d",
-      "name": "Trator Florestal",
-      "model": "Modelo X",
-      "isActive": true
-    },
-    {
-      "id": "5e6f7g8h",
-      "name": "Caminhão Madeireiro",
-      "model": "Modelo Y",
-      "isActive": true
-    }
-  ]
-
  **`POST /api/equipments`**
-- Descrição: Cria um novo equipamento.
-
-- Entrada (Body):
-  ```json
-    {
-      "name": "Novo Equipamento",
-      "modelId": "123456",
-      "isActive": true
-    }  
-- Resposta de Sucesso (201 Created):
-  ```json
-    {
-      "id": "1a2b3c4d",
-      "name": "Novo Equipamento",
-      "modelId": "123456",
-      "isActive": true
-    }
-  
  **`PUT /api/equipments/{id}`**
-- Descrição: Atualiza um equipamento existente.
-
-- Entrada (Body):
-  ```json
-    {
-      "id": "1a2b3c4d",
-  
-      "name": "Name Equipamento",
-      "modelId": "654321",
-      "isActive": false
-    }  
-- Resposta de Sucesso (201 Created):
-  ```json
-    {
-      "id": "1a2b3c4d",
-      "name": "Equipamento Atualizado",
-      "modelId": "654321",
-      "isActive": false
-    }
-
 **`DELETE /api/equipments/{id}`**
-- Descrição: Remove um equipamento (exclusão lógica).
-
-- Resposta de Sucesso (200 OK):
-  ```json
-    {
-  "message": "Equipamento excluído com sucesso."
-    }
-- Erros Comuns (404 Not Found):
-  ```json
-    {
-  "error": "Equipamento não encontrado."
-    }
-  
-Outros endpoints para Modelos de Equipamentos, Estados e Histórico estão documentados no Swagger.
 
 ## Estrutura do Projeto
 ```bash
